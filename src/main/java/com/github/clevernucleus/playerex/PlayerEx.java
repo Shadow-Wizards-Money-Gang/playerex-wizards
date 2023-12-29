@@ -29,35 +29,52 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class PlayerEx implements ModInitializer {
-	public static final ScreenHandlerType<ExScreenFactory.Handler> EX_SCREEN = Registry.register(Registry.SCREEN_HANDLER, new Identifier(ExAPI.MODID, "ex_screen"), ExScreenFactory.type());
-	public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
-	public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
-	
-	@Override
-	public void onInitialize() {
-		AutoConfig.register(ConfigImpl.class, GsonConfigSerializer::new);
-		
-		ServerLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactory::loginQueryResponse);
-		ServerPlayNetworking.registerGlobalReceiver(NetworkFactory.SCREEN, NetworkFactory::switchScreen);
-		ServerPlayNetworking.registerGlobalReceiver(NetworkFactory.MODIFY, NetworkFactory::modifyAttributes);
-		
-		CommandRegistrationCallback.EVENT.register(CommandsImpl::register);
-		ServerLoginConnectionEvents.QUERY_START.register(NetworkFactory::loginQueryStart);
-		ServerLifecycleEvents.SERVER_STARTING.register(EventFactory::serverStarting);
-		ServerPlayerEvents.COPY_FROM.register(EventFactory::reset);
-		LivingEntityEvents.ON_HEAL.register(EventFactory::healed);
-		LivingEntityEvents.EVERY_SECOND.register(EventFactory::healthRegeneration);
-		LivingEntityEvents.ON_DAMAGE.register(EventFactory::onDamage);
-		LivingEntityEvents.SHOULD_DAMAGE.register(EventFactory::shouldDamage);
-		PlayerEntityEvents.ON_CRIT.register(EventFactory::onCritAttack);
-		PlayerEntityEvents.SHOULD_CRIT.register(EventFactory::attackIsCrit);
-		EntityAttributeModifiedEvents.CLAMPED.register(EventFactory::clamped);
-		
-		DamageFactory.STORE.forEach(ExAPI::registerDamageModification);
-		RefundFactory.STORE.forEach(ExAPI::registerRefundCondition);
-		PlaceholderFactory.STORE.forEach(Placeholders::register);
-		
-		Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
-		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);
-	}
+
+    // Screen handler type for the custom screen
+    public static final ScreenHandlerType<ExScreenFactory.Handler> EX_SCREEN = Registry.register(Registry.SCREEN_HANDLER, new Identifier(ExAPI.MODID, "ex_screen"), ExScreenFactory.type());
+    
+    // Sound events for level up and SP spend
+    public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
+    public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
+    
+    @Override
+    public void onInitialize() {
+        // Register the configuration class
+        AutoConfig.register(ConfigImpl.class, GsonConfigSerializer::new);
+        
+        // Register networking receivers for custom network packets
+        ServerLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactory::loginQueryResponse);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkFactory.SCREEN, NetworkFactory::switchScreen);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkFactory.MODIFY, NetworkFactory::modifyAttributes);
+        
+        // Register custom commands
+        CommandRegistrationCallback.EVENT.register(CommandsImpl::register);
+        
+        // Register event listeners for various server events
+        ServerLoginConnectionEvents.QUERY_START.register(NetworkFactory::loginQueryStart);
+        ServerLifecycleEvents.SERVER_STARTING.register(EventFactory::serverStarting);
+        ServerPlayerEvents.COPY_FROM.register(EventFactory::reset);
+        
+        // Register LivingEntity events
+        LivingEntityEvents.ON_HEAL.register(EventFactory::healed);
+        LivingEntityEvents.EVERY_SECOND.register(EventFactory::healthRegeneration);
+        LivingEntityEvents.ON_DAMAGE.register(EventFactory::onDamage);
+        LivingEntityEvents.SHOULD_DAMAGE.register(EventFactory::shouldDamage);
+        
+        // Register PlayerEntity events
+        PlayerEntityEvents.ON_CRIT.register(EventFactory::onCritAttack);
+        PlayerEntityEvents.SHOULD_CRIT.register(EventFactory::attackIsCrit);
+        
+        // Register attribute modification events
+        EntityAttributeModifiedEvents.CLAMPED.register(EventFactory::clamped);
+        
+        // Register damage modifications, refund conditions, and placeholders
+        DamageFactory.STORE.forEach(ExAPI::registerDamageModification);
+        RefundFactory.STORE.forEach(ExAPI::registerRefundCondition);
+        PlaceholderFactory.STORE.forEach(Placeholders::register);
+        
+        // Register custom sound events
+        Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
+        Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);
+    }
 }
