@@ -13,14 +13,20 @@ import net.minecraft.entity.player.PlayerInventory;
 
 @Mixin(PlayerInventory.class)
 abstract class PlayerInventoryMixin {
-	
-	@Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
-	private void playerex_getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> info) {
-		float original = info.getReturnValue();
-		float result = DataAttributesAPI.ifPresent(((PlayerInventory)(Object)this).player, ExAPI.BREAKING_SPEED, original, value -> {
-			return (float)(original + value - 1.0);
-		});
-		
-		info.setReturnValue(result);
-	}
+
+    // Inject code into the getBlockBreakingSpeed method after its return
+    @Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
+    private void playerex_getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> info) {
+        // Store the original return value of the method
+        float original = info.getReturnValue();
+
+        // Use DataAttributesAPI to get the breaking speed attribute from the player
+        float result = DataAttributesAPI.ifPresent(((PlayerInventory) (Object) this).player, ExAPI.BREAKING_SPEED, original, value -> {
+            // Modify the original breaking speed based on the attribute value
+            return (float) (original + value - 1.0);
+        });
+
+        // Set the modified value as the new return value
+        info.setReturnValue(result);
+    }
 }
