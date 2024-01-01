@@ -14,46 +14,47 @@ import net.minecraft.text.Text;
 
 public class ExScreenFactory implements ExtendedScreenHandlerFactory {
 	private final int pageId;
-	
+
 	public ExScreenFactory(final int pageId) {
 		this.pageId = pageId;
 	}
-	
+
 	public static ExtendedScreenHandlerType<Handler> type() {
-		return new ExtendedScreenHandlerType<>((syncId, inv, buf) -> new ExScreenFactory.Handler(syncId, inv, buf.readInt()));
+		return new ExtendedScreenHandlerType<>(
+				(syncId, inv, buf) -> new ExScreenFactory.Handler(syncId, inv, buf.readInt()));
 	}
-	
+
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory inventory, PlayerEntity player) {
 		return new Handler(syncId, inventory, this.pageId);
 	}
-	
+
 	@Override
 	public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
 		buf.writeInt(this.pageId);
 	}
-	
+
 	@Override
 	public Text getDisplayName() {
 		return Text.translatable("playerex.gui.page.attributes.title");
 	}
-	
+
 	public static class Handler extends ScreenHandler {
 		public final int pageId;
-		
+
 		public Handler(int syncId, PlayerInventory inventory, int pageId) {
 			super(PlayerEx.EX_SCREEN, syncId);
 			this.pageId = pageId;
 		}
-		
+
 		@Override
 		public boolean canUse(PlayerEntity player) {
 			return true;
 		}
-		
+
 		@Override
-		public ItemStack transferSlot(PlayerEntity player, int index) {
-			return this.slots.get(index).getStack();
+		public ItemStack quickMove(PlayerEntity player, int slot) {
+			return this.slots.get(slot).getStack();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package com.github.clevernucleus.playerex.factory;
 
-import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
+import com.github.clevernucleus.dataattributes_dc.api.DataAttributesAPI;
 import com.github.clevernucleus.playerex.api.EntityAttributeSupplier;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.PacketType;
@@ -28,64 +28,68 @@ public final class NetworkFactory {
 	public static final Identifier MODIFY = new Identifier(ExAPI.MODID, "modify");
 	public static final Identifier SCREEN = new Identifier(ExAPI.MODID, "screen");
 	public static final Identifier NOTIFY = new Identifier(ExAPI.MODID, "notify");
-	
-	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
+
+	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender,
+			ServerLoginNetworking.LoginSynchronizer synchronizer) {
 		PacketByteBuf buf = PacketByteBufs.create();
 		NbtCompound tag = new NbtCompound();
-		
-		((ConfigImpl)ExAPI.getConfig()).getServerInstance().writeToNbt(tag);
-		
+
+		((ConfigImpl) ExAPI.getConfig()).getServerInstance().writeToNbt(tag);
+
 		buf.writeNbt(tag);
 		sender.sendPacket(CONFIG, buf);
 	}
-	
-	public static void loginQueryResponse(MinecraftServer server, ServerLoginNetworkHandler handler, boolean understood, PacketByteBuf buf, LoginSynchronizer synchronizer, PacketSender responseSender) {
-		if(!understood) {
+
+	public static void loginQueryResponse(MinecraftServer server, ServerLoginNetworkHandler handler, boolean understood,
+			PacketByteBuf buf, LoginSynchronizer synchronizer, PacketSender responseSender) {
+		if (!understood) {
 			handler.disconnect(Text.literal("Disconnected: network communication issue."));
 		}
 	}
-	
-	public static void switchScreen(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+
+	public static void switchScreen(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
+			PacketByteBuf buf, PacketSender responseSender) {
 		int pageId = buf.readInt();
-		
+
 		server.execute(() -> {
-			if(player != null) {
-				if(pageId < 0) {
-					player.closeScreenHandler();
+			if (player != null) {
+				if (pageId < 0) {
+					player.closeHandledScreen();
 				} else {
-					if(!ExAPI.getConfig().isAttributesGuiDisabled()) {
+					if (!ExAPI.getConfig().isAttributesGuiDisabled()) {
 						player.openHandledScreen(new ExScreenFactory(pageId));
 					}
 				}
 			}
 		});
 	}
-	
-	public static void modifyAttributes(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+
+	public static void modifyAttributes(MinecraftServer server, ServerPlayerEntity player,
+			ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
 		NbtCompound tag = buf.readNbt();
-		
+
 		server.execute(() -> {
-			if(player != null) {
+			if (player != null) {
 				PlayerData data = ExAPI.PLAYER_DATA.get(player);
 				NbtList list = tag.getList("Data", NbtElement.COMPOUND_TYPE);
 				PacketType packetType = PacketType.fromId(tag.getByte("Type"));
-				
-				if(packetType.test(server, player, data)) {
-					for(int i = 0; i < list.size(); i++) {
+
+				if (packetType.test(server, player, data)) {
+					for (int i = 0; i < list.size(); i++) {
 						NbtCompound entry = list.getCompound(i);
 						Identifier identifier = new Identifier(entry.getString("Key"));
 						EntityAttributeSupplier attribute = EntityAttributeSupplier.of(identifier);
-						DataAttributesAPI.ifPresent(player, attribute, (Object)null, amount -> {
+						DataAttributesAPI.ifPresent(player, attribute, (Object) null, amount -> {
 							double value = entry.getDouble("Value");
 							data.add(attribute, value);
-							return (Object)null;
+							return (Object) null;
 						});
 					}
 				}
 			}
 		});
 	}
-	
+
 	public static void notifyLevelUp(final ServerPlayerEntity player) {
 		ServerPlayNetworking.send(player, NOTIFY, PacketByteBufs.empty());
 	}

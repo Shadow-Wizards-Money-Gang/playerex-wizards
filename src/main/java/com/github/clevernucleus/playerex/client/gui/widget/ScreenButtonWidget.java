@@ -6,9 +6,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -19,10 +19,11 @@ public class ScreenButtonWidget extends ButtonWidget {
 	private final Identifier key;
 	private int u, v, dx, dy;
 	public boolean alt;
-	
-	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, Identifier key, PressAction pressAction, TooltipSupplier tooltipSupplier) {
-		super(x, y, width, height, Text.empty(), pressAction, tooltipSupplier);
-		
+
+	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height,
+			Identifier key, PressAction pressAction, NarrationSupplier narrationSupplier) {
+		super(x, y, width, height, Text.empty(), pressAction, narrationSupplier);
+
 		this.parent = parent;
 		this.key = key;
 		this.u = u;
@@ -31,52 +32,55 @@ public class ScreenButtonWidget extends ButtonWidget {
 		this.dy = y;
 		this.alt = false;
 	}
-	
-	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, PressAction pressAction, TooltipSupplier tooltipSupplier) {
-		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, tooltipSupplier);
+
+	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height,
+			PressAction pressAction, NarrationSupplier narrationSupplier) {
+		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, narrationSupplier);
 	}
-	
-	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, PressAction pressAction) {
-		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, EMPTY);
+
+	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height,
+			PressAction pressAction) {
+		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, DEFAULT_NARRATION_SUPPLIER);
 	}
-	
+
 	public Identifier key() {
 		return this.key;
 	}
-	
+
+	// @Override
+	// public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
+	// if(this.isHovered()) {
+	// this.narrationSupplier.onTooltip(this, context, mouseX, mouseY);
+	// }
+	// }
+
 	@Override
-	public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-		if(this.isHovered()) {
-			this.tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
-		}
-	}
-	
-	@Override
-	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		ExScreenData handledScreen = (ExScreenData)this.parent;
-		this.x = handledScreen.getX() + this.dx;
-		this.y = handledScreen.getY() + this.dy;
-		
+	public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+		ExScreenData handledScreen = (ExScreenData) this.parent;
+		this.setX(handledScreen.getX() + this.dx);
+		this.setY(handledScreen.getY() + this.dy);
+
 		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
 		RenderSystem.disableDepthTest();
-		
+
 		int i = this.u;
 		int j = this.v;
-		
-		if(this.alt) {
+
+		if (this.alt) {
 			i += this.width;
 		}
-		
-		if(this.active) {
-			if(this.isHovered()) {
+
+		if (this.active) {
+			if (this.isHovered()) {
 				j += this.height;
 			}
 		} else {
 			j += (2 * this.height);
 		}
-		
-		this.drawTexture(matrices, this.x, this.y, i, j, this.width, this.height);
-		
+
+		// context.drawTexture(this.page.icon(), (int)((getX() + 6) / this.scale),
+		// (int)((getY() + w) / this.scale), 0, 0, 256, 256);
+
 		RenderSystem.enableDepthTest();
 	}
 }

@@ -2,11 +2,11 @@
 
 #### Dependencies
 
--Requires Fabric API version `0.76.0+1.19.2` or greater.
+-Requires Fabric API version `0.84.0+1.20.1` or greater.
 
--Requires Data Attributes version `1.4.6+1.19.2` or greater.
+-Requires Data Attributes version `1.5.0+1.20.1` or greater.
 
--Now comes embedded (jar-in-jar) with [Projectile Damage](https://github.com/ZsoltMolnarrr/ProjectileDamage) `3.2.1+1.19-fabric`.
+-Now comes embedded (jar-in-jar) with [Projectile Damage](https://github.com/ZsoltMolnarrr/ProjectileDamage) `3.2.2+1.20.1-fabric`.
 
 #### Game Play
 

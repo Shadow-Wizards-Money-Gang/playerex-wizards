@@ -1,11 +1,12 @@
 package com.github.clevernucleus.playerex.mixin.client;
 
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
+import com.github.clevernucleus.dataattributes_dc.api.DataAttributesAPI;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.config.ConfigImpl;
 
@@ -25,7 +26,6 @@ import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Matrix4f;
 
 @Mixin(LivingEntityRenderer.class)
 abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
@@ -40,7 +40,8 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
         double d = this.dispatcher.getSquaredDistanceToCamera((Entity) livingEntity);
         float f = ((Entity) livingEntity).isSneaky() ? 32.0f : 64.0f;
 
-        if (d >= (double) (f * f)) return false;
+        if (d >= (double) (f * f))
+            return false;
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         ClientPlayerEntity clientPlayerEntity = minecraftClient.player;
         boolean bl = !((Entity) livingEntity).isInvisibleTo(clientPlayerEntity);
@@ -60,7 +61,9 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
                         return false;
                     }
                     case HIDE_FOR_OTHER_TEAMS: {
-                        return abstractTeam2 == null ? bl : abstractTeam.isEqual(abstractTeam2) && (abstractTeam.shouldShowFriendlyInvisibles() || bl);
+                        return abstractTeam2 == null ? bl
+                                : abstractTeam.isEqual(abstractTeam2)
+                                        && (abstractTeam.shouldShowFriendlyInvisibles() || bl);
                     }
                     case HIDE_FOR_OWN_TEAM: {
                         return abstractTeam2 == null ? bl : !abstractTeam.isEqual(abstractTeam2) && bl;
@@ -71,11 +74,13 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
             }
         }
 
-        return MinecraftClient.isHudEnabled() && livingEntity != minecraftClient.getCameraEntity() && bl && !((Entity) livingEntity).hasPassengers();
+        return MinecraftClient.isHudEnabled() && livingEntity != minecraftClient.getCameraEntity() && bl
+                && !((Entity) livingEntity).hasPassengers();
     }
 
     // Custom method to render the level nameplate
-    private void playerex_renderLevel(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void playerex_renderLevel(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+            int light) {
         double d = this.dispatcher.getSquaredDistanceToCamera(entity);
 
         if (!(d > 4096.0D)) {
@@ -92,10 +97,14 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
             int j = (int) (g * 255.0F) << 24;
             TextRenderer textRenderer = this.getTextRenderer();
             float h = (float) (-textRenderer.getWidth((StringVisitable) text) / 2);
-            textRenderer.draw(text, h, (float) i, 553648127, false, matrix4f, vertexConsumers, bl, j, light);
+
+            TextRenderer.TextLayerType textLayer = bl ? TextRenderer.TextLayerType.NORMAL
+                    : TextRenderer.TextLayerType.SEE_THROUGH;
+
+            textRenderer.draw(text, h, (float) i, 553648127, false, matrix4f, vertexConsumers, textLayer, j, light);
 
             if (bl) {
-                textRenderer.draw((Text) text, h, (float) i, -1, false, matrix4f, vertexConsumers, false, 0, light);
+                textRenderer.draw((Text) text, h, (float) i, -1, false, matrix4f, vertexConsumers, textLayer, 0, light);
             }
 
             matrices.pop();
@@ -104,15 +113,19 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 
     // Inject code at the end of the render method
     @Inject(method = "render", at = @At("TAIL"))
-    private void onRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
-        // Check if the level nameplate should be rendered and the configuration allows it
+    private void onRender(T livingEntity, float f, float g, MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
+        // Check if the level nameplate should be rendered and the configuration allows
+        // it
         if (this.playerex_shouldRenderLevel(livingEntity) && ((ConfigImpl) ExAPI.getConfig()).levelNameplate()) {
             // Get the level value using DataAttributesAPI
             DataAttributesAPI.ifPresent(livingEntity, ExAPI.LEVEL, (Object) null, value -> {
                 // Check if the entity is the player "CleverNucleus" (for special formatting)
-                boolean coder = (livingEntity instanceof PlayerEntity) && "CleverNucleus".equals(((PlayerEntity) livingEntity).getGameProfile().getName());
+                boolean coder = (livingEntity instanceof PlayerEntity)
+                        && "CleverNucleus".equals(((PlayerEntity) livingEntity).getGameProfile().getName());
                 // Format the level as a Text object
-                Text tag = Text.translatable("playerex.gui.text.nameplate", String.valueOf(Math.round(value))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
+                Text tag = Text.translatable("playerex.gui.text.nameplate", String.valueOf(Math.round(value)))
+                        .formatted(coder ? Formatting.GOLD : Formatting.WHITE);
                 // Render the level nameplate
                 this.playerex_renderLevel(livingEntity, tag, matrixStack, vertexConsumerProvider, i);
                 return (Object) null;

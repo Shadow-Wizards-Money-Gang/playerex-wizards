@@ -15,16 +15,16 @@ import net.minecraft.world.chunk.Chunk;
 
 @Mixin(ExperienceOrbEntity.class)
 abstract class ExperienceOrbEntityMixin {
-    
+
     // Inject code at the end of the constructor method
     @Inject(method = "<init>", at = @At("TAIL"))
     public void playerex_init(World world, double x, double y, double z, int amount, CallbackInfo ci) {
         // Create a BlockPos based on the provided coordinates
-        BlockPos pos = new BlockPos(x, y, z);
-        
+        BlockPos pos = BlockPos.ofFloored(x, y, z);
+
         // Get the chunk at the specified position
         Chunk chunk = world.getChunk(pos);
-        
+
         // Access the experience data through the ExAPI and perform actions based on it
         ExAPI.EXPERIENCE_DATA.maybeGet(chunk).ifPresent(data -> {
             // Update the experience negation factor with the given amount
