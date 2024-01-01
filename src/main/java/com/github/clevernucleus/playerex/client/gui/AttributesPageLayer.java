@@ -125,8 +125,10 @@ public class AttributesPageLayer extends PageLayer {
 				(int) ((this.x + 105) / scaleX.get()), (int) ((this.y + 81) / scaleY.get()), 4210752, false);
 		;
 
-		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, this::renderTooltip, context,
-				this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
+		// COMPONENTS.forEach(component -> component.renderTooltip(this.client.player,
+		// this::renderTooltip, context,
+		// this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(),
+		// scaleY.get()));
 	}
 
 	@Override

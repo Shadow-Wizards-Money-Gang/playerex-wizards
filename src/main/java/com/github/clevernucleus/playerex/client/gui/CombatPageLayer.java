@@ -16,7 +16,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
@@ -51,8 +50,10 @@ public class CombatPageLayer extends PageLayer {
 				Text.translatable("playerex.gui.page.combat.text.defense").formatted(Formatting.DARK_GRAY),
 				(int) ((this.x + 21) / scaleX.get()), (int) ((this.y + 92) / scaleY.get()), 4210752, false);
 
-		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, this::renderTooltip, context,
-				this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
+		// COMPONENTS.forEach(component -> component.renderTooltip(this.client.player,
+		// this::renderTooltip, context,
+		// this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(),
+		// scaleY.get()));
 	}
 
 	@Override
