@@ -33,6 +33,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -97,7 +98,7 @@ public class AttributesPageLayer extends PageLayer {
 			Text tooltip = (Text.translatable("playerex.gui.page.attributes.tooltip.button.level", progress))
 					.formatted(Formatting.GRAY);
 
-			this.renderTooltip(matrices, tooltip, mouseX, mouseY);
+			// this.renderTooltip(context, tooltip, mouseX, mouseY);
 		} else {
 			Supplier<EntityAttribute> attribute = DataAttributesAPI.getAttribute(key);
 			DataAttributesAPI.ifPresent(this.client.player, attribute, (Object) null, value -> {
@@ -105,7 +106,7 @@ public class AttributesPageLayer extends PageLayer {
 				String type = "playerex.gui.page.attributes.tooltip.button." + (this.canRefund() ? "refund" : "skill");
 				Text tooltip = (Text.translatable(type)).append(text).formatted(Formatting.GRAY);
 
-				this.renderTooltip(matrices, tooltip, mouseX, mouseY);
+				// this.renderTooltip(context, tooltip, mouseX, mouseY);
 				return (Object) null;
 			});
 		}
@@ -113,7 +114,7 @@ public class AttributesPageLayer extends PageLayer {
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		COMPONENTS.forEach(component -> component.renderText(this.client.player, matrices, this.textRenderer, this.x,
+		COMPONENTS.forEach(component -> component.renderText(this.client.player, context, this.textRenderer, this.x,
 				this.y, scaleX.get(), scaleY.get()));
 
 		context.drawText(textRenderer,
@@ -131,18 +132,18 @@ public class AttributesPageLayer extends PageLayer {
 	@Override
 	public void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
 		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-		this.drawTexture(matrices, this.x + 9, this.y + 35, 226, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 9, this.y + 123, 235, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 24, 226, 9, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 79, 235, 9, 9, 9);
+		context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 35, 226, 0, 9, 9);
+		context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 123, 235, 0, 9, 9);
+		context.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 24, 226, 9, 9, 9);
+		context.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 79, 235, 9, 9, 9);
 
 		DataAttributesAPI.ifPresent(this.client.player, ExAPI.BREAKING_SPEED, (Object) null, value -> {
-			this.drawTexture(matrices, this.x + 9, this.y + 134, 235, 36, 9, 9);
+			context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 134, 235, 36, 9, 9);
 			return (Object) null;
 		});
 
 		DataAttributesAPI.ifPresent(this.client.player, ExAPI.REACH_DISTANCE, (Object) null, value -> {
-			this.drawTexture(matrices, this.x + 9, this.y + 145, 244, 0, 9, 9);
+			context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 145, 244, 0, 9, 9);
 			return (Object) null;
 		});
 
@@ -187,20 +188,19 @@ public class AttributesPageLayer extends PageLayer {
 	protected void init() {
 		super.init();
 		this.playerData = ExAPI.PLAYER_DATA.get(this.client.player);
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> {
-			ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D));
-			this.buttonDelay.put(((ScreenButtonWidget) btn).key(), 40);
-		}, this::buttonTooltip));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0),
+				btn -> ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D)),
+				textSupplier -> (MutableText) textSupplier.get()));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1),
-				this::buttonPressed, this::buttonTooltip));
+				this::buttonPressed, textSupplier -> (MutableText) textSupplier.get()));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2),
-				this::buttonPressed, this::buttonTooltip));
+				this::buttonPressed, textSupplier -> (MutableText) textSupplier.get()));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3),
-				this::buttonPressed, this::buttonTooltip));
+				this::buttonPressed, textSupplier -> (MutableText) textSupplier.get()));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 89, 204, 0, 11, 10, BUTTON_KEYS.get(4),
-				this::buttonPressed, this::buttonTooltip));
+				this::buttonPressed, textSupplier -> (MutableText) textSupplier.get()));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 100, 204, 0, 11, 10, BUTTON_KEYS.get(5),
-				this::buttonPressed, this::buttonTooltip));
+				this::buttonPressed, textSupplier -> (MutableText) textSupplier.get()));
 	}
 
 	static {

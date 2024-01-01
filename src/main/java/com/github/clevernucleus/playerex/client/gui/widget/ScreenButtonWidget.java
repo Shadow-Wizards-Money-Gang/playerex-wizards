@@ -47,12 +47,12 @@ public class ScreenButtonWidget extends ButtonWidget {
 		return this.key;
 	}
 
-	// @Override
-	// public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
-	// if(this.isHovered()) {
-	// this.narrationSupplier.onTooltip(this, context, mouseX, mouseY);
-	// }
-	// }
+	@Override
+	public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
+		if (this.isHovered()) {
+			this.narrationSupplier.onTooltip(this, context, mouseX, mouseY);
+		}
+	}
 
 	@Override
 	public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -78,8 +78,8 @@ public class ScreenButtonWidget extends ButtonWidget {
 			j += (2 * this.height);
 		}
 
-		// context.drawTexture(this.page.icon(), (int)((getX() + 6) / this.scale),
-		// (int)((getY() + w) / this.scale), 0, 0, 256, 256);
+		context.drawTexture(this.page.icon(), (int) ((getX() + 6) / this.scale),
+				(int) ((getY() + w) / this.scale), 0, 0, 256, 256);
 
 		RenderSystem.enableDepthTest();
 	}
