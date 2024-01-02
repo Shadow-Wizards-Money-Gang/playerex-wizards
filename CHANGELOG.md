@@ -4,7 +4,7 @@
 
 -Requires Fabric API version `0.84.0+1.20.1` or greater.
 
--Requires Data Attributes version `1.5.0+1.20.1` or greater.
+-Requires Data Attributes version `1.5.1+1.20.1` or greater.
 
 -Now comes embedded (jar-in-jar) with [Projectile Damage](https://github.com/ZsoltMolnarrr/ProjectileDamage) `3.2.2+1.20.1-fabric`.
 
