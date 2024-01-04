@@ -10,6 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -47,7 +48,6 @@ public class TabButtonWidget extends ButtonWidget {
 		this.setX(handledScreen.getX() + this.dx);
 		this.setY(handledScreen.getY() + this.dy);
 
-		RenderSystem.setShaderTexture(0, TABS);
 		RenderSystem.disableDepthTest();
 
 		int u = (this.index % 6) * this.width;
@@ -58,13 +58,17 @@ public class TabButtonWidget extends ButtonWidget {
 			v += this.height;
 		}
 
-		context.drawTexture(TABS, getX(), getY(), u, v, this.width, this.height);
+		context.drawTexture(TABS, this.getX(), this.getY(), u, v, this.width, this.height);
 
-		RenderSystem.setShaderTexture(0, this.page.icon());
+		MatrixStack matrices = context.getMatrices();
 
-		context.drawTexture(this.page.icon(), (int) ((getX() + 6) / this.scale), (int) ((getY() + w) / this.scale), 0,
-				0, 256, 256);
+		matrices.push();
+		matrices.scale(this.scale, this.scale, 0.75F);
 
+		context.drawTexture(this.page.icon(), (int) ((this.getX() + 6) / this.scale),
+				(int) ((this.getY() + w) / this.scale), 0, 0, 256, 256);
+
+		matrices.pop();
 		RenderSystem.enableDepthTest();
 	}
 }

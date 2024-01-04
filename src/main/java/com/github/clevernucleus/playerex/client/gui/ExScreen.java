@@ -19,6 +19,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
@@ -70,13 +71,7 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenFactory.Handler> {
 		this.renderBackground(context);
 		super.render(context, mouseX, mouseY, delta);
 		this.currentPage().forEachLayer(layer -> layer.render(context, mouseX, mouseY, delta));
-		this.forEachButton(button -> context.drawTooltip(this.textRenderer, button.getMessage(), mouseX, mouseY)); // Possibly?
-	}
-
-	@Override
-	protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-		context.drawText(this.textRenderer, this.currentPage().title().copy().formatted(Formatting.DARK_GRAY),
-				this.titleX, (this.titleY + 2), 4210752, false);
+		// this.forEachButton(button -> button.renderTooltip(context, mouseX, mouseY));
 	}
 
 	@Override
@@ -84,15 +79,20 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenFactory.Handler> {
 		int u = this.x;
 		int v = (this.height - this.backgroundHeight) / 2;
 
-		RenderSystem.setShaderTexture(0, this.currentPage().texture());
-		context.drawTexture(this.currentPage().texture(), this.x + 6, v + 6, 0, 0, this.backgroundWidth - 12,
-				this.backgroundWidth - 12);
+		Identifier pageTexture = this.currentPage().texture();
+
+		context.drawTexture(pageTexture, u + 6, v + 6, 0, 0, this.backgroundWidth - 12, this.backgroundWidth - 12);
 
 		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-		context.drawTexture(PlayerExClient.GUI, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
-
+		context.drawTexture(pageTexture, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
 		this.currentPage().forEachLayer(layer -> layer.drawBackground(context, delta, mouseX, mouseY));
 		this.forEachButton(button -> button.render(context, mouseX, mouseY, delta));
+	}
+
+	@Override
+	protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+		context.drawText(this.textRenderer, this.currentPage().title().copy().formatted(Formatting.DARK_GRAY),
+				this.titleX, (this.titleY + 2), 4210752, false);
 	}
 
 	@Override

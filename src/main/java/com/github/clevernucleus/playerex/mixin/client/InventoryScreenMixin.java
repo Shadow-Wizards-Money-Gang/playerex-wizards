@@ -1,15 +1,7 @@
 package com.github.clevernucleus.playerex.mixin.client;
 
-import java.util.function.Consumer;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.github.clevernucleus.playerex.client.gui.widget.TabButtonWidget;
-
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,18 +16,22 @@ abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreen
         super(player.playerScreenHandler, player.getInventory(), text);
     }
 
-    // Custom method to iterate over TabButtonWidget elements and apply a consumer
-    private void playerex_forEachTab(Consumer<TabButtonWidget> consumer) {
-        // Filter children to get only TabButtonWidget instances and apply the consumer
-        this.children().stream().filter(e -> e instanceof TabButtonWidget)
-                .forEach(e -> consumer.accept((TabButtonWidget) e));
-    }
+    // // Custom method to iterate over TabButtonWidget elements and apply a
+    // consumer
+    // private void playerex_forEachTab(Consumer<TabButtonWidget> consumer) {
+    // // Filter children to get only TabButtonWidget instances and apply the
+    // consumer
+    // this.children().stream().filter(e -> e instanceof TabButtonWidget)
+    // .forEach(e -> consumer.accept((TabButtonWidget) e));
+    // }
 
-    // Inject code at the end of the render method
-    @Inject(method = "render", at = @At("TAIL"))
-    private void playerex_render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo info) {
-        // Render tooltips for each TabButtonWidget using the playerex_forEachTab method
-        this.playerex_forEachTab(tab -> tab.render(context, mouseX, mouseY, delta)); // ???
-        // this.playerex_forEachTab(tab -> tab.renderTooltip(context, mouseX, mouseY));
-    }
+    // // Inject code at the end of the render method
+    // @Inject(method = "render", at = @At("TAIL"))
+    // private void playerex_render(DrawContext context, int mouseX, int mouseY,
+    // float delta, CallbackInfo info) {
+    // // Render tooltips for each TabButtonWidget using the playerex_forEachTab
+    // method
+    // this.playerex_forEachTab(tab -> tab.renderTooltip(context, mouseX, mouseY,
+    // delta));
+    // }
 }

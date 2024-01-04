@@ -78,16 +78,16 @@ public final class RenderComponent {
 	/**
 	 * 
 	 * @param livingEntity
-	 * @param context
+	 * @param ctx
 	 * @param textRenderer
 	 * @param x
 	 * @param y
 	 * @param scaleX
 	 * @param scaleY
 	 */
-	public void renderText(LivingEntity livingEntity, DrawContext context, TextRenderer textRenderer, int x, int y,
+	public void renderText(LivingEntity livingEntity, DrawContext ctx, TextRenderer textRenderer, int x, int y,
 			float scaleX, float scaleY) {
-		context.drawText(textRenderer, this.text.apply(livingEntity), (int) ((x + this.dx) / scaleX),
+		ctx.drawText(textRenderer, this.text.apply(livingEntity), (int) ((x + this.dx) / scaleX),
 				(int) ((y + this.dy) / scaleY), 4210752, false);
 	}
 
@@ -95,7 +95,7 @@ public final class RenderComponent {
 	 * 
 	 * @param livingEntity
 	 * @param consumer
-	 * @param context
+	 * @param ctx
 	 * @param textRenderer
 	 * @param x
 	 * @param y
@@ -104,11 +104,11 @@ public final class RenderComponent {
 	 * @param scaleX
 	 * @param scaleY
 	 */
-	public void renderTooltip(LivingEntity livingEntity, RenderTooltip consumer, DrawContext context,
+	public void renderTooltip(LivingEntity livingEntity, RenderTooltip consumer, DrawContext ctx,
 			TextRenderer textRenderer, int x, int y, int mouseX, int mouseY, float scaleX, float scaleY) {
 		if (this.isMouseOver(x + this.dx, y + this.dy, textRenderer.getWidth(this.text.apply(livingEntity)) * scaleX, 7,
 				mouseX, mouseY)) {
-			consumer.renderTooltip(context, this.tooltip.apply(livingEntity), mouseX, mouseY);
+			consumer.renderTooltip(textRenderer, this.tooltip.apply(livingEntity), mouseX, mouseY);
 		}
 	}
 
@@ -117,11 +117,11 @@ public final class RenderComponent {
 
 		/**
 		 * 
-		 * @param context
+		 * @param textRenderer
 		 * @param tooltip
 		 * @param mouseX
 		 * @param mouseY
 		 */
-		void renderTooltip(DrawContext context, List<Text> tooltip, int mouseX, int mouseY);
+		void renderTooltip(TextRenderer textRenderer, List<Text> tooltip, int mouseX, int mouseY);
 	}
 }

@@ -3,6 +3,9 @@
         "minecraft:generic.max_health": {
             "integer": "0.0"
         },
+        "playerex:breaking_speed": {
+            "integer": "0.0"
+        },
         "playerex:level": {
             "integer": "0.0"
         },

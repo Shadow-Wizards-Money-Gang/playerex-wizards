@@ -49,7 +49,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-	modImplementation "curse.maven:data-attributes-directors-cut-955929:5000272"
+	modImplementation "maven.modrinth:data-attributes-directors-cut:${project.dataattributes_version}"
     
     modImplementation "maven.modrinth:opc-directors-cut:${project.opc_dc_version}"
     include "maven.modrinth:opc-directors-cut:${project.opc_dc_version}"

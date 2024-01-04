@@ -10,12 +10,12 @@ import com.github.clevernucleus.playerex.api.client.ClientUtil;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.github.clevernucleus.playerex.api.client.RenderComponent;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
@@ -37,29 +37,32 @@ public class CombatPageLayer extends PageLayer {
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+		MatrixStack stack = context.getMatrices();
+
+		stack.push();
+		stack.scale(scaleX.get(), scaleY.get(), scaleZ);
+
 		COMPONENTS.forEach(component -> component.renderText(this.client.player, context, this.textRenderer, this.x,
 				this.y, scaleX.get(), scaleY.get()));
 
-		context.drawText(this.textRenderer,
+		context.drawText(textRenderer,
 				Text.translatable("playerex.gui.page.combat.text.melee").formatted(Formatting.DARK_GRAY),
 				(int) ((this.x + 21) / scaleX.get()), (int) ((this.y + 26) / scaleY.get()), 4210752, false);
-		context.drawText(this.textRenderer,
-				Text.translatable("playerex.gui.page.combat.text.ranged").formatted(Formatting.DARK_GRAY),
-				(int) ((this.x + 105) / scaleX.get()), (int) ((this.y + 26) / scaleY.get()), 4210752, false);
-		context.drawText(this.textRenderer,
+		context.drawText(textRenderer,
 				Text.translatable("playerex.gui.page.combat.text.defense").formatted(Formatting.DARK_GRAY),
 				(int) ((this.x + 21) / scaleX.get()), (int) ((this.y + 92) / scaleY.get()), 4210752, false);
+		context.drawText(textRenderer,
+				Text.translatable("playerex.gui.page.combat.text.ranged").formatted(Formatting.DARK_GRAY),
+				(int) ((this.x + 105) / scaleX.get()), (int) ((this.y + 26) / scaleY.get()), 4210752, false);
 
-		// COMPONENTS.forEach(component -> component.renderTooltip(this.client.player,
-		// this::renderTooltip, context,
-		// this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(),
-		// scaleY.get()));
+		stack.pop();
+
+		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, context::drawTooltip, context,
+				this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
 	}
 
 	@Override
 	public void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-
 		context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 24, 244, 9, 9, 9);
 		context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 90, 226, 18, 9, 9);
 		context.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 24, 235, 18, 9, 9);
