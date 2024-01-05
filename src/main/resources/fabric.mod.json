@@ -2,7 +2,7 @@
     "schemaVersion": 1,
     "id": "playerex",
     "version": "${version}",
-    "name": "PlayerEx",
+    "name": "PlayerEx: Directors Cut",
     "description": "Adds RPG style attributes to the game, and provides the player with a new levelling system.",
     "authors": [
         "CleverNucleus",
@@ -10,8 +10,8 @@
         "pokesmells"
     ],
     "contact": {
-        "homepage": "https://github.com/CleverNucleus/playerex",
-        "sources": "https://github.com/CleverNucleus/playerex"
+        "homepage": "https://github.com/PlayerEXDirectorsCut/playerex",
+        "sources": "https://github.com/PlayerEXDirectorsCut/playerex"
     },
     "license": "MIT",
     "icon": "assets/playerex/icon.png",
