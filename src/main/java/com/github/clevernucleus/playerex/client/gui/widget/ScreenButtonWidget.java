@@ -8,9 +8,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class ScreenButtonWidget extends ButtonWidget {
@@ -19,6 +24,9 @@ public class ScreenButtonWidget extends ButtonWidget {
 	private final Identifier key;
 	private int u, v, dx, dy;
 	public boolean alt;
+
+	@Nullable
+	private Function<ScreenButtonWidget, @Nullable Tooltip> tooltipSupplier = null;
 
 	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height,
 			Identifier key, PressAction pressAction, NarrationSupplier narrationSupplier) {
@@ -33,14 +41,17 @@ public class ScreenButtonWidget extends ButtonWidget {
 		this.alt = false;
 	}
 
-	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height,
-			PressAction pressAction, NarrationSupplier narrationSupplier) {
-		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, narrationSupplier);
+	@Override
+	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+		if(tooltipSupplier != null && this.visible) this.setTooltip(tooltipSupplier.apply(this));
+
+		super.render(context, mouseX, mouseY, delta);
 	}
 
-	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height,
-			PressAction pressAction) {
-		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, DEFAULT_NARRATION_SUPPLIER);
+	public ScreenButtonWidget setTooltipSupplier(Function<ScreenButtonWidget, @Nullable Tooltip> tooltipSupplier){
+		this.tooltipSupplier = tooltipSupplier;
+
+		return this;
 	}
 
 	public Identifier key() {
