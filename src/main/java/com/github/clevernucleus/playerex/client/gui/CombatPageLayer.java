@@ -57,7 +57,7 @@ public class CombatPageLayer extends PageLayer {
 
 		stack.pop();
 
-		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, context::drawTooltip, context,
+		COMPONENTS.forEach(component -> component.drawTooltip(this.client.player, context::drawTooltip, context,
 				this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
 	}
 

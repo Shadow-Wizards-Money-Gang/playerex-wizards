@@ -9,7 +9,6 @@ import com.github.clevernucleus.playerex.client.PlayerExClient;
 import com.github.clevernucleus.playerex.client.factory.NetworkFactoryClient;
 import com.github.clevernucleus.playerex.client.gui.widget.TabButtonWidget;
 import com.github.clevernucleus.playerex.factory.ExScreenFactory;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,7 +18,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
@@ -79,12 +77,10 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenFactory.Handler> {
 		int u = this.x;
 		int v = (this.height - this.backgroundHeight) / 2;
 
-		Identifier pageTexture = this.currentPage().texture();
+		context.drawTexture(this.currentPage().texture(), u + 6, v + 6, 0, 0, this.backgroundWidth - 12,
+				this.backgroundWidth - 12);
 
-		context.drawTexture(pageTexture, u + 6, v + 6, 0, 0, this.backgroundWidth - 12, this.backgroundWidth - 12);
-
-		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-		context.drawTexture(pageTexture, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
+		context.drawTexture(PlayerExClient.GUI, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
 		this.currentPage().forEachLayer(layer -> layer.drawBackground(context, delta, mouseX, mouseY));
 		this.forEachButton(button -> button.render(context, mouseX, mouseY, delta));
 	}

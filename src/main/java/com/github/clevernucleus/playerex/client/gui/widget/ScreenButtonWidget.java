@@ -53,6 +53,7 @@ public class ScreenButtonWidget extends ButtonWidget {
 		this.setX(handledScreen.getX() + this.dx);
 		this.setY(handledScreen.getY() + this.dy);
 
+		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
 		RenderSystem.disableDepthTest();
 
 		int i = this.u;

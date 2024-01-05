@@ -20,12 +20,12 @@ import com.github.clevernucleus.playerex.api.client.RenderComponent;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
 import com.github.clevernucleus.playerex.client.gui.widget.ScreenButtonWidget;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -51,6 +51,8 @@ public class AttributesPageLayer extends PageLayer {
 
 	private PlayerData playerData;
 	private final Map<Identifier, Integer> buttonDelay = new HashMap<Identifier, Integer>();
+
+	private final List<ScreenButtonWidget> ScreenWidgets = new ArrayList<ScreenButtonWidget>();
 
 	public AttributesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(parent, handler, inventory, title);
@@ -86,7 +88,12 @@ public class AttributesPageLayer extends PageLayer {
 		this.buttonDelay.put(key, 40);
 	}
 
-	private void buttonTooltip(ScreenButtonWidget button, DrawContext context, int mouseX, int mouseY) {
+	@Override
+	protected void handledScreenTick() {
+		this.ScreenWidgets.forEach(this::writeToWidget);
+	}
+
+	private void writeToWidget(ScreenButtonWidget button) {
 		Identifier lvl = new Identifier("playerex:level");
 		Identifier key = button.key();
 
@@ -96,7 +103,7 @@ public class AttributesPageLayer extends PageLayer {
 			String progress = "(" + currentXp + "/" + requiredXp + ")";
 			Text tooltip = (Text.translatable("playerex.gui.page.attributes.tooltip.button.level", progress))
 					.formatted(Formatting.GRAY);
-			context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
+			button.setTooltip(Tooltip.of(tooltip));
 		} else {
 			Supplier<EntityAttribute> attribute = DataAttributesAPI.getAttribute(key);
 			DataAttributesAPI.ifPresent(this.client.player, attribute, (Object) null, value -> {
@@ -104,13 +111,13 @@ public class AttributesPageLayer extends PageLayer {
 				String type = "playerex.gui.page.attributes.tooltip.button." + (this.canRefund() ? "refund" : "skill");
 				Text tooltip = (Text.translatable(type)).append(text).formatted(Formatting.GRAY);
 
-				context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
+				button.setTooltip(Tooltip.of(tooltip));
 				return (Object) null;
 			});
 		}
 	}
 
-	private MutableText nsButtonTooltip(Supplier<MutableText> textSupplier) {
+	private MutableText narrationButtonTooltip(Supplier<MutableText> textSupplier) {
 		return textSupplier.get();
 	}
 
@@ -133,13 +140,13 @@ public class AttributesPageLayer extends PageLayer {
 
 		matrices.pop();
 
-		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, context::drawTooltip, context,
+		COMPONENTS.forEach(component -> component.drawTooltip(this.client.player, context::drawTooltip, context,
 				this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
+
 	}
 
 	@Override
 	public void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
 		context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 35, 226, 0, 9, 9);
 		context.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 123, 235, 0, 9, 9);
 		context.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 24, 226, 9, 9, 9);
@@ -195,21 +202,29 @@ public class AttributesPageLayer extends PageLayer {
 	@Override
 	protected void init() {
 		super.init();
+
 		this.playerData = ExAPI.PLAYER_DATA.get(this.client.player);
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> {
-			ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D));
-			this.buttonDelay.put(((ScreenButtonWidget) btn).key(), 40);
-		}, this::nsButtonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1),
-				this::buttonPressed, this::nsButtonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2),
-				this::buttonPressed, this::nsButtonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3),
-				this::buttonPressed, this::nsButtonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 89, 204, 0, 11, 10, BUTTON_KEYS.get(4),
-				this::buttonPressed, this::nsButtonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 100, 204, 0, 11, 10, BUTTON_KEYS.get(5),
-				this::buttonPressed, this::nsButtonTooltip));
+
+		this.ScreenWidgets.add(this.addDrawableChild(
+				new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> {
+					ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D));
+					this.buttonDelay.put(((ScreenButtonWidget) btn).key(), 40);
+				}, this::narrationButtonTooltip)));
+		this.ScreenWidgets.add(this.addDrawableChild(
+				new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1),
+						this::buttonPressed, this::narrationButtonTooltip)));
+		this.ScreenWidgets.add(this.addDrawableChild(
+				new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2),
+						this::buttonPressed, this::narrationButtonTooltip)));
+		this.ScreenWidgets.add(this.addDrawableChild(
+				new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3),
+						this::buttonPressed, this::narrationButtonTooltip)));
+		this.ScreenWidgets.add(this.addDrawableChild(
+				new ScreenButtonWidget(this.parent, 8, 89, 204, 0, 11, 10, BUTTON_KEYS.get(4),
+						this::buttonPressed, this::narrationButtonTooltip)));
+		this.ScreenWidgets.add(this.addDrawableChild(
+				new ScreenButtonWidget(this.parent, 8, 100, 204, 0, 11, 10, BUTTON_KEYS.get(5),
+						this::buttonPressed, this::narrationButtonTooltip)));
 	}
 
 	static {

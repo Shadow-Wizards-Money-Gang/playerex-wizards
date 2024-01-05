@@ -104,16 +104,16 @@ public final class RenderComponent {
 	 * @param scaleX
 	 * @param scaleY
 	 */
-	public void renderTooltip(LivingEntity livingEntity, RenderTooltip consumer, DrawContext ctx,
+	public void drawTooltip(LivingEntity livingEntity, DrawTooltip consumer, DrawContext ctx,
 			TextRenderer textRenderer, int x, int y, int mouseX, int mouseY, float scaleX, float scaleY) {
 		if (this.isMouseOver(x + this.dx, y + this.dy, textRenderer.getWidth(this.text.apply(livingEntity)) * scaleX, 7,
 				mouseX, mouseY)) {
-			consumer.renderTooltip(textRenderer, this.tooltip.apply(livingEntity), mouseX, mouseY);
+			consumer.drawTooltip(textRenderer, this.tooltip.apply(livingEntity), mouseX, mouseY);
 		}
 	}
 
 	@FunctionalInterface
-	public interface RenderTooltip {
+	public interface DrawTooltip {
 
 		/**
 		 * 
@@ -122,6 +122,6 @@ public final class RenderComponent {
 		 * @param mouseX
 		 * @param mouseY
 		 */
-		void renderTooltip(TextRenderer textRenderer, List<Text> tooltip, int mouseX, int mouseY);
+		void drawTooltip(TextRenderer textRenderer, List<Text> tooltip, int mouseX, int mouseY);
 	}
 }
