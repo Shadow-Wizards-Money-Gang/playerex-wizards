@@ -201,7 +201,7 @@ public class AttributesPageLayer extends PageLayer {
 
 		this.addDrawableChild(createAttributeButton(x, 23, BUTTON_KEYS.get(0), btn -> {
 			ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D));
-			this.buttonDelay.put(((ScreenButtonWidget) btn).key(), 40);
+			// this.buttonDelay.put(((ScreenButtonWidget) btn).key(), 40);
 		}).setTooltipSupplier(widget -> this.createAttributeTooltip(widget.key())));
 
 		this.addDrawableChild(createAttributeButton(x, 56, BUTTON_KEYS.get(1), this::buttonPressed));
