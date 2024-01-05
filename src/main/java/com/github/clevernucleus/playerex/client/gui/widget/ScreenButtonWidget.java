@@ -15,7 +15,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class ScreenButtonWidget extends ButtonWidget {
@@ -43,12 +42,13 @@ public class ScreenButtonWidget extends ButtonWidget {
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		if(tooltipSupplier != null && this.visible) this.setTooltip(tooltipSupplier.apply(this));
+		if (tooltipSupplier != null && this.visible)
+			this.setTooltip(tooltipSupplier.apply(this));
 
 		super.render(context, mouseX, mouseY, delta);
 	}
 
-	public ScreenButtonWidget setTooltipSupplier(Function<ScreenButtonWidget, @Nullable Tooltip> tooltipSupplier){
+	public ScreenButtonWidget setTooltipSupplier(Function<ScreenButtonWidget, @Nullable Tooltip> tooltipSupplier) {
 		this.tooltipSupplier = tooltipSupplier;
 
 		return this;

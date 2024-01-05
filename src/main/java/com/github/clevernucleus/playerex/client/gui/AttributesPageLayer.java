@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.github.clevernucleus.dataattributes_dc.api.DataAttributesAPI;
@@ -84,7 +83,7 @@ public class AttributesPageLayer extends PageLayer {
 					ExAPI.getConfig().skillUpVolume(), ExAPI.getConfig().skillUpPitch());
 			return (Object) null;
 		});
-		//this.buttonDelay.put(key, 40);
+		// this.buttonDelay.put(key, 40);
 	}
 
 	private Tooltip createAttributeTooltip(Identifier key) {
@@ -212,8 +211,10 @@ public class AttributesPageLayer extends PageLayer {
 		this.addDrawableChild(createAttributeButton(x, 100, BUTTON_KEYS.get(5), this::buttonPressed));
 	}
 
-	private ScreenButtonWidget createAttributeButton(int x, int y, Identifier key, ButtonWidget.PressAction pressAction){
-		var button = new ScreenButtonWidget(this.parent, x, y, 204, 0, 11, 10, key, pressAction, this::narrationButtonTooltip);
+	private ScreenButtonWidget createAttributeButton(int x, int y, Identifier key,
+			ButtonWidget.PressAction pressAction) {
+		var button = new ScreenButtonWidget(this.parent, x, y, 204, 0, 11, 10, key, pressAction,
+				this::narrationButtonTooltip);
 
 		button.setTooltip(this.createAttributeTooltip(key));
 
