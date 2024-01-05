@@ -62,6 +62,12 @@ public interface ExConfig {
 	 * @return 0 - 1.5. Volume multiplier for skill up event.
 	 */
 	float skillUpVolume();
+
+	/**
+	 * Client option.
+	 * @return 0 - 2. Pitch multiplier for skill up event.
+	 */
+	float skillUpPitch();
 	
 	/**
 	 * Client option.

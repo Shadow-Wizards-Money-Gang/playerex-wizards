@@ -46,10 +46,10 @@ public final class NetworkFactoryClient {
 	}
 	
 	public static void openInventoryScreen(ButtonWidget button) {
-		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeInt(-1);
-		
-		ClientPlayNetworking.send(NetworkFactory.SCREEN, buf);
+//		PacketByteBuf buf = PacketByteBufs.create();
+//		buf.writeInt(-1);
+//		ClientPlayNetworking.send(NetworkFactory.SCREEN, buf);
+
 		MinecraftClient client = MinecraftClient.getInstance();
 		client.setScreen(new InventoryScreen(client.player));
 	}

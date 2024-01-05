@@ -61,6 +61,11 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	private int skillUpVolume = 100;
 
 	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 200)
+	@ConfigEntry.Gui.Tooltip
+	private int skillUpPitch = 100;
+
+	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.Gui.Tooltip
 	private boolean disableInventoryTabs = false;
 
@@ -143,6 +148,11 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	@Override
 	public float skillUpVolume() {
 		return this.skillUpVolume * 0.01F;
+	}
+
+	@Override
+	public float skillUpPitch() {
+		return this.skillUpPitch * 0.01F;
 	}
 
 	@Override
