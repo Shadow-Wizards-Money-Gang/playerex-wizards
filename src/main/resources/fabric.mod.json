@@ -56,7 +56,7 @@
 	},
 	"custom": {
 		"cardinal-components": [
-			"playerex-directors-cut:player_entities"
+			"playerex-directors-cut:living_entities"
 		]
 	}
 }

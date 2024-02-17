@@ -5,7 +5,7 @@ import dev.onyxstudios.cca.api.v3.component.Component
 import dev.onyxstudios.cca.api.v3.entity.PlayerComponent
 import net.minecraft.nbt.NbtCompound
 
-class PlayerEntityComponent() : PlayerComponent<Component>, Component {
+class LivingEntityComponent() : PlayerComponent<Component>, Component {
     companion object {}
 
     private val attributes = mutableMapOf<PlayerEXDCAttributes, Int>()
