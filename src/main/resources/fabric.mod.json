@@ -35,6 +35,9 @@
 				"value": "com.edelweiss.playerex.PlayerEXDirectorsCutDataGenerator",
 				"adapter": "kotlin"
 			}
+		],
+		"cardinal-components": [
+			"com.edelweiss.playerex.PlayerEXDCEntityComponents"
 		]
 	},
 	"mixins": [
@@ -50,5 +53,10 @@
 		"java": ">=17",
 		"fabric-api": "*",
 		"fabric-language-kotlin": ">=1.9.22"
+	},
+	"custom": {
+		"cardinal-components": [
+			"playerex-directors-cut:player_entities"
+		]
 	}
 }
