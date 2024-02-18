@@ -15,7 +15,7 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/playerex-directors-cut/icon.png",
+	"icon": "assets/playerex/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -37,13 +37,13 @@
 			}
 		],
 		"cardinal-components": [
-			"com.edelweiss.playerex.PlayerEXDCEntityComponents"
+			"com.edelweiss.playerex.PlayerEXComponents"
 		]
 	},
 	"mixins": [
-		"playerex-directors-cut.mixins.json",
+		"playerex.mixins.json",
 		{
-			"config": "playerex-directors-cut.client.mixins.json",
+			"config": "playerex.client.mixins.json",
 			"environment": "client"
 		}
 	],
@@ -56,7 +56,8 @@
 	},
 	"custom": {
 		"cardinal-components": [
-			"playerex-directors-cut:living_entities"
+			"playerex:living_entities",
+			"playerex:player_entities"
 		]
 	}
 }
