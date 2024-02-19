@@ -38,12 +38,12 @@ object PlayerEXCacheCommands {
 
     private fun <T>nullKeyMessage(id: T): () -> MutableText = { Text.literal("$id -> <null_key>").formatted(Formatting.RED) }
 
-    private fun playerIDMessage(cache: PlayerEXCacheInternal, id: Either<String, UUID>?, function: () -> MutableText): () -> MutableText = {
+    private fun playerIDMessage(cache: PlayerEXCacheInternal, stringOrUUID: Either<String, UUID>?, function: () -> MutableText): () -> MutableText = {
         var formattedID = "<invalid_id>"
-        id?.ifLeft { name ->
-            formattedID = "UUID: ${cache.playerNameToUUID[name]}\n" + "Name: $id"
+        stringOrUUID?.ifLeft { name ->
+            formattedID = "UUID: ${cache.playerNameToUUID[name]}\n" + "Name: $name"
         }?.ifRight {
-            uuid -> formattedID = "UUID: $id\n" + "Name: ${cache.playerNameToUUID.inverse()[uuid]}"
+            uuid -> formattedID = "UUID: $uuid\n" + "Name: ${cache.playerNameToUUID.inverse()[uuid]}"
         }
         Text.literal("$formattedID\n").formatted(Formatting.GREEN)
             .append(function())
@@ -66,13 +66,13 @@ object PlayerEXCacheCommands {
                 val uuidOrString: Either<String, UUID>? = if (id is String) Either.left(id) else { if (id is UUID) Either.right(id) else null }
                 var fetchedValue: Any? = null
 
-                ctx.source.sendFeedback(
-                    playerIDMessage(cache, uuidOrString) { Text.literal("[$identifier] is ($value)").formatted(Formatting.WHITE) },
-                    false
-                )
-
                 uuidOrString?.ifLeft { fetchedValue = cache.get(server, id as String, value) }
                 uuidOrString?.ifRight { fetchedValue = cache.get(server, id as UUID, value) }
+
+                ctx.source.sendFeedback(
+                    playerIDMessage(cache, uuidOrString) { Text.literal("[$identifier] is ($fetchedValue)").formatted(Formatting.WHITE) },
+                    false
+                )
 
                 if (fetchedValue is Number) return@ifCachePresent abs(fetchedValue as Int) % 16
 

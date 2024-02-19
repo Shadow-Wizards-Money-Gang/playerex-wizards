@@ -8,7 +8,7 @@ interface PlayerEXCache {
     companion object {
         /** Registers the provided cached value to the server. */
         fun <V>register(key: CachedPlayerValue<V>): CachedPlayerValue<V> {
-            PlayerEXDirectorsCut.logger.debug("Cached Value has been registered: <{} :: #id: {}>", key, key.id())
+            PlayerEXDirectorsCut.LOGGER.debug("Cached Value has been registered: <{} :: #id: {}>", key, key.id())
             return PlayerEXCacheInternal.register(key)
         }
 
@@ -27,14 +27,14 @@ interface PlayerEXCache {
     fun <V>get(playerName: String, key: CachedPlayerValue<V>) {}
 
     /** Returns all offline & online player UUIDs. */
-    fun playerIDs(): Set<UUID>
+    fun playerIDs(): Collection<UUID>
 
     /** Returns all offline & online player names. */
-    fun playerNames(): Set<String>
+    fun playerNames(): Collection<String>
 
     /** Checks if the player with the UUID is in the cache or not. */
     fun isPlayerCached(uuid: UUID): Boolean
 
     /** Checks if the player with the name is in the cache or not. */
-    fun isPlayerCached(playerName: String)
+    fun isPlayerCached(playerName: String): Boolean
 }

@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory
 
 object PlayerEXDirectorsCut : ModInitializer {
 	const val MODID: String = "playerex"
-
-	val logger = LoggerFactory.getLogger(MODID)
+	val LOGGER = LoggerFactory.getLogger(MODID)!!
 
 	private fun registerCommands() = CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
 		val head = PlayerEXCommands.registerHead(dispatcher)

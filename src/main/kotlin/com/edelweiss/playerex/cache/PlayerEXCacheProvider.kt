@@ -8,21 +8,13 @@ class PlayerEXCacheProvider(
     private val internal: PlayerEXCacheInternal? = PlayerEXCacheInternal.ifCachePresent(server, null) { cache -> cache }
 ) : PlayerEXCache {
     /** Checks if the cache is "empty", as in being `null`. */
-    fun isEmpty(): Boolean = this.internal == null
+    fun isEmpty() = this.internal == null
 
-    override fun playerIDs(): Set<UUID> {
-        TODO("Not yet implemented")
-    }
+    override fun playerIDs() = this.internal!!.playerIDs(this.server)
 
-    override fun playerNames(): Set<String> {
-        TODO("Not yet implemented")
-    }
+    override fun playerNames() = this.internal!!.playerNames(this.server)
 
-    override fun isPlayerCached(uuid: UUID): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isPlayerCached(uuid: UUID) = this.internal!!.isPlayerCached(uuid)
 
-    override fun isPlayerCached(playerName: String) {
-        TODO("Not yet implemented")
-    }
+    override fun isPlayerCached(playerName: String) = this.internal!!.isPlayerCached(playerName)
 }
