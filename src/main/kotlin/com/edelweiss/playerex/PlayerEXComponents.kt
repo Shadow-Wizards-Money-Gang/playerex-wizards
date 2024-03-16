@@ -1,7 +1,6 @@
 package com.edelweiss.playerex
 
 import com.edelweiss.playerex.api.PlayerEXAPI
-import com.edelweiss.playerex.components.LivingEntityComponent
 import com.edelweiss.playerex.components.PlayerEntityComponent
 import dev.onyxstudios.cca.api.v3.component.ComponentKey
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry

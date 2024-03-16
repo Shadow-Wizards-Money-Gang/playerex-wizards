@@ -1,29 +1,28 @@
 package com.edelweiss.playerex.constants
 
 import com.edelweiss.playerex.api.PlayerEXAPI
-import net.minecraft.util.Identifier
 
-enum class EntityAttributes(val id: Identifier) {
-    Luck(PlayerEXAPI.id("luck")),
-    Level(PlayerEXAPI.id("level")),
-    Focus(PlayerEXAPI.id("focus")),
-    Evasion(PlayerEXAPI.id("evasion")),
-    Lifesteal(PlayerEXAPI.id("lifesteal")),
-    Strength(PlayerEXAPI.id("strength")),
-    Dexterity(PlayerEXAPI.id("dexterity")),
-    Intelligence(PlayerEXAPI.id("intelligence")),
-    Constitution(PlayerEXAPI.id("constitution")),
-    BreakingSpeed(PlayerEXAPI.id("breaking_speed")),
-    HealthRegeneration(PlayerEXAPI.id("health_regeneration")),
-    HealAmplification(PlayerEXAPI.id("heal_amplification")),
-    MeleeCritDamage(PlayerEXAPI.id("melee_crit_damage")),
-    MeleeCritChance(PlayerEXAPI.id("melee_crit_chance")),
-    RangedCritDamage(PlayerEXAPI.id("ranged_crit_damage")),
-    RangedCritChance(PlayerEXAPI.id("ranged_crit_chance")),
-    RangedBonusDamage(PlayerEXAPI.id("ranged_damage")),
-    FireResistance(PlayerEXAPI.id("fire_resistance")),
-    FreezeResistance(PlayerEXAPI.id("freeze_resistance")),
-    LightningResistance(PlayerEXAPI.id("lightning_resistance")),
-    PoisonResistance(PlayerEXAPI.id("poison_resistance")),
-    WitherResistance(PlayerEXAPI.id("wither_resistance")),
+object EntityAttributes {
+    val LUCK = PlayerEXAPI.id("luck")
+    val LEVEL = PlayerEXAPI.id("level")
+    val FOCUS = PlayerEXAPI.id("focus")
+    val EVASION = PlayerEXAPI.id("evasion")
+    val LIFESTEAL = PlayerEXAPI.id("lifesteal")
+    val STRENGTH = PlayerEXAPI.id("strength")
+    val DEXTERITY = PlayerEXAPI.id("dexterity")
+    val INTELLIGENCE = PlayerEXAPI.id("intelligence")
+    val CONSTITUTION = PlayerEXAPI.id("constitution")
+    val BREAKING_SPEED = PlayerEXAPI.id("breaking_speed")
+    val HEALTH_REGENERATION = PlayerEXAPI.id("health_regeneration")
+    val HEAL_AMPLIFICATION = PlayerEXAPI.id("heal_amplification")
+    val MELEE_CRIT_DAMAGE = PlayerEXAPI.id("melee_crit_damage")
+    val MELEE_CRIT_CHANCE = PlayerEXAPI.id("melee_crit_chance")
+    val RANGED_CRIT_DAMAGE = PlayerEXAPI.id("ranged_crit_damage")
+    val RANGED_CRIT_CHANCE = PlayerEXAPI.id("ranged_crit_chance")
+    val RANGED_BONUS_DAMAGE = PlayerEXAPI.id("ranged_damage")
+    val FIRE_RESISTANCE = PlayerEXAPI.id("fire_resistance")
+    val FREEZE_RESISTANCE = PlayerEXAPI.id("freeze_resistance")
+    val LIGHTNING_RESISTANCE = PlayerEXAPI.id("lightning_resistance")
+    val POISON_RESISTANCE = PlayerEXAPI.id("poison_resistance")
+    val WITHER_RESISTANCE = PlayerEXAPI.id("wither_resistance")
 }

@@ -1,4 +1,4 @@
-package com.edelweiss.playerex.mixin;
+package com.edelweiss.playerex.mixin.cache;
 
 import com.edelweiss.playerex.cache.PlayerEXCacheData;
 import com.edelweiss.playerex.cache.PlayerEXCacheInternal;

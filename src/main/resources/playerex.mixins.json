@@ -3,9 +3,9 @@
   "package": "com.edelweiss.playerex.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LevelPropertiesMixin",
-    "PlayerManagerMixin",
-    "UnmodifiableLevelPropertiesMixin"
+    "cache.LevelPropertiesMixin",
+    "cache.PlayerManagerMixin",
+    "cache.UnmodifiableLevelPropertiesMixin"
   ],
   "injectors": {
     "defaultRequire": 1
