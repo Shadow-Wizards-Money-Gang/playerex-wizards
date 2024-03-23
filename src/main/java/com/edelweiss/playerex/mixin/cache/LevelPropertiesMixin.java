@@ -1,7 +1,7 @@
 package com.edelweiss.playerex.mixin.cache;
 
 import com.edelweiss.playerex.cache.PlayerEXCacheData;
-import com.edelweiss.playerex.cache.PlayerEXCacheInternal;
+import com.edelweiss.playerex.cache.PlayerEXCache;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.Lifecycle;
@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LevelProperties.class)
 abstract class LevelPropertiesMixin implements PlayerEXCacheData {
     @Unique
-    private final PlayerEXCacheInternal playerEXCache = new PlayerEXCacheInternal();
+    private final PlayerEXCache playerEXCache = new PlayerEXCache();
 
     @Inject(method = "updateProperties", at = @At("HEAD"))
     private void playerex_updateProperties(DynamicRegistryManager registryManager, NbtCompound levelNbt, NbtCompound playerNbt, CallbackInfo ci) {
@@ -37,7 +37,7 @@ abstract class LevelPropertiesMixin implements PlayerEXCacheData {
     }
 
     @Override
-    public PlayerEXCacheInternal playerEXCache() {
+    public PlayerEXCache playerEXCache() {
         return this.playerEXCache;
     }
 }

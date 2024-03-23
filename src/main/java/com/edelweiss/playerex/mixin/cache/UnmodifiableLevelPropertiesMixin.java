@@ -1,7 +1,7 @@
 package com.edelweiss.playerex.mixin.cache;
 
 import com.edelweiss.playerex.cache.PlayerEXCacheData;
-import com.edelweiss.playerex.cache.PlayerEXCacheInternal;
+import com.edelweiss.playerex.cache.PlayerEXCache;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.UnmodifiableLevelProperties;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ abstract class UnmodifiableLevelPropertiesMixin implements PlayerEXCacheData {
 
     @NotNull
     @Override
-    public PlayerEXCacheInternal playerEXCache() {
+    public PlayerEXCache playerEXCache() {
         return ((PlayerEXCacheData) this.worldProperties).playerEXCache();
     }
 }

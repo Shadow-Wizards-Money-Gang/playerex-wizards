@@ -1,13 +1,13 @@
 package com.edelweiss.playerex.api
 
 import com.edelweiss.playerex.PlayerEXDirectorsCut
-import com.edelweiss.playerex.cache.PlayerEXCache
+import com.edelweiss.playerex.cache.PlayerEXCacheAPI
 import com.edelweiss.playerex.values.LevelValue
 import net.minecraft.util.Identifier
 
 /** Singleton used for main API access for PlayerEX. */
 object PlayerEXAPI {
-    val LEVEL_VALUE = PlayerEXCache.register(LevelValue())
+    val LEVEL_VALUE = PlayerEXCacheAPI.register(LevelValue())
 
 
     /**

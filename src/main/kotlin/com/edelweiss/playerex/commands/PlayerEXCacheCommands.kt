@@ -1,6 +1,6 @@
 package com.edelweiss.playerex.commands
 
-import com.edelweiss.playerex.cache.PlayerEXCacheInternal
+import com.edelweiss.playerex.cache.PlayerEXCache
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
@@ -21,39 +21,37 @@ import kotlin.math.abs
 
 object PlayerEXCacheCommands {
     private val suggestionKeys = SuggestionProvider<ServerCommandSource> { _, builder ->
-        CommandSource.suggestIdentifiers(PlayerEXCacheInternal.keys(), builder)
+        CommandSource.suggestIdentifiers(PlayerEXCache.keys(), builder)
     }
     private val suggestionNames = SuggestionProvider<ServerCommandSource> { ctx, builder ->
-        PlayerEXCacheInternal.ifCachePresent(ctx.source.server, builder.buildFuture()) { cache ->
-            cache.playerNames(ctx.source.server).forEach(builder::suggest)
-            return@ifCachePresent builder.buildFuture()
-        }
+        val cache = PlayerEXCache.get(ctx.source.server) ?: return@SuggestionProvider builder.buildFuture();
+        cache.playerNames(ctx.source.server).forEach(builder::suggest)
+        return@SuggestionProvider builder.buildFuture()
     }
     private val suggestionUUIDs = SuggestionProvider<ServerCommandSource> { ctx, builder ->
-        PlayerEXCacheInternal.ifCachePresent(ctx.source.server, builder.buildFuture()) { cache ->
-            cache.playerIDs(ctx.source.server).forEach { id -> builder.suggest(id.toString()) }
-            return@ifCachePresent builder.buildFuture()
-        }
+        val cache = PlayerEXCache.get(ctx.source.server) ?: return@SuggestionProvider builder.buildFuture()
+        cache.playerIDs(ctx.source.server).forEach { id -> builder.suggest(id.toString()) }
+        return@SuggestionProvider builder.buildFuture()
     }
 
     private fun <T>nullKeyMessage(id: T): () -> MutableText = { Text.literal("$id -> <null_key>").formatted(Formatting.RED) }
 
-    private fun playerIDMessage(cache: PlayerEXCacheInternal, stringOrUUID: Either<String, UUID>?, function: () -> MutableText): () -> MutableText = {
+    private fun playerIDMessage(cache: PlayerEXCache, either: Either<String, UUID>?, text: () -> MutableText): () -> MutableText = {
         var formattedID = "<invalid_id>"
-        stringOrUUID?.ifLeft { name ->
+        either?.ifLeft { name ->
             formattedID = "UUID: ${cache.playerNameToUUID[name]}\n" + "Name: $name"
         }?.ifRight {
             uuid -> formattedID = "UUID: $uuid\n" + "Name: ${cache.playerNameToUUID.inverse()[uuid]}"
         }
         Text.literal("$formattedID\n").formatted(Formatting.GREEN)
-            .append(function())
+            .append(text())
     }
 
     private fun <T>getKey(input: (CommandContext<ServerCommandSource>) -> T): ArgumentCommandNode<ServerCommandSource, Identifier> {
         return CommandManager.argument("key", IdentifierArgumentType.identifier()).suggests(suggestionKeys).executes { ctx ->
             val id = input(ctx)
             val identifier = IdentifierArgumentType.getIdentifier(ctx, "key")
-            val value = PlayerEXCacheInternal.getKey(identifier)
+            val value = PlayerEXCache.getKey(identifier)
 
             if (value == null) {
                 ctx.source.sendFeedback(nullKeyMessage(id), false)
@@ -62,22 +60,22 @@ object PlayerEXCacheCommands {
 
             val server = ctx.source.server
 
-            return@executes PlayerEXCacheInternal.ifCachePresent(server, -1) { cache ->
-                val uuidOrString: Either<String, UUID>? = if (id is String) Either.left(id) else { if (id is UUID) Either.right(id) else null }
-                var fetchedValue: Any? = null
+            val cache = PlayerEXCache.get(server) ?: return@executes -1;
 
-                uuidOrString?.ifLeft { fetchedValue = cache.get(server, id as String, value) }
-                uuidOrString?.ifRight { fetchedValue = cache.get(server, id as UUID, value) }
+            val uuidOrString: Either<String, UUID>? = if (id is String) Either.left(id) else { if (id is UUID) Either.right(id) else null }
+            var fetchedValue: Any? = null
 
-                ctx.source.sendFeedback(
-                    playerIDMessage(cache, uuidOrString) { Text.literal("[$identifier] is ($fetchedValue)").formatted(Formatting.WHITE) },
-                    false
-                )
+            uuidOrString?.ifLeft { fetchedValue = cache.get(server, id as String, value) }
+            uuidOrString?.ifRight { fetchedValue = cache.get(server, id as UUID, value) }
 
-                if (fetchedValue is Number) return@ifCachePresent abs(fetchedValue as Int) % 16
+            ctx.source.sendFeedback(
+                playerIDMessage(cache, uuidOrString) { Text.literal("[$identifier] is ($fetchedValue)").formatted(Formatting.WHITE) },
+                false
+            )
 
-                return@ifCachePresent 1
-            }
+            if (fetchedValue is Number) return@executes abs(fetchedValue as Int) % 16
+
+            return@executes 1
         }.build()
     }
 
@@ -85,7 +83,7 @@ object PlayerEXCacheCommands {
         return CommandManager.argument("key", IdentifierArgumentType.identifier()).suggests(suggestionKeys).executes { ctx ->
             val id = input(ctx)
             val identifier = IdentifierArgumentType.getIdentifier(ctx, "key")
-            val value = PlayerEXCacheInternal.getKey(identifier)
+            val value = PlayerEXCache.getKey(identifier)
 
             if (value == null) {
                 ctx.source.sendFeedback(nullKeyMessage(id), false)
@@ -94,14 +92,13 @@ object PlayerEXCacheCommands {
 
             val server = ctx.source.server
 
-            return@executes PlayerEXCacheInternal.ifCachePresent(server, -1) { cache ->
-                if (id is String) cache.uncache(id as String)
-                else if (id is UUID) cache.uncache(id as UUID)
+            val cache = PlayerEXCache.get(server) ?: return@executes -1;
+            if (id is String) cache.uncache(id as String)
+            else if (id is UUID) cache.uncache(id as UUID)
 
-                ctx.source.sendFeedback({Text.literal("-$id -$identifier").formatted(Formatting.GRAY)}, false)
+            ctx.source.sendFeedback({Text.literal("-$id -$identifier").formatted(Formatting.GRAY)}, false)
 
-                return@ifCachePresent 1
-            }
+            return@executes 1
         }.build()
     }
 
@@ -132,23 +129,21 @@ object PlayerEXCacheCommands {
 
         val nameArgNode = CommandManager.argument("name", StringArgumentType.string()).suggests(suggestionNames).executes {ctx ->
             val server = ctx.source.server
-            return@executes PlayerEXCacheInternal.ifCachePresent(server, -1) { cache ->
-                val playerString = StringArgumentType.getString(ctx, "name")
-                cache.uncache(playerString)
-                ctx.source.sendFeedback({Text.literal("-$playerString -*").formatted(Formatting.GRAY)}, false)
-                return@ifCachePresent 1
-            }
+            val cache = PlayerEXCache.get(server) ?: return@executes -1;
+            val playerString = StringArgumentType.getString(ctx, "name")
+            cache.uncache(playerString)
+            ctx.source.sendFeedback({Text.literal("-$playerString -*").formatted(Formatting.GRAY)}, false)
+            return@executes 1
         }.build()
 
         val key1 = removeKey { ctx -> StringArgumentType.getString(ctx, "name") }
         val uuid = CommandManager.argument("uuid", UuidArgumentType.uuid()).suggests(suggestionUUIDs).executes { ctx ->
             val server = ctx.source.server
-            return@executes PlayerEXCacheInternal.ifCachePresent(server, -1) { cache ->
-                val playerUUID = UuidArgumentType.getUuid(ctx, "uuid")
-                cache.uncache(playerUUID)
-                ctx.source.sendFeedback({Text.literal("-$playerUUID -*").formatted(Formatting.GRAY)}, false)
-                return@ifCachePresent 1
-            }
+            val cache = PlayerEXCache.get(server) ?: return@executes -1;
+            val playerUUID = UuidArgumentType.getUuid(ctx, "uuid")
+            cache.uncache(playerUUID)
+            ctx.source.sendFeedback({Text.literal("-$playerUUID -*").formatted(Formatting.GRAY)}, false)
+            return@executes 1
         }.build()
 
         val key2 = removeKey { ctx -> UuidArgumentType.getUuid(ctx, "uuid") }

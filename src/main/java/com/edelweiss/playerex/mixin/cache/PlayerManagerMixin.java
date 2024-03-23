@@ -1,6 +1,6 @@
 package com.edelweiss.playerex.mixin.cache;
 
-import com.edelweiss.playerex.cache.PlayerEXCacheInternal;
+import com.edelweiss.playerex.cache.PlayerEXCache;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -27,25 +27,19 @@ abstract class PlayerManagerMixin {
 
     @Inject(method = "onPlayerConnect", at = @At("TAIL"))
     private void playerex_onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
-        PlayerEXCacheInternal.Companion.ifCachePresent(this.server, null, playerCache -> {
-            playerCache.uncache(player);
-            return null;
-        });
+        var cache = PlayerEXCache.Companion.get(this.server);
+        if (cache != null) cache.uncache(player);
     }
 
     @Inject(method = "remove", at = @At("HEAD"))
     private void playerex_remove(ServerPlayerEntity player, CallbackInfo ci) {
-        PlayerEXCacheInternal.Companion.ifCachePresent(this.server, null, playerCache -> {
-            playerCache.cache(player);
-            return null;
-        });
+        var cache = PlayerEXCache.Companion.get(this.server);
+        if (cache != null) cache.cache(player);
     }
 
     @Inject(method = "disconnectAllPlayers", at = @At("HEAD"))
     private void playerex_disconnectAllPlayers(CallbackInfo ci) {
-        PlayerEXCacheInternal.Companion.ifCachePresent(this.server, null, playerCache -> {
-            for (ServerPlayerEntity player : this.players) { playerCache.cache(player); }
-            return null;
-        });
+        var cache = PlayerEXCache.Companion.get(this.server);
+        if (cache != null) for (ServerPlayerEntity player : this.players) { cache.cache(player); }
     }
 }

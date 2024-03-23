@@ -1,5 +1,5 @@
 package com.edelweiss.playerex.cache
 
 interface PlayerEXCacheData {
-    fun playerEXCache(): PlayerEXCacheInternal
+    fun playerEXCache(): PlayerEXCache
 }
