@@ -65,6 +65,9 @@ dependencies {
 
 	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 	include "io.wispforest:owo-sentinel:${project.owo_version}"
+
+	// All The Trims
+//	modImplementation "maven.modrinth:allthetrims:${project.all_the_trims_version}"
 }
 
 processResources {
