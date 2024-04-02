@@ -1,4 +1,4 @@
-package com.edelweiss.playerex.skill_attributes.json
+package com.edelweiss.playerex.attributes.json
 
 import com.edelweiss.skillattributes.enums.FunctionBehavior
 import com.edelweiss.skillattributes.utils.from

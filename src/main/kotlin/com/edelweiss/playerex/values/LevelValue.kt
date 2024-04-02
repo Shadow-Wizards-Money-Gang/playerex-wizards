@@ -5,7 +5,6 @@ import com.edelweiss.playerex.cache.CachedPlayerValue
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
-
 /** Represents a cacheable PlayerEX level. */
 class LevelValue(private val id: Identifier = PlayerEXAPI.id("level")) : CachedPlayerValue<Int> {
     override fun get(player: ServerPlayerEntity): Int {
@@ -18,7 +17,7 @@ class LevelValue(private val id: Identifier = PlayerEXAPI.id("level")) : CachedP
 
     override fun writeToNbt(tag: NbtCompound, value: Any?): Boolean {
         if (value is Int) {
-            tag.putInt("level", value)
+            tag.putInt(this.id.path, value)
             return true
         }
         else return false
@@ -26,7 +25,6 @@ class LevelValue(private val id: Identifier = PlayerEXAPI.id("level")) : CachedP
 
     override fun id(): Identifier = this.id
 
-    // todo: unsure if this is needed, but will leave this here (for now) ~ Jecka
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other === null) return false

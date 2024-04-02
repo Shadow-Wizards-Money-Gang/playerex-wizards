@@ -1,7 +1,7 @@
-package com.edelweiss.playerex.skill_attributes.json
+package com.edelweiss.playerex.attributes.json
 
-import com.edelweiss.playerex.skill_attributes.enums.AttributeOverrideTags
-import com.edelweiss.playerex.skill_attributes.utils.NbtIO
+import com.edelweiss.playerex.attributes.enums.AttributeOverrideTags
+import com.edelweiss.playerex.attributes.utils.NbtIO
 import com.edelweiss.skillattributes.enums.StackingFormula
 import com.edelweiss.skillattributes.utils.from
 import kotlinx.serialization.Serializable

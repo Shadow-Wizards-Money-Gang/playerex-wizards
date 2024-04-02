@@ -1,4 +1,4 @@
-package com.edelweiss.playerex.skill_attributes.utils
+package com.edelweiss.playerex.attributes.utils
 
 import net.minecraft.nbt.NbtCompound
 

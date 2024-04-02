@@ -1,4 +1,4 @@
-package com.edelweiss.playerex.skill_attributes.json
+package com.edelweiss.playerex.attributes.json
 
 import kotlinx.serialization.Serializable
 

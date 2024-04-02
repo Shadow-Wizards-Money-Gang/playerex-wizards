@@ -13,5 +13,5 @@ object PlayerEXAPI {
     /**
     * Creates and returns an `Identifier` based on the PlayerEX mod id.
     * */
-    fun id(str: String) = Identifier(PlayerEXDirectorsCut.MODID, str)
+    fun id(path: String) = Identifier(PlayerEXDirectorsCut.MODID, path)
 }
