@@ -18,7 +18,7 @@ import net.minecraft.nbt.NbtCompound
 //}
 
 @Serializable
-data class AttributeOverride(
+data class AttributeOverrideJSON(
     private var default: Double,
     private var min: Double,
     private var max: Double,

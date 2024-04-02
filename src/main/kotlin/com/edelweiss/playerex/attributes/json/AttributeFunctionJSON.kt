@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import java.nio.ByteBuffer
 
 @Serializable
-data class AttributeFunction(
+data class AttributeFunctionJSON(
     /** The behavior associated with the attribute function. */
     @SerialName("behaviour")
     val behavior: FunctionBehavior,
@@ -20,9 +20,9 @@ data class AttributeFunction(
          * Attempts to read the data through a byte array.
          * This is prone to fail, and will return null if it does.
          * */
-        fun read(array: ByteArray): AttributeFunction? {
+        fun read(array: ByteArray): AttributeFunctionJSON? {
             val behavior = (FunctionBehavior::id from array[8]) ?: return null
-            return AttributeFunction(behavior, ByteBuffer.wrap(array).getDouble())
+            return AttributeFunctionJSON(behavior, ByteBuffer.wrap(array).getDouble())
         }
     }
 
