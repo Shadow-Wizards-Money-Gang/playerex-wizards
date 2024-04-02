@@ -12,7 +12,7 @@ import java.util.UUID
 /** This is the singleton class that implements the cache. */
 class PlayerEXCache(
     private val cache: MutableMap<UUID, MutableMap<CachedPlayerValue<*>, *>> = mutableMapOf(),
-    val playerNameToUUID: BiMap<String, UUID> = HashBiMap.create()
+    private val playerNameToUUID: BiMap<String, UUID> = HashBiMap.create()
 ) {
     companion object {
         private val cacheKeys = mutableMapOf<Identifier, CachedPlayerValue<*>>()
@@ -69,6 +69,12 @@ class PlayerEXCache(
         }
         return set
     }
+
+    /** Attempts to get the player UUID within the cache map based on a name. */
+    fun getUUID(playerName: String) = this.playerNameToUUID[playerName]
+
+    /** Attempts to get the player name within the cache map based on a UUID. */
+    fun getPlayerName(uuid: UUID) = this.playerNameToUUID.inverse()[uuid]
 
     /** Collects all the player names from the server into a `Set`. */
     fun playerNames(server: MinecraftServer): Collection<String> {

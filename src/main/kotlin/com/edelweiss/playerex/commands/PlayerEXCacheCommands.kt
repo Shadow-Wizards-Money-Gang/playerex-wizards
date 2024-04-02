@@ -39,9 +39,9 @@ object PlayerEXCacheCommands {
     private fun playerIDMessage(cache: PlayerEXCache, either: Either<String, UUID>?, text: () -> MutableText): () -> MutableText = {
         var formattedID = "<invalid_id>"
         either?.ifLeft { name ->
-            formattedID = "UUID: ${cache.playerNameToUUID[name]}\n" + "Name: $name"
+            formattedID = "UUID: ${cache.getUUID(name)}\n" + "Name: $name"
         }?.ifRight {
-            uuid -> formattedID = "UUID: $uuid\n" + "Name: ${cache.playerNameToUUID.inverse()[uuid]}"
+            uuid -> formattedID = "UUID: $uuid\n" + "Name: ${cache.getPlayerName(uuid)}"
         }
         Text.literal("$formattedID\n").formatted(Formatting.GREEN)
             .append(text())

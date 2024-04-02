@@ -21,10 +21,10 @@ class PlayerEXCacheAPI(private val server: MinecraftServer) {
     }
 
     /** Fetches the last cached value if offline, otherwise will fetch the current value from the player. */
-    fun <V>get(uuid: UUID, key: CachedPlayerValue<V>): V? = PlayerEXCache.get(this.server)?.get(server, uuid, key)
+    fun <V>get(uuid: UUID, key: CachedPlayerValue<V>): V? = PlayerEXCache.get(this.server)!!.get(server, uuid, key)
 
     /** Fetches the last cached value if offline, otherwise will fetch the current value from the player. */
-    fun <V>get(playerName: String, key: CachedPlayerValue<V>): V? = PlayerEXCache.get(this.server)?.get(server, playerName, key)
+    fun <V>get(playerName: String, key: CachedPlayerValue<V>): V? = PlayerEXCache.get(this.server)!!.get(server, playerName, key)
 
     /** Returns all offline & online player UUIDs. */
     fun playerIDs(): Collection<UUID> = PlayerEXCache.get(this.server)!!.playerIDs(this.server)
