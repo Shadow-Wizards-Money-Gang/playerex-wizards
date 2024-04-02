@@ -1,6 +1,6 @@
 package com.edelweiss.playerex.attributes.json
 
-import com.edelweiss.playerex.attributes.enums.AttributeOverrideTags
+import com.edelweiss.playerex.attributes.tags.AttributeOverrideTags
 import com.edelweiss.playerex.attributes.utils.NbtIO
 import com.edelweiss.skillattributes.enums.StackingFormula
 import com.edelweiss.skillattributes.utils.from
@@ -24,8 +24,6 @@ data class AttributeOverrideJSON(
     private var max: Double,
     private var increment: Double,
     private var formula: StackingFormula,
-    // todo: figure out if this needs to be kept, allows people to override translations.
-    // Looks to be required...
     private var translationKey: String
 ) : NbtIO
 {

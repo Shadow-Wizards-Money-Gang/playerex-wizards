@@ -1,4 +1,4 @@
-package com.edelweiss.playerex.attributes.enums
+package com.edelweiss.playerex.attributes.tags
 
 object AttributeOverrideTags {
     const val DEFAULT = "default"
