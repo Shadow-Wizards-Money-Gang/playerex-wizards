@@ -2,4 +2,5 @@ package com.edelweiss.playerex.attributes.json
 
 import kotlinx.serialization.Serializable
 
-data class PropertiesJSON(val values: MutableMap<String, MutableMap<String, String>>)
+@Serializable
+data class PropertiesJSON(private val properties: MutableMap<String, MutableMap<String, String>>) : DataMerger<String>(properties)

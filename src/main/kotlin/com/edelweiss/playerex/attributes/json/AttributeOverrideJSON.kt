@@ -1,5 +1,6 @@
 package com.edelweiss.playerex.attributes.json
 
+import com.edelweiss.playerex.attributes.mutable.MutableEntityAttribute
 import com.edelweiss.playerex.attributes.tags.AttributeOverrideTags
 import com.edelweiss.playerex.attributes.utils.NbtIO
 import com.edelweiss.skillattributes.enums.StackingFormula
@@ -27,10 +28,19 @@ data class AttributeOverrideJSON(
     private var translationKey: String
 ) : NbtIO
 {
+    constructor(tag: NbtCompound) : this(
+        tag.getDouble(AttributeOverrideTags.DEFAULT),
+        tag.getDouble(AttributeOverrideTags.MIN),
+        tag.getDouble(AttributeOverrideTags.MAX),
+        tag.getDouble(AttributeOverrideTags.INCREMENT),
+        (StackingFormula::id from tag.getByte(AttributeOverrideTags.FORMULA)) ?: StackingFormula.Flat,
+        tag.getString(AttributeOverrideTags.TRANSLATION_KEY)
+    )
+
     /** Creates and returns a `ClampedEntityAttribute`. */
     fun create() = ClampedEntityAttribute(this.translationKey, this.default, this.min, this.max)
 
-//    fun override(attribute: MutableEntityAttribute) = attribute.override(this)
+    fun override(attribute: MutableEntityAttribute) = attribute.override(this)
 
     override fun readFromNbt(tag: NbtCompound) {
         this.default = tag.getDouble(AttributeOverrideTags.DEFAULT)

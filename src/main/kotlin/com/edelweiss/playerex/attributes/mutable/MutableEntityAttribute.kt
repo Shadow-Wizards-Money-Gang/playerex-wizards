@@ -8,7 +8,7 @@ import com.edelweiss.skillattributes.enums.StackingFormula
 /** An interface for a mutable PlayerEX Entity Attribute. */
 interface MutableEntityAttribute : PEXEntityAttribute {
     /** Overrides properties of the `PEXEntityAttribute`. */
-    fun override(min: Double, max: Double, default: Double, increment: Double, formula: StackingFormula, translationKey: String)
+    fun override(json: AttributeOverrideJSON)
 
     /** Sets additional properties for the `EntityAttribute` */
     fun setProperties(properties: Map<String, String>)
@@ -17,7 +17,7 @@ interface MutableEntityAttribute : PEXEntityAttribute {
     fun addParent(parent: MutableEntityAttribute, function: AttributeFunctionJSON)
 
     /** Adds a child `EntityAttribute` with an associated function. */
-    fun addChild(child: MutableEntityAttribute, function: AttributeOverrideJSON)
+    fun addChild(child: MutableEntityAttribute, function: AttributeFunctionJSON)
 
     /** Clears properties & relationships of the `EntityAttribute`. */
     fun clear()
