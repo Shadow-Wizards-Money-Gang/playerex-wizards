@@ -38,7 +38,7 @@ class AttributeContainerHandler(
         val container = AttributeContainer(builder.build())
         (container as MutableAttributeContainer).setLivingEntity(livingEntity)
 
-        return container;
+        return container
     }
 
    fun buildContainers(entityTypeDataIn: Map<Identifier, EntityTypeData>, instances: Map<Identifier, AttributeManager.Tuple<Int>>) {
@@ -76,7 +76,7 @@ class AttributeContainerHandler(
             val builder = DefaultAttributeContainer.builder()
             val entityTypeData = entityTypeDataIn[id]
             entityTypeData?.build(builder)
-            implContainers[index] = AttributeManager.Tuple<DefaultAttributeContainer>(tuple.entity, builder.build())
+            implContainers[index] = AttributeManager.Tuple(tuple.entity, builder.build())
         }
 
         this.implicitContainers = implContainers

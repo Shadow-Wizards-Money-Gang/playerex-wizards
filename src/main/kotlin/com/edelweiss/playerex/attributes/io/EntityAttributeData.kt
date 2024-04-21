@@ -11,9 +11,9 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
 class EntityAttributeData(
-    var attributeOverride: AttributeOverrideJSON? = null,
-    val functions: MutableMap<Identifier, AttributeFunctionJSON> = mutableMapOf(),
-    val properties: MutableMap<String, String> = mutableMapOf()
+    private var attributeOverride: AttributeOverrideJSON? = null,
+    private val functions: MutableMap<Identifier, AttributeFunctionJSON> = mutableMapOf(),
+    private val properties: MutableMap<String, String> = mutableMapOf()
 ) : NbtIO {
     fun override(identifier: Identifier, function: (Identifier, EntityAttribute) -> EntityAttribute) {
         this.attributeOverride?.let { override ->
@@ -62,11 +62,11 @@ class EntityAttributeData(
         }
 
         val functions = NbtCompound()
-        this.functions.forEach { k, v -> functions.putByteArray(k.toString(), v.write()) }
+        this.functions.forEach { (k, v) -> functions.putByteArray(k.toString(), v.write()) }
         tag.put(AttributeTags.FUNCTIONS, functions)
 
         val properties = NbtCompound()
-        this.properties.forEach { k, v -> properties.putString(k.toString(), v) }
+        this.properties.forEach { (k, v) -> properties.putString(k, v) }
         tag.put(AttributeTags.PROPERTIES, properties)
     }
 }
