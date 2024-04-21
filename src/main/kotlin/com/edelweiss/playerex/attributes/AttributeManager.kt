@@ -158,7 +158,9 @@ class AttributeManager(
 
             entityTypes.keys.forEach { key ->
                 val identifier = Identifier(key)
-                val data = EntityTypeData(entityTypes[key] ?: return@forEach)
+                val data = EntityTypeData((entityTypes[key] ?: return@forEach).entries.associate {
+                    entry -> Identifier(entry.key) to entry.value }.toMutableMap()
+                )
                 entityTypeData[identifier] = data
             }
         }

@@ -8,9 +8,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
 class EntityTypeData(val data: MutableMap<Identifier, Double> = mutableMapOf()) : NbtIO {
-    constructor(stringData: Map<String, Double>) : this(mutableMapOf<Identifier, Double>()) {
-        stringData.forEach { k, v -> this.data[Identifier(k)] = v }
-    }
 
     /** Builds the type data using a nullable DAC and the builder associated. */
     fun build(builder: DefaultAttributeContainer.Builder, container: DefaultAttributeContainer? = null) {
