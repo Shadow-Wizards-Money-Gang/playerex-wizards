@@ -25,7 +25,6 @@ object PlayerEXDirectorsCut : ModInitializer {
 	}
 
 	override fun onInitialize() {
-		LOGGER.info(Json.encodeToString(AttributeOverrideJSON()))
 //		ServerLifecycleEvents.SERVER_STARTING.register(ServerEventListeners::serverStarting)
 //		ServerPlayerEvents.COPY_FROM.register(ServerEventListeners::reset)
 
