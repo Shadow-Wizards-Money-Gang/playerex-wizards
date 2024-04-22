@@ -8,6 +8,7 @@ import com.edelweiss.playerex.attributes.mutable.MutableEntityAttribute
 import com.edelweiss.playerex.attributes.mutable.PEXMutableRegistry
 import com.edelweiss.playerex.attributes.tags.AttributeTags
 import com.edelweiss.playerex.attributes.utils.NbtIO
+import com.edelweiss.playerex.attributes.utils.merge
 import com.mojang.logging.LogUtils
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -98,7 +99,7 @@ class AttributeManager(
             }
 
             val functions = mutableMapOf<String, MutableMap<String, AttributeFunctionJSON>>()
-            cache.values.forEach { json -> json.merge(functions) }
+            cache.values.forEach { json -> json.values merge functions }
 
             functions.keys.forEach { key ->
                 val identifier = Identifier(key)
@@ -126,7 +127,7 @@ class AttributeManager(
             }
 
             val properties = mutableMapOf<String, MutableMap<String, String>>()
-            cache.values.forEach { json -> json.merge(properties) }
+            cache.values.forEach { json -> json.values merge properties }
 
             properties.keys.forEach { key ->
                 val identifier = Identifier(key)
@@ -154,7 +155,7 @@ class AttributeManager(
             }
 
             val entityTypes = mutableMapOf<String, MutableMap<String, Double>>()
-            cache.values.forEach { json -> json.merge(entityTypes) }
+            cache.values.forEach { json -> json.values merge entityTypes }
 
             entityTypes.keys.forEach { key ->
                 val identifier = Identifier(key)
@@ -249,13 +250,16 @@ class AttributeManager(
         this.updateFlag = tag.getInt(AttributeTags.UPDATE_FLAG)
     }
 
+    /** Shorthand to create and return a compound based on the information from this manager. **/
+    fun toNBT(): NbtCompound { val compound = NbtCompound(); this.writeToNbt(compound); return compound }
+
     fun nextUpdateFlag() { this.updateFlag++ }
 
     fun getUpdateFlag() = this.updateFlag
 
     fun getContainer(entityType: EntityType<out LivingEntity>, livingEntity: LivingEntity): AttributeContainer = this.handler.getContainer(entityType, livingEntity)
 
-    private fun apply() {
+    fun apply() {
         PEXMutableRegistry.unregister(Registries.ATTRIBUTE)
 
         Registries.ATTRIBUTE.ids.forEach { id -> (Registries.ATTRIBUTE[id] as? MutableEntityAttribute ?: return@forEach).clear() }

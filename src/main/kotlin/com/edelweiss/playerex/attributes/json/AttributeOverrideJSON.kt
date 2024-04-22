@@ -4,7 +4,7 @@ import com.edelweiss.playerex.attributes.mutable.MutableEntityAttribute
 import com.edelweiss.playerex.attributes.tags.AttributeOverrideTags
 import com.edelweiss.playerex.attributes.utils.NbtIO
 import com.edelweiss.skillattributes.enums.StackingFormula
-import com.edelweiss.skillattributes.utils.from
+import com.edelweiss.skillattributes.utils.find
 import kotlinx.serialization.Serializable
 import net.minecraft.entity.attribute.ClampedEntityAttribute
 import net.minecraft.nbt.NbtCompound
@@ -33,7 +33,7 @@ data class AttributeOverrideJSON(
         tag.getDouble(AttributeOverrideTags.MIN),
         tag.getDouble(AttributeOverrideTags.MAX),
         tag.getDouble(AttributeOverrideTags.INCREMENT),
-        (StackingFormula::id from tag.getByte(AttributeOverrideTags.FORMULA)) ?: StackingFormula.Flat,
+        (StackingFormula::id find tag.getByte(AttributeOverrideTags.FORMULA)) ?: StackingFormula.Flat,
         tag.getString(AttributeOverrideTags.TRANSLATION_KEY)
     )
 
@@ -49,7 +49,7 @@ data class AttributeOverrideJSON(
         this.increment = tag.getDouble(AttributeOverrideTags.INCREMENT)
         this.translationKey = tag.getString(AttributeOverrideTags.TRANSLATION_KEY)
         val byte = tag.getByte(AttributeOverrideTags.FORMULA)
-        this.formula = (StackingFormula::id from byte) ?: StackingFormula.Flat
+        this.formula = (StackingFormula::id find byte) ?: StackingFormula.Flat
     }
 
     override fun writeToNbt(tag: NbtCompound) {
