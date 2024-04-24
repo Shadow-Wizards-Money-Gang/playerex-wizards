@@ -1,7 +1,7 @@
 package com.edelweiss.playerex.attributes.json
 
 import com.edelweiss.skillattributes.enums.FunctionBehavior
-import com.edelweiss.skillattributes.utils.from
+import com.edelweiss.skillattributes.utils.find
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.nio.ByteBuffer
@@ -21,7 +21,7 @@ data class AttributeFunctionJSON(
          * This is prone to fail, and will return null if it does.
          * */
         fun read(array: ByteArray): AttributeFunctionJSON? {
-            val behavior = (FunctionBehavior::id from array[8]) ?: return null
+            val behavior = (FunctionBehavior::id find array[8]) ?: return null
             return AttributeFunctionJSON(behavior, ByteBuffer.wrap(array).getDouble())
         }
     }

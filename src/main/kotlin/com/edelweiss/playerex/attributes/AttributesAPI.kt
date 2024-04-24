@@ -39,7 +39,7 @@ class AttributesAPI {
         const val ENTITY_INSTANCE_ANIMAL_ENTITY: String = "animal_entity"
 
         /** Returns a `EntityAttribute` assigned to the input key. */
-        fun getAttribute(key: Identifier) = { -> Registries.ATTRIBUTE.get(key) }
+        fun getAttribute(key: Identifier): () -> EntityAttribute? = { -> Registries.ATTRIBUTE.get(key) }
 
         /**
          * Allows for an Optional-like use of attributes that may or may not exist all
