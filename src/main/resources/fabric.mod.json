@@ -1,43 +1,41 @@
 {
 	"schemaVersion": 1,
-	"id": "playerex-directors-cut",
+	"id": "playerex",
 	"version": "${version}",
-	"name": "playerex-directors-cut",
+	"name": "PlayerEX: Directors Cut",
 	"description": "TBD",
 	"authors": [
-		"CleverNucleus",
-		"Jecka (MerryweatherLost)",
-		"pokesmells",
-		"DROGERSMAN"
+		"Bare Minimum Studios",
+		"CleverNucleus (former author)"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/playerex/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			{
-				"value": "com.edelweiss.playerex.PlayerEXDirectorsCut",
+				"value": "com.bibireden.playerex.PlayerEXDirectorsCut",
 				"adapter": "kotlin"
 			}
 		],
 		"client": [
 			{
-				"value": "com.edelweiss.playerex.PlayerEXDirectorsCutClient",
+				"value": "com.bibireden.playerex.PlayerEXClient",
 				"adapter": "kotlin"
 			}
 		],
 		"fabric-datagen": [
 			{
-				"value": "com.edelweiss.playerex.PlayerEXDirectorsCutDataGenerator",
+				"value": "com.bibireden.playerex.PlayerEXDataGenerator",
 				"adapter": "kotlin"
 			}
 		],
 		"cardinal-components": [
-			"com.edelweiss.playerex.PlayerEXComponents"
+			"com.bibireden.playerex.components.PlayerEXComponents"
 		]
 	},
 	"mixins": [

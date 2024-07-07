@@ -1,8 +1,9 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version "1.7-SNAPSHOT"
 	id 'maven-publish'
-	id "org.jetbrains.kotlin.jvm" version "1.9.23"
-	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0-RC1'
+	id "org.jetbrains.kotlin.jvm" version "2.0.0"
+	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0'
+	id("com.google.devtools.ksp") version "2.0.0-1.0.21"
 }
 
 version = project.mod_version
@@ -43,7 +44,7 @@ fabricApi {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
@@ -64,8 +65,17 @@ dependencies {
 
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
 
+	// owo
 	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 	include "io.wispforest:owo-sentinel:${project.owo_version}"
+
+	implementation("com.google.devtools.ksp:symbol-processing-api:${project.ksp_version}")
+	implementation("com.squareup:kotlinpoet-ksp:${project.kotlinpoet_version}")
+	ksp("dev.kosmx.kowoconfig:ksp-owo-config:${project.ksp_owo_config_version}")
+
+	// in-house
+	modImplementation include("maven.modrinth:opc-directors-cut:${project.opc_version}")
+	modImplementation("maven.modrinth:data-attributes-directors-cut:${project.data_attributes_version}")
 
 	// All The Trims
 //	modImplementation "maven.modrinth:allthetrims:${project.all_the_trims_version}"
