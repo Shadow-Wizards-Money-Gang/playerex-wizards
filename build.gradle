@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
 	id 'fabric-loom' version "1.7-SNAPSHOT"
 	id 'maven-publish'
@@ -45,27 +47,20 @@ fabricApi {
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
 	// Cardinal Components
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cardinal_components_version}"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cardinal_components_version}"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-level:${project.cardinal_components_version}"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-level:${project.cardinal_components_version}"
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}")
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cardinal_components_version}")
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-level:${project.cardinal_components_version}")
 
 	modImplementation "maven.modrinth:projectile-damage-attribute:${project.projectile_damage_attribute_version}-fabric"
-
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
 
 	// owo
@@ -79,9 +74,6 @@ dependencies {
 	// in-house
 	modImplementation include("maven.modrinth:opc-directors-cut:${project.opc_version}")
 	modImplementation("maven.modrinth:data-attributes-directors-cut:${project.data_attributes_version}")
-
-	// All The Trims
-//	modImplementation "maven.modrinth:allthetrims:${project.all_the_trims_version}"
 }
 
 processResources {
@@ -96,7 +88,7 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType(KotlinCompile).configureEach {
 	kotlinOptions {
 		jvmTarget = 17
 	}
