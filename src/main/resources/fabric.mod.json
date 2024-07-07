@@ -1,0 +1,61 @@
+{
+	"schemaVersion": 1,
+	"id": "playerex",
+	"version": "${version}",
+	"name": "PlayerEX: Directors Cut",
+	"description": "TBD",
+	"authors": [
+		"Bare Minimum Studios",
+		"CleverNucleus (former author)"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/playerex/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "com.bibireden.playerex.PlayerEXDirectorsCut",
+				"adapter": "kotlin"
+			}
+		],
+		"client": [
+			{
+				"value": "com.bibireden.playerex.PlayerEXClient",
+				"adapter": "kotlin"
+			}
+		],
+		"fabric-datagen": [
+			{
+				"value": "com.bibireden.playerex.PlayerEXDataGenerator",
+				"adapter": "kotlin"
+			}
+		],
+		"cardinal-components": [
+			"com.bibireden.playerex.components.PlayerEXComponents"
+		]
+	},
+	"mixins": [
+		"playerex.mixins.json",
+		{
+			"config": "playerex.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.6",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"fabric-language-kotlin": ">=1.10.19+kotlin.1.9.23"
+	},
+	"custom": {
+		"cardinal-components": [
+			"playerex:living_entities",
+			"playerex:player_entities"
+		]
+	}
+}
