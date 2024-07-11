@@ -9,8 +9,8 @@
 		"CleverNucleus (former author)"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/BareMinimumStudios/playerex",
+		"sources": "https://github.com/BareMinimumStudios/playerex"
 	},
 	"license": "MIT",
 	"icon": "assets/playerex/icon.png",
@@ -18,7 +18,7 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "com.bibireden.playerex.PlayerEXDirectorsCut",
+				"value": "com.bibireden.playerex.PlayerEX",
 				"adapter": "kotlin"
 			}
 		],
@@ -53,9 +53,16 @@
 		"fabric-language-kotlin": ">=1.10.19+kotlin.1.9.23"
 	},
 	"custom": {
-		"cardinal-components": [
-			"playerex:living_entities",
-			"playerex:player_entities"
-		]
+		"cardinal-components": [],
+		"mc-publish": {
+			"modrinth": "4UKlJSdk",
+			"curseforge": 958325,
+			"loaders": ["fabric", "quilt"],
+			"dependencies": [
+				"fabric-api@0.92.2+1.20.1(required){modrinth:P7dR8mSH}{curseforge:306612}#(ignore:github)",
+				"fabric-language-kotlin@1.9.5+kotlin.1.8.22(required){modrinth:Ha28R6CL}{curseforge:308769}#(ignore:github)",
+				"owo-lib@0.11.2(required){modrinth:ccKDOlHs}{curseforge:532610}#(ignore:github)"
+			]
+		}
 	}
 }

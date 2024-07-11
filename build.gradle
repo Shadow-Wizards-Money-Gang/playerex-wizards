@@ -48,7 +48,9 @@ fabricApi {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
+
+	mappings("net.fabricmc:yarn:${project.yarn_mappings}:v2")
+
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -60,8 +62,13 @@ dependencies {
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cardinal_components_version}")
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-level:${project.cardinal_components_version}")
 
-	modImplementation "maven.modrinth:projectile-damage-attribute:${project.projectile_damage_attribute_version}-fabric"
+	modImplementation "maven.modrinth:projectile-damage-attribute:${project.projectile_damage_attribute_version}"
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
+
+	// todo: alpha.5 will have this included, so schedule for removal then.
+	modImplementation include("io.wispforest:endec:${project.endec_version}")
+	modImplementation include("io.wispforest.endec:netty:${project.endec_version}")
+	// todo: end section
 
 	// owo
 	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
@@ -73,7 +80,7 @@ dependencies {
 
 	// in-house
 	modImplementation include("maven.modrinth:opc-directors-cut:${project.opc_version}")
-	modImplementation("maven.modrinth:data-attributes-directors-cut:${project.data_attributes_version}")
+	modImplementation include("maven.modrinth:data-attributes-directors-cut:${project.data_attributes_version}")
 }
 
 processResources {
