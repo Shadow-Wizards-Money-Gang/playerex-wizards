@@ -3,7 +3,7 @@ package com.bibireden.playerex.keys
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.opc.api.CachedPlayerKey
 import com.bibireden.playerex.PlayerEX
-import com.bibireden.playerex.api.PlayerEXAttributes
+import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import kotlin.jvm.optionals.getOrNull

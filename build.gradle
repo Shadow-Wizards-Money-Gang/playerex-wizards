@@ -26,6 +26,10 @@ repositories {
 		url = "https://api.modrinth.com/maven"
 	}
 	maven {
+		name = "Nucleoid"
+		url = "https://maven.nucleoid.xyz/"
+	}
+	maven {
 		url = "https://maven.kosmx.dev/"
 	}
 }
@@ -65,10 +69,8 @@ dependencies {
 	modImplementation "maven.modrinth:projectile-damage-attribute:${project.projectile_damage_attribute_version}"
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
 
-	// todo: alpha.5 will have this included, so schedule for removal then.
 	modImplementation include("io.wispforest:endec:${project.endec_version}")
 	modImplementation include("io.wispforest.endec:netty:${project.endec_version}")
-	// todo: end section
 
 	// owo
 	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
@@ -77,6 +79,8 @@ dependencies {
 	implementation("com.google.devtools.ksp:symbol-processing-api:${project.ksp_version}")
 	implementation("com.squareup:kotlinpoet-ksp:${project.kotlinpoet_version}")
 	ksp("dev.kosmx.kowoconfig:ksp-owo-config:${project.ksp_owo_config_version}")
+
+	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 
 	// in-house
 	modImplementation include("maven.modrinth:opc-directors-cut:${project.opc_version}")
