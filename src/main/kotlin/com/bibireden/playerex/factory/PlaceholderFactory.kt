@@ -8,11 +8,12 @@ import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import eu.pb4.placeholders.api.PlaceholderHandler
 import eu.pb4.placeholders.api.PlaceholderResult
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 
 object PlaceholderFactory {
-    public val STORE: Map<Identifier, PlaceholderHandler> = HashMap<Identifier, PlaceholderHandler>();
+    public val STORE: MutableMap<Identifier, PlaceholderHandler> = mutableMapOf();
 
     private fun nameLevelPair(server: MinecraftServer, namesIn: Collection<String>, indexIn: Int): Pair<String, Int>
     {
@@ -67,5 +68,12 @@ object PlaceholderFactory {
         }
     }
 
-    
+    init {
+        // Implement Store adds
+        STORE.put(Identifier.of(), {ctx, args ->
+            val player: ServerPlayerEntity = ctx.player
+
+            player ?: return@put PlaceholderResult.value("No player!");
+        })
+    }
 }

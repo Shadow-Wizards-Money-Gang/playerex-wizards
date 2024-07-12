@@ -2,7 +2,7 @@ package com.bibireden.playerex.factory
 
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
-import com.bibireden.playerex.networking.NotificationType
+import com.bibireden.playerex.networking.types.NotificationType
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking
 import net.minecraft.server.MinecraftServer

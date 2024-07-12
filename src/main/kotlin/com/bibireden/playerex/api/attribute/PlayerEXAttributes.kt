@@ -41,6 +41,9 @@ object PlayerEXAttributes {
     val MELEE_CRIT_CHANCE = register("melee_crit_chance", 0.0, 0.0, 100.0);
 
     @JvmField
+    val BREAKING_SPEED = register("breaking_speed", 0.0, 0.0, 100.0);
+
+    @JvmField
     val FIRE_RESISTANCE = register("fire_resistance", 0.0, 0.0, 1.0);
 
     @JvmField
