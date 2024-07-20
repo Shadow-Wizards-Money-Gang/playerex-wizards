@@ -1,0 +1,48 @@
+{
+    "playerex.key.main_screen": "Open Main Screen",
+
+    "playerex.ui.current_level": [
+        {"text": "❤ ", "color": "#F6CB3B"},
+        {"text": "Level: ", "color": "white"},
+        {"index": 0},
+        {"text": " (", "color": "#757575"},
+        {"index": 1, "color": "#757575", "italic": true, "underline": true },
+        {"text": " XP until the next level)", "color": "#757575", "italic": true }
+    ],
+
+
+    "attribute.name.playerex.level": "Level",
+    "attribute.name.playerex.constitution": "Constitution",
+    "attribute.name.playerex.strength": "Strength",
+    "attribute.name.playerex.dexterity": "Dexterity",
+    "attribute.name.playerex.intelligence": "Intelligence",
+    "attribute.name.playerex.luckiness": "Luckiness",
+    "attribute.name.playerex.evasion": "Evasion",
+    "attribute.name.playerex.lifesteal": "Lifesteal",
+    "attribute.name.playerex.health_regeneration": "Health Regeneration",
+    "attribute.name.playerex.heal_amplification": "Heal Amplification",
+    "attribute.name.playerex.melee_crit_damage": "Melee Crit. Damage",
+    "attribute.name.playerex.melee_crit_chance": "Melee Crit. Chance",
+    "attribute.name.playerex.ranged_crit_damage": "Ranged Crit. Damage",
+    "attribute.name.playerex.ranged_crit_chance": "Ranged Crit. Chance",
+    "attribute.name.playerex.ranged_damage": "Ranged Damage",
+    "attribute.name.playerex.fire_resistance": "Fire Resistance",
+    "attribute.name.playerex.freeze_resistance": "Freeze Resistance",
+    "attribute.name.playerex.lightning_resistance": "Lightning Resistance",
+    "attribute.name.playerex.poison_resistance": "Poison Resistance",
+    "attribute.name.playerex.wither_resistance": "Wither Resistance",
+    "attribute.name.playerex.breaking_speed": "Breaking Speed",
+
+    "playerex.command.reset": "Reset attributes to default values for player %s",
+    "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
+    "playerex.command.refund": "Refunded %s skill points for player %s",
+    "playerex.command.refund_alt": "Refunded 1 skill point for player %s",
+    "playerex.command.levelup": "Added %s levels to player %s",
+    "playerex.command.levelup_alt": "Added 1 level to player %s",
+    "playerex.command.attribute_max_error": "%s attribute is already at maximum value for player %s",
+    "playerex.command.skill_attribute": "Skilled %s for player %s.",
+    "playerex.command.skill_attribute_error": "%s has no Skill Points to spend!",
+    "playerex.command.refund_attribute": "Refunded %s for player %s.",
+    "playerex.command.refund_attribute_error": "%s has no Refunds to spend!",
+    "playerex.command.refund_attribute_unskilled": "%s has not been skilled for player %s!"
+}

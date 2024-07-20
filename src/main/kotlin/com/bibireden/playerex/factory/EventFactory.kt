@@ -1,43 +1,42 @@
 package com.bibireden.playerex.factory
 
 import com.bibireden.data_attributes.api.DataAttributesAPI
-import com.bibireden.data_attributes.api.attribute.IEntityAttribute
+import com.bibireden.playerex.PlayerEX
+import com.bibireden.playerex.api.PlayerEXAPI
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
+import com.bibireden.playerex.components.PlayerEXComponents
+import com.bibireden.playerex.registry.DamageModificationRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.PersistentProjectileEntity
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
-import java.util.Optional
 
 object EventFactory {
-    fun serverStarting(sever: MinecraftServer)
-    {
-        // todo: Create config?
-    }
-
     fun reset(oldPlayer: ServerPlayerEntity, newPlayer: ServerPlayerEntity, isAlive: Boolean)
     {
-
+        if (PlayerEX.CONFIG.resetOnDeath)
+        {
+            val playerData = PlayerEXComponents.PLAYER_DATA.maybeGet(newPlayer)
+            if (playerData.isPresent)
+            {
+                playerData.get().reset(0)
+            }
+        }
     }
 
-    fun clamped(attributeIn: EntityAttribute, valueIn: Double)
-    {
-        val attribute: IEntityAttribute = attributeIn as IEntityAttribute;
-    }
+    // todo: this may be redundant and will have to be replaced by something else, integer property does not exist anymore.
+//    fun clamped(attributeIn: EntityAttribute, valueIn: Double): Double
+//    {
+//        val attribute: IEntityAttribute = attributeIn as IEntityAttribute;
+//        return round(valueIn)
+//    }
 
     fun healed(livingEntity: LivingEntity, amount: Float): Float
     {
-        val healAmplificationOption: Optional<Double> = DataAttributesAPI.getValue(PlayerEXAttributes.HEAL_AMPLIFICATION, livingEntity);
-
-        if (healAmplificationOption.isPresent)
-        {
-            return (amount * (1.0 + healAmplificationOption.get())).toFloat()
-        }
+        return DataAttributesAPI.getValue(PlayerEXAttributes.HEAL_AMPLIFICATION, livingEntity).map { (amount * (1.0 + it)).toFloat() }.orElse(amount)
     }
 
     fun healthRegeneration(livingEntity: LivingEntity)
@@ -61,6 +60,19 @@ object EventFactory {
 
     fun onDamage(livingEntity: LivingEntity, source: DamageSource, original: Float): Float
     {
+        var amount = original
+        for (condition in DamageModificationRegistry.get()) {
+            val damage = amount
+            amount = condition.provide { predicate, function ->
+                return@provide if (predicate.test(livingEntity, source, damage)) {
+                    function.apply(livingEntity, source, damage)
+                }
+                else {
+                    damage
+                }
+            }
+        }
+        return amount
     }
 
     fun shouldDamage(livingEntity: LivingEntity, source: DamageSource, original: Float): Boolean
@@ -91,13 +103,11 @@ object EventFactory {
             val chance = livingEntity.random.nextFloat();
             return !(chance < evasionOption.get() && origin is PersistentProjectileEntity);
         }
+
+        return true
     }
 
-    fun onCritAttack(
-        player: PlayerEntity,
-        target: Entity,
-        amount: Float
-    ): Float
+    fun onCritAttack(player: PlayerEntity, target: Entity, amount: Float): Float
     {
         if (target !is LivingEntity) return amount;
 
@@ -107,11 +117,13 @@ object EventFactory {
         {
             return (amount * (1.0 + (meleeCritOption.get() * 10.0)) / 1.5).toFloat();
         }
+
+        return amount
     }
 
-    fun attackIsCrit(player: PlayerEntity, target: Entity, vanilla: Boolean): Boolean
+    fun attackIsCrit(player: PlayerEntity, target: Entity, original: Boolean): Boolean
     {
-        if (target !is LivingEntity) return vanilla;
+        if (target !is LivingEntity) return original;
 
         val critChanceOptional = DataAttributesAPI.getValue(PlayerEXAttributes.MELEE_CRIT_CHANCE, player);
 
@@ -120,6 +132,8 @@ object EventFactory {
             val chance = player.random.nextFloat();
             return (chance < critChanceOptional.get()) && !player.isClimbing && !player.hasStatusEffect(StatusEffects.BLINDNESS) && !player.hasVehicle();
         }
+
+        return original
     }
 
 }

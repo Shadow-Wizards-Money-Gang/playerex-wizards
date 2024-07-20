@@ -23,7 +23,7 @@ object PlayerEXAttributes {
     val INTELLIGENCE = register("intelligence", 0.0, 0.0, 1000000.0);
 
     @JvmField
-    val LUCKINESS = register("luck", 0.0, 0.0, 1000000.0);
+    val LUCKINESS = register("luckiness", 0.0, 0.0, 1000000.0);
 
     @JvmField
     val HEALTH_REGENERATION = register("health_regeneration", 0.0, 0.0, 100.0);
@@ -63,6 +63,15 @@ object PlayerEXAttributes {
 
     @JvmField
     val FOCUS = register("focus", 0.0, 0.0, 1_000_000.0)
+
+    @JvmField
+    val RANGED_DAMAGE = register("ranged_damage", 0.0, 0.0, 1000000.0)
+
+    @JvmField
+    val RANGED_CRITICAL_CHANCE = register("ranged_crit_chance", 0.0, 0.0, 100.0)
+
+    @JvmField
+    val RANGED_CRITICAL_DAMAGE = register("ranged_crit_damage", 0.0, 0.0, 1000000.0)
 
     fun register(path: String, base: Double, min: Double, max: Double): ClampedEntityAttribute {
         val attribute = ClampedEntityAttribute("attribute.name.${PlayerEX.MOD_ID}.$path", base, min, max)

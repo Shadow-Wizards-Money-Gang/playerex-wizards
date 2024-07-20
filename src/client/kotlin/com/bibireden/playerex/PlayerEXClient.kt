@@ -1,7 +1,45 @@
 package com.bibireden.playerex
 
+import com.bibireden.playerex.api.PlayerEXAPI
+import com.bibireden.playerex.api.event.PlayerEXSoundEvents
+import com.bibireden.playerex.components.PlayerEXComponents
+import com.bibireden.playerex.networking.NetworkingChannels
+import com.bibireden.playerex.networking.NetworkingPackets
+import com.bibireden.playerex.networking.types.NotificationType
+import com.bibireden.playerex.ui.PlayerEXScreen
+import com.bibireden.playerex.ui.childById
+import io.wispforest.owo.ui.component.LabelComponent
+import io.wispforest.owo.ui.core.ParentComponent
+import io.wispforest.owo.ui.hud.Hud
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.minecraft.client.option.KeyBinding
+import net.minecraft.client.util.InputUtil
+import net.minecraft.sound.SoundCategory
+import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 
 object PlayerEXClient : ClientModInitializer {
-	override fun onInitializeClient() {}
+	val MAIN_UI_SCREEN_ID = PlayerEX.id("main_ui_model")
+	val KEYBINDING_MAIN_SCREEN = KeyBindingHelper.registerKeyBinding(KeyBinding("${PlayerEX.MOD_ID}.key.main_screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_L, "key.categories.${PlayerEX.MOD_ID}"))
+
+	fun sendUpdatePacket(packet: NetworkingPackets.Update) {
+		NetworkingChannels.MODIFY.clientHandle().send(packet)
+	}
+
+	override fun onInitializeClient() {
+		NetworkingChannels.NOTIFICATIONS.registerClientbound(NetworkingPackets.Notify::class.java) { (type), ctx ->
+			when (type) {
+				NotificationType.LevelUp -> ctx.player().playSound(PlayerEXSoundEvents.LEVEL_UP_SOUND, SoundCategory.NEUTRAL, PlayerEX.CONFIG.levelUpVolume.toFloat(), 1.5F)
+			}
+		}
+
+		ClientTickEvents.END_CLIENT_TICK.register { client ->
+			if (PlayerEX.CONFIG.disableAttributesGui) return@register
+			while (KEYBINDING_MAIN_SCREEN.wasPressed()) {
+				if (client.currentScreen == null) client.setScreen(PlayerEXScreen())
+			}
+		}
+	}
 }

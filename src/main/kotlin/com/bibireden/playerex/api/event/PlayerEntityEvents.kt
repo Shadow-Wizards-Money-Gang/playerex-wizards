@@ -12,6 +12,7 @@ object PlayerEntityEvents {
     /**
      * Fired if the player lands a critical hit. The result is the damage.
      */
+    @JvmField
     val ON_CRITICAL: Event<AttackCriticalDamage> = EventFactory.createArrayBacked(AttackCriticalDamage::class.java) { callbacks: Array<AttackCriticalDamage> ->
         AttackCriticalDamage { player: PlayerEntity, target: Entity, amount: Float ->
             var previous = amount
@@ -25,6 +26,7 @@ object PlayerEntityEvents {
     /**
      * Fired when determining if the player's attack is critical. Return true if it is critical, return false if it is not.
      */
+    @JvmField
     val SHOULD_CRITICAL: Event<ShouldCritical> = EventFactory.createArrayBacked(ShouldCritical::class.java) { callbacks: Array<ShouldCritical> ->
         ShouldCritical { player: PlayerEntity, target: Entity, vanilla: Boolean ->
             for (callback in callbacks) {

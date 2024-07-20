@@ -36,7 +36,7 @@ class PlayerDataComponent(
     private var _refundablePoints: Int = 0,
     private var _skillPoints: Int = 0,
     private var _modifiers: MutableMap<Identifier, Double> = mutableMapOf(),
-    var isLevelUpNotified: Boolean = false
+    var isLevelUpNotified: Boolean = false,
 ) : IPlayerDataComponent, AutoSyncedComponent {
     object Keys {
         const val SET = "set"
@@ -112,12 +112,12 @@ class PlayerDataComponent(
         }
     }
 
-    override fun get(attribute: EntityAttribute): Double {
-        return this._modifiers.getOrDefault(attribute.id, 0.0)
+    override fun get(attribute: EntityAttribute?): Double {
+        return this._modifiers.getOrDefault(attribute?.id, 0.0)
     }
 
-    override fun set(attribute: EntityAttribute, value: Double) {
-        val identifier = attribute.id
+    override fun set(attribute: EntityAttribute?, value: Double) {
+        val identifier = attribute?.id ?: return
         val attributeValue = attribute.clamp(value)
 
         if (!this.trySet(identifier, value)) return
@@ -132,14 +132,14 @@ class PlayerDataComponent(
         }
     }
 
-    override fun add(attribute: EntityAttribute, value: Double) {
+    override fun add(attribute: EntityAttribute?, value: Double) {
         this.set(attribute, value + this.get(attribute))
     }
 
-    override fun remove(attribute: EntityAttribute) {
-        val identifier = attribute.id
-        if (!this.tryRemove(identifier).also { if (it == true) this._modifiers.remove(identifier) }) return
-        this.sync { buf, player ->
+    override fun remove(attribute: EntityAttribute?) {
+        val identifier = attribute?.id ?: return
+        if (!this.tryRemove(identifier).also { if (it) this._modifiers.remove(identifier) }) return
+        this.sync { buf, _ ->
             val tag = NbtCompound()
             tag.putString(Keys.REMOVE, identifier.toString())
             buf.writeNbt(tag)
@@ -178,8 +178,8 @@ class PlayerDataComponent(
         this.sync { buf, player ->
             val tag = NbtCompound()
             tag.put(Keys.RESET, list)
-            tag.putInt(Keys.SKILL_POINTS, this.skillPoints())
-            tag.putInt(Keys.REFUNDABLE_POINTS, this.refundablePoints())
+            tag.putInt(Keys.SKILL_POINTS, this.skillPoints)
+            tag.putInt(Keys.REFUNDABLE_POINTS, this.refundablePoints)
             buf.writeNbt(tag)
         }
     }
@@ -188,34 +188,36 @@ class PlayerDataComponent(
         this._skillPoints += points
         this.sync { buf, player ->
             val tag = NbtCompound()
-            tag.putInt(Keys.SKILL_POINTS, this.skillPoints())
+            tag.putInt(Keys.SKILL_POINTS, this.skillPoints)
             buf.writeNbt(tag)
         }
     }
 
     override fun addRefundablePoints(points: Int) {
-        val previous = this.refundablePoints()
+        val previous = this.refundablePoints
         var maxRefundPoints = 0.0
 
         for (condition in RefundConditionRegistry.get()) {
             maxRefundPoints += condition(this, this.player)
         }
 
-        this._refundablePoints = round(MathHelper.clamp((this.refundablePoints() + points).toDouble(), 0.0, maxRefundPoints)).toInt()
+        this._refundablePoints = round(MathHelper.clamp((this.refundablePoints + points).toDouble(), 0.0, maxRefundPoints)).toInt()
 
         this.sync { buf, player ->
             val tag = NbtCompound()
-            tag.putInt(Keys.REFUNDABLE_POINTS, this.refundablePoints())
+            tag.putInt(Keys.REFUNDABLE_POINTS, this.refundablePoints)
             buf.writeNbt(tag)
         }
     }
 
-    override fun skillPoints(): Int = this._skillPoints
+    override val skillPoints: Int
+        get() = this._skillPoints
 
-    override fun refundablePoints(): Int = this._refundablePoints
+    override val refundablePoints: Int
+        get() = this._refundablePoints
 
     override fun readFromNbt(tag: NbtCompound) {
-        ENDEC.decode(NbtDeserializer.of(tag)).also {
+        ENDEC.decodeFully(NbtDeserializer::of, tag.get("DART")).also {
             this._modifiers = it.modifiers.toMutableMap()
             this._refundablePoints = it.refundablePoints
             this._skillPoints = it.skillPoints
@@ -224,7 +226,7 @@ class PlayerDataComponent(
     }
 
     override fun writeToNbt(tag: NbtCompound) {
-        ENDEC.encode(NbtSerializer.of(tag), Packet(this._modifiers, this.refundablePoints(), this.skillPoints(), this.isLevelUpNotified))
+        tag.put("DART", ENDEC.encodeFully(NbtSerializer::of, Packet(this._modifiers, this.refundablePoints, this.skillPoints, this.isLevelUpNotified)))
     }
 
     override fun shouldSyncWith(player: ServerPlayerEntity?): Boolean {

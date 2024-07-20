@@ -6,13 +6,13 @@ import net.minecraft.entity.attribute.EntityAttribute
 /** Utilized to access and modify PlayerEX attribute modifiers. */
 interface IPlayerDataComponent : Component {
     /** Gets the cached [EntityAttribute] modifier value, or provides `0` if it does not exist. */
-    fun get(attribute: EntityAttribute): Double
+    fun get(attribute: EntityAttribute?): Double
     /** Applies the provided modifier value to the [EntityAttribute], and creates it if it does not exist. */
-    fun set(attribute: EntityAttribute, value: Double)
+    fun set(attribute: EntityAttribute?, value: Double)
     /** Removes the [EntityAttribute] modifier if it exists. */
-    fun remove(attribute: EntityAttribute)
+    fun remove(attribute: EntityAttribute?)
     /** Adds the current [EntityAttribute]'s value with the provided value together. */
-    fun add(attribute: EntityAttribute, value: Double)
+    fun add(attribute: EntityAttribute?, value: Double)
     /**
      * Resets all the data (which includes all [EntityAttribute] modifiers) to their defaults.
      *
@@ -24,7 +24,7 @@ interface IPlayerDataComponent : Component {
     /** Applies refundable points to the player. */
     fun addRefundablePoints(points: Int)
     /** Provides the current number of skill points. */
-    fun skillPoints(): Int
+    val skillPoints: Int
     /** Returns the current number of refundable points. */
-    fun refundablePoints(): Int
+    val refundablePoints: Int
 }

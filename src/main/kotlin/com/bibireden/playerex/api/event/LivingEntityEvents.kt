@@ -12,6 +12,7 @@ object LivingEntityEvents {
      *
      * @see [LivingEntityEvents.SHOULD_HEAL].
      */
+    @JvmField
     val ON_HEAL: Event<Healed> = EventFactory.createArrayBacked(Healed::class.java) { callbacks -> Healed { entity, original ->
         var previous = original
         callbacks.forEach { previous = it.onHeal(entity, previous) }
@@ -21,6 +22,7 @@ object LivingEntityEvents {
     /**
      * Fired at the start of [LivingEntity.heal], but before healing is applied. Can return false to cancel all healing, or true to allow it.
      */
+    @JvmField
     val SHOULD_HEAL: Event<Heal> = EventFactory.createArrayBacked(Heal::class.java) { callbacks -> Heal { entity, original ->
         callbacks.forEach { if (!it.shouldHeal(entity, original)) return@Heal false }
         true
@@ -29,7 +31,8 @@ object LivingEntityEvents {
     /**
      * Fired once at the end of {@link LivingEntity#tick()}, every 20 ticks (1 second).
      */
-    val ON_TICK: Event<Tick> = EventFactory.createArrayBacked(Tick::class.java) { callbacks -> Tick { entity -> callbacks.forEach { it.everySecond(entity) } }}
+    @JvmField
+    val ON_TICK: Event<Tick> = EventFactory.createArrayBacked(Tick::class.java) { callbacks -> Tick { entity -> callbacks.forEach { it.onTick(entity) } }}
 
     /**
      * Fired before {@link LivingEntity#damage(DamageSource, float)}; allows the amount of damage to be modified before it is used in any way.
@@ -37,6 +40,7 @@ object LivingEntityEvents {
      * The original value is the incoming damage, followed by the result of this event by any previous registries.
      * Setting the output to 0 is an unreliable way to negate incoming damage depending on other mods installed. Instead, use {@link LivingEntityEvents#SHOUL_DAMAGE}.
      */
+    @JvmField
     val ON_DAMAGE: Event<Damaged> = EventFactory.createArrayBacked(Damaged::class.java) { callbacks -> Damaged { entity, source, original ->
         var previous = original
         callbacks.forEach { previous = it.onDamage(entity, source, previous) }
@@ -49,6 +53,7 @@ object LivingEntityEvents {
      * is checked, but before all other logic is performed. Can be used to cancel the method and prevent damage from being taken by returning false.
      * Returning true allows the logic to continue.
      */
+    @JvmField
     val SHOULD_DAMAGE: Event<Damage> = EventFactory.createArrayBacked(Damage::class.java) { callbacks -> Damage { entity, source, original ->
         callbacks.forEach { if (!it.shouldDamage(entity, source, original)) return@Damage false }
         true
@@ -63,7 +68,7 @@ object LivingEntityEvents {
     }
 
     fun interface Tick {
-        fun everySecond(livingEntity: LivingEntity)
+        fun onTick(livingEntity: LivingEntity)
     }
 
     fun interface Damaged {
