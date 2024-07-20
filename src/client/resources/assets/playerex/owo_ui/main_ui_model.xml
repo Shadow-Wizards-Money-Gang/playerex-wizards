@@ -27,7 +27,7 @@
 
                                     <sizing>
                                         <vertical method="fill">100</vertical>
-                                        <horizontal method="fill">15</horizontal>
+                                        <horizontal method="fill">20</horizontal>
                                     </sizing>
                                     <positioning type="relative">50,0</positioning>
 
@@ -37,44 +37,40 @@
                                     <surface><vanilla-translucent/><outline>white</outline></surface>
                                 </flow-layout>
 
-                                <button id="exit">
-                                    <text translate="false">Exit</text>
-                                    <tooltip-text> Exits from the window. </tooltip-text>
+                                <flow-layout direction="horizontal">
+                                    <children>
 
-                                    <sizing><vertical method="fill">60</vertical><horizontal method="fill">4</horizontal></sizing>
+                                        <button id="previous">
+                                            <text>⬅</text>
+                                            <tooltip-text>Go to the previous page.</tooltip-text>
+
+                                            <renderer><flat color="black" hovered-color="dark-aqua" disabled-color="dark-red"/></renderer>
+                                        </button>
+
+                                        <label id="counter">
+                                            <text>0/0</text>
+                                        </label>
+
+                                        <button id="next">
+                                            <text>➡</text>
+                                            <tooltip-text>Advance to the next page.</tooltip-text>
+
+                                            <renderer><flat color="black" hovered-color="dark-aqua" disabled-color="dark-red"/></renderer>
+                                        </button>
+
+                                        <button id="exit">
+                                            <text translate="false">Exit</text>
+                                            <tooltip-text> Exits from the window. </tooltip-text>
+
+                                            <sizing><vertical method="fill">60</vertical><horizontal method="fill">4</horizontal></sizing>
+                                            <renderer><flat color="black" hovered-color="dark-red" disabled-color="red"/></renderer>
+                                        </button>
+                                    </children>
+                                    <gap>5</gap>
                                     <positioning type="relative">100,50</positioning>
-                                    <renderer><flat color="black" hovered-color="dark-red" disabled-color="red"/></renderer>
-
-                                    <vertical-alignment>center</vertical-alignment>
                                     <horizontal-alignment>right</horizontal-alignment>
-                                </button>
-
-                                <button id="next">
-                                    <text>➡</text>
-                                    <tooltip-text>Advance to the next page.</tooltip-text>
-                                    <positioning type="relative">95,50</positioning>
-
-                                    <renderer><flat color="black" hovered-color="dark-aqua" disabled-color="dark-red"/></renderer>
-
-                                    <horizontal-alignment>right</horizontal-alignment>
-                                </button>
-
-                                <label id="counter">
-                                    <text>0/0</text>
-                                    <positioning type="relative">93,55</positioning>
-                                    <vertical-text-alignment>center</vertical-text-alignment>
-                                </label>
-
-                                <button id="previous">
-                                    <text>⬅</text>
-                                    <tooltip-text>Go to the previous page.</tooltip-text>
-                                    <positioning type="relative">91,50</positioning>
-
-                                    <renderer><flat color="black" hovered-color="dark-aqua" disabled-color="dark-red"/></renderer>
-
                                     <vertical-alignment>center</vertical-alignment>
-                                </button>
-
+                                </flow-layout>
 
                             </children>
 
