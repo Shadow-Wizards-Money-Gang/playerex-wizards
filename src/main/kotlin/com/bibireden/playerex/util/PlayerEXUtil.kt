@@ -13,34 +13,31 @@ import kotlin.math.min
 import kotlin.math.round
 
 object PlayerEXUtil {
-    const val VARIABLE = "x"
+    private const val VARIABLE = "x"
     /**
      * The function is as follows (according to previous implementation)
      * `stairs(x, stretch, steepness, x-offset, y-offset, y-limit)`
      */
-    val STAIRCASE_FUNCTION = object : Function("stairs", 6) {
+    private val STAIRCASE_FUNCTION = object : Function("stairs", 6) {
         override fun apply(vararg args: Double): Double {
             return min(Maths.stairs(args[0], args[1], args[2], args[3], args[4]), args[5])
         }
     }
 
-    val expression: Expression
+    private val expression: Expression
         get() = createExpression()
 
     private fun createExpression(): Expression {
         return ExpressionBuilder(PlayerEX.CONFIG.levelFormula).variable(VARIABLE).function(STAIRCASE_FUNCTION).build()
     }
 
-    /** todo: document, none evident on former */
-    fun level(value: Double): Int {
-        val exp = expression.setVariable(VARIABLE, round(value))
-        return abs(round(exp.evaluate())).toInt()
-    }
+    /** Computes the cost of the provided level. */
+    fun getLevelCost(level: Double): Int = abs(round(expression.setVariable(VARIABLE, round(level)).evaluate())).toInt()
 
 
     /** todo: document, none evident on former, resolve if orElse is needed here, and if we can do nullable or not without drastically changing things */
     @JvmStatic
     fun getRequiredXp(player: PlayerEntity): Int {
-        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(::level).orElse(1)
+        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(::getLevelCost).orElse(1)
     }
 }

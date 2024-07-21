@@ -2,6 +2,7 @@ package com.bibireden.playerex.components.experience
 
 import com.bibireden.data_attributes.endec.nbt.NbtDeserializer
 import com.bibireden.data_attributes.endec.nbt.NbtSerializer
+import com.bibireden.playerex.PlayerEX
 import io.wispforest.endec.Endec
 import io.wispforest.endec.impl.StructEndecBuilder
 import net.minecraft.nbt.NbtCompound
@@ -13,21 +14,11 @@ import kotlin.random.Random
 class ExperienceDataComponent(
     val chunk: Chunk,
     private var _ticks: Int = 0,
-    private var _restorativeForceTicks: Int = 0, // todo: requires config
-    private var _restorativeForce: Float = 0.0F, // todo: requires config
+    private var _restorativeForceTicks: Int = PlayerEX.CONFIG.restorativeForceTicks,
+    private var _restorativeForceMultiplier: Int = PlayerEX.CONFIG.restorativeForceMultiplier,
     private var _expNegationFactor: Float = 1.0F,
-    private var _expNegationMultiplier: Float = 0.0F // todo: requires config
+    private var _expNegationMultiplier: Int = PlayerEX.CONFIG.expNegationFactor
 ) : IExperienceDataComponent {
-    companion object {
-        @JvmRecord data class Packet(val expNegationFactor: Float)
-
-        @JvmField
-        val ENDEC = StructEndecBuilder.of(
-            Endec.FLOAT.fieldOf("expNegationFactor") { it.expNegationFactor },
-            ::Packet
-        )
-    }
-
     override fun updateExperienceNegationFactor(amount: Int): Boolean {
         if (Random.nextFloat() > this._expNegationFactor) return true;
 
@@ -37,16 +28,14 @@ class ExperienceDataComponent(
         return false;
     }
 
-    override fun resetExperienceNegationFactor() { this._expNegationMultiplier = 1.0F }
+    override fun resetExperienceNegationFactor() { this._expNegationMultiplier = 1 }
 
     override fun readFromNbt(tag: NbtCompound) {
-        ENDEC.decode(NbtDeserializer.of(tag)).also {
-            this._expNegationFactor = it.expNegationFactor
-        }
+        this._expNegationFactor = tag.getFloat("exp_factor")
     }
 
     override fun writeToNbt(tag: NbtCompound) {
-        ENDEC.encode(NbtSerializer.of(tag), Packet(this._expNegationFactor))
+        tag.putFloat("exp_factor", this._expNegationFactor)
     }
 
     override fun serverTick() {
@@ -54,7 +43,7 @@ class ExperienceDataComponent(
         if (this._ticks < this._restorativeForceTicks) this._ticks++
         else {
             this._ticks = 0
-            this._expNegationFactor = min(this._expNegationFactor * this._restorativeForce, 1.0F)
+            this._expNegationFactor = min(this._expNegationFactor * this._restorativeForceMultiplier, 1.0F)
             this.chunk.setNeedsSaving(true)
         }
     }

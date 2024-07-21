@@ -29,6 +29,15 @@ class PlayerEXConfigModel {
     @Hook
     var levelFormula: String = "stairs(x,0.2,2.4,17,10,25)"
 
+    @JvmField
+    var restorativeForceTicks: Int = 600
+
+    @JvmField
+    var restorativeForceMultiplier: Int = 110
+
+    @JvmField
+    var expNegationFactor: Int = 95
+
 //    @JvmField
 //    var expression: Expression
 

@@ -8,21 +8,8 @@ import net.minecraft.server.network.ServerPlayerEntity
 
 enum class AttributePacketType(val applyIfValid: (server: MinecraftServer, player: ServerPlayerEntity, component: IPlayerDataComponent) -> Boolean) {
     Default({ _, _, _ -> true }),
-    Level(::onLevel),
     Skill(::onSkill),
     Refund(::onRefund);
-}
-
-private fun onLevel(server: MinecraftServer, player: ServerPlayerEntity, component: IPlayerDataComponent): Boolean {
-    val required = PlayerEXUtil.getRequiredXp(player)
-    val skillPoints = PlayerEX.CONFIG.skillPointsPerLevelUp
-
-    val isEnoughExperience = player.experienceLevel >= required
-    if (isEnoughExperience) {
-        player.addExperienceLevels(-required)
-        component.addSkillPoints(skillPoints)
-    }
-    return isEnoughExperience
 }
 
 private fun onSkill(server: MinecraftServer, player: ServerPlayerEntity, component: IPlayerDataComponent): Boolean {
