@@ -33,13 +33,53 @@
     "attribute.name.playerex.wither_resistance": "Wither Resistance",
     "attribute.name.playerex.breaking_speed": "Breaking Speed",
 
+    "attribute.name.playerex.mining": "Mining",
+    "attribute.name.playerex.enchanting": "Enchanting",
+    "attribute.name.playerex.alchemy": "Alchemy",
+    "attribute.name.playerex.fishing": "Fishing",
+    "attribute.name.playerex.logging": "Logging",
+    "attribute.name.playerex.smithing": "Smithing",
+    "attribute.name.playerex.farming": "Farming",
+
     "playerex.command.reset": "Reset attributes to default values for player %s",
     "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "Refunded %s skill points for player %s",
     "playerex.command.level_up": "Added %s levels to player %s",
-    "playerex.command.attribute_max_error": "%s attribute is already at maximum value for player %s",
-    "playerex.command.skill_attribute": "Skilled %s for player %s.",
-    "playerex.command.skill_attribute_error": "%s has no Skill Points to spend!",
+    "playerex.command.max_error": [
+        {"text": "⚑ ", "color": "#F53E3E"},
+        {"index": 0, "color": "#EEBC58"},
+        {"text": " is already at a maximum value for ", "color": "white"},
+        {"index": 1, "color": "#F6CB3B"},
+        {"text": ", and cannot be increased further!", "color": "white"}
+    ],
+    "playerex.command.level_get": [
+        {"text": "» ", "color": "#F6CB3B"},
+        {"text": "The current level of ", "color": "white"},
+        {"index": 0, "color": "#F6CB3B"},
+        {"text": " is at ", "color": "white"},
+        {"index": 1, "color": "#60DF90"}
+    ],
+    "playerex.command.skill_get": [
+        {"text": "» ", "color": "#F6CB3B"},
+        {"index": 0, "color": "#EEBC58"},
+        {"text": " is currently at ", "color": "white"},
+        {"index": 1, "color": "#60DF90"},
+        {"text": " for ", "color": "white"},
+        {"index": 2}
+    ],
+    "playerex.command.skill_up": [
+        {"text": "❤ ", "color": "#F6CB3B"},
+        {"text": "Added ", "color": "white"},
+        {"index": 0, "color": "#60DF90"},
+        {"text": " point(s) to ", "color": "white"},
+        {"index": 1, "color": "#EEBC58"},
+        {"text": " for ", "color": "white"},
+        {"index": 2}
+    ],
+    "playerex.command.skill_error": [
+        {"text": "⚑ ", "color": "#F53E3E"},
+        {"index": 0, "color": "white"},
+    ],
     "playerex.command.refund_attribute": "Refunded %s for player %s.",
     "playerex.command.refund_attribute_error": "%s has no Refunds to spend!",
     "playerex.command.refund_attribute_unskilled": "%s has not been skilled for player %s!"

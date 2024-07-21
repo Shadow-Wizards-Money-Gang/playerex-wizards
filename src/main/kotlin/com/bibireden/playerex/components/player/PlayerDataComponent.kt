@@ -1,6 +1,7 @@
 package com.bibireden.playerex.components.player
 
 import com.bibireden.data_attributes.api.DataAttributesAPI
+import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.data_attributes.api.attribute.IEntityAttributeInstance
 import com.bibireden.data_attributes.endec.Endecs
 import com.bibireden.data_attributes.endec.nbt.NbtDeserializer
@@ -26,6 +27,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
+import kotlin.math.exp
 import kotlin.math.round
 
 /**
@@ -194,6 +196,23 @@ class PlayerDataComponent(
         }.orElse(false)
     }
 
+    override fun skillUp(skill: EntityAttribute, amount: Int, override: Boolean): Boolean {
+        if (amount <= 0) return false
+
+        return DataAttributesAPI.getValue(skill, player).map { current ->
+            val expected = current + amount
+            // too high
+            if (expected > (skill as IEntityAttribute).`data_attributes$max`()) return@map false
+            if (!override) {
+                // not enough skill points
+                if (skillPoints < amount) return@map false
+                this._skillPoints -= amount
+            }
+            this.set(skill, expected)
+            return@map true
+        }.orElse(false)
+    }
+
     override val skillPoints: Int
         get() = this._skillPoints
 
@@ -213,7 +232,7 @@ class PlayerDataComponent(
         tag.put("DART", ENDEC.encodeFully(NbtSerializer::of, Packet(this._modifiers, this.refundablePoints, this.skillPoints, this.isLevelUpNotified)))
     }
 
-    override fun shouldSyncWith(player: ServerPlayerEntity?): Boolean = player == this.player
+    override fun shouldSyncWith(player: ServerPlayerEntity): Boolean = player == this.player
 
     override fun applySyncPacket(buf: PacketByteBuf) {
         updateFromPacket(buf.readNbt() ?: return)

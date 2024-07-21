@@ -30,8 +30,15 @@ interface IPlayerDataComponent : Component {
     fun addRefundablePoints(points: Int): Int
     /**
      * Levels up the player based on the given amount that you wish to level them up by.
+     *
      * If it is not possible, it will return `false`.
-     * This can be changed by setting `true` to the override argument.
+     * This can be changed by setting `true` to the [override] argument.
      */
     fun levelUp(amount: Int, override: Boolean = false): Boolean
+
+    /** Skills up the player based on the given amount.
+     *
+     * If not possible, it will return `false`.
+     * This can be changed by setting `true` to the [override] argument. */
+    fun skillUp(skill: EntityAttribute, amount: Int, override: Boolean = false): Boolean
 }

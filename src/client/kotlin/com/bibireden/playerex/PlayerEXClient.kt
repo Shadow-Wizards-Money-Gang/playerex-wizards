@@ -37,6 +37,9 @@ object PlayerEXClient : ClientModInitializer {
 					if (attribute == PlayerEXAttributes.LEVEL) {
 						screen.onLevelUpdated()
 					}
+					else {
+						screen.onAttributesUpdated()
+					}
 				}
 			}
 		}

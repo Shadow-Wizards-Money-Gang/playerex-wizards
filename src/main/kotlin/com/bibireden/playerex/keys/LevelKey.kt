@@ -10,7 +10,7 @@ import kotlin.jvm.optionals.getOrNull
 
 class LevelKey : CachedPlayerKey<Int>(PlayerEX.id("level")) {
     override fun get(player: ServerPlayerEntity): Int? {
-        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).getOrNull()?.toInt()
+        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(Double::toInt).getOrNull()
     }
 
     override fun readFromNbt(tag: NbtCompound): Int {
