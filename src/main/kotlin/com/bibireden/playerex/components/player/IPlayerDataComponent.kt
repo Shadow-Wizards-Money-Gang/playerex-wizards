@@ -22,7 +22,8 @@ interface IPlayerDataComponent : Component {
     /** Applies skill points to the player. */
     fun addSkillPoints(points: Int)
     /** Applies refundable points to the player. */
-    fun addRefundablePoints(points: Int)
+    fun addRefundablePoints(points: Int): Int
+
     /** Provides the current number of skill points. */
     val skillPoints: Int
     /** Returns the current number of refundable points. */

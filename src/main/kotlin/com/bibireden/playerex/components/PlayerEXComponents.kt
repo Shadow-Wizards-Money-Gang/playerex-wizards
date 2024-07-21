@@ -16,9 +16,9 @@ import net.minecraft.util.Identifier
 class PlayerEXComponents : EntityComponentInitializer, ChunkComponentInitializer {
     companion object {
         @JvmField
-        val PLAYER_DATA = ComponentRegistry.getOrCreate(Identifier.of(PlayerEX.MOD_ID, "player-data")!!, IPlayerDataComponent::class.java)
+        val PLAYER_DATA = ComponentRegistry.getOrCreate(PlayerEX.id("player-data"), IPlayerDataComponent::class.java)
         @JvmField
-        val EXPERIENCE_DATA = ComponentRegistry.getOrCreate(Identifier.of(PlayerEX.MOD_ID, "experience-data")!!, IExperienceDataComponent::class.java)
+        val EXPERIENCE_DATA = ComponentRegistry.getOrCreate(PlayerEX.id("experience-data"), IExperienceDataComponent::class.java)
     }
 
     override fun registerEntityComponentFactories(registry: EntityComponentFactoryRegistry) {
