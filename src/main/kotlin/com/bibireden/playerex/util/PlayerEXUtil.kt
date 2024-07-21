@@ -29,13 +29,13 @@ object PlayerEXUtil {
         return ExpressionBuilder(PlayerEX.CONFIG.levelFormula).variable(VARIABLE).function(STAIRCASE_FUNCTION).build()
     }
 
-    /** Computes the cost of the provided level. */
-    fun getLevelCost(level: Double): Int = abs(round(expression.setVariable(VARIABLE, round(level)).evaluate())).toInt()
+    /** Computes the experience cost of the provided level. */
+    fun getRequiredExperienceForLevel(level: Double): Int = abs(round(expression.setVariable(VARIABLE, round(level)).evaluate())).toInt()
 
 
     /** todo: document, none evident on former, resolve if orElse is needed here, and if we can do nullable or not without drastically changing things */
     @JvmStatic
     fun getRequiredXp(player: PlayerEntity): Int {
-        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(::getLevelCost).orElse(1)
+        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(::getRequiredExperienceForLevel).orElse(1)
     }
 }

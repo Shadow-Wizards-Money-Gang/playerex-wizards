@@ -1,10 +1,8 @@
 package com.bibireden.playerex
 
-import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.factory.DefaultAttributeFactory
 import com.bibireden.playerex.api.PlayerEXAPI
 import com.bibireden.playerex.api.attribute.DefaultAttributeImpl
-import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.api.event.LivingEntityEvents
 import com.bibireden.playerex.api.event.PlayerEXSoundEvents
 import com.bibireden.playerex.api.event.PlayerEntityEvents
@@ -14,7 +12,6 @@ import com.bibireden.playerex.factory.*
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.registerServerbound
-import com.bibireden.playerex.util.PlayerEXUtil
 import eu.pb4.placeholders.api.Placeholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -43,33 +40,18 @@ object PlayerEX : ModInitializer {
 
 			val component = PlayerEXComponents.PLAYER_DATA.get(player)
 
-			if (type.applyIfValid(server, player, component)) {
-				for ((id, value) in refs) {
-					Registries.ATTRIBUTE[id]?.let { attr ->
-						DataAttributesAPI.getValue(attr, player).ifPresent { component.add(attr, it) }
-					}
-				}
-			}
+			// todo: needs to be redone to support many packed attributes... depending on amount, refundable and skill-points have to be adjusted...
+//			if (type.applyIfValid(server, player, component)) {
+//				for ((id, value) in refs) {
+//					Registries.ATTRIBUTE[id]?.let { attr ->
+//						DataAttributesAPI.getValue(attr, player).ifPresent { component.add(attr, it) }
+//					}
+//				}
+//			}
 		}
 		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Level::class) { (levelsToAdd), ctx ->
 			if (levelsToAdd <= 0) return@registerServerbound
-
-			val player = ctx.player
-
-			// get the expected level, but do not go beyond the bounds of the maximum!
-			val expectedLevel = DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).orElse(0.0) + levelsToAdd
-			if (expectedLevel > PlayerEXAttributes.LEVEL.maxValue) return@registerServerbound
-
-			val component = PlayerEXComponents.PLAYER_DATA.get(player)
-
-			val required = PlayerEXUtil.getLevelCost(expectedLevel)
-			val skillPoints = CONFIG.skillPointsPerLevelUp * levelsToAdd
-
-			if (player.experienceLevel >= required) {
-				player.addExperienceLevels(-required)
-				component.addSkillPoints(skillPoints)
-				component.add(PlayerEXAttributes.LEVEL, expectedLevel)
-			}
+			PlayerEXComponents.PLAYER_DATA.get(ctx.player).levelUp(levelsToAdd)
 		}
 
 		CommandRegistrationCallback.EVENT.register(PlayerEXCommands::register)

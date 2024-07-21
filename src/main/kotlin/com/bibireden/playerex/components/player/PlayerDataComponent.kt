@@ -1,13 +1,17 @@
 package com.bibireden.playerex.components.player
 
+import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.IEntityAttributeInstance
 import com.bibireden.data_attributes.endec.Endecs
 import com.bibireden.data_attributes.endec.nbt.NbtDeserializer
 import com.bibireden.data_attributes.endec.nbt.NbtSerializer
+import com.bibireden.playerex.PlayerEX.CONFIG
 import com.bibireden.playerex.api.PlayerEXModifiers
+import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.registry.RefundConditionRegistry
+import com.bibireden.playerex.util.PlayerEXUtil
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent
 import dev.onyxstudios.cca.api.v3.component.sync.ComponentPacketWriter
 import io.wispforest.endec.Endec
@@ -35,10 +39,6 @@ class PlayerDataComponent(
     private var _modifiers: MutableMap<Identifier, Double> = mutableMapOf(),
     var isLevelUpNotified: Boolean = false,
 ) : IPlayerDataComponent, AutoSyncedComponent {
-    object Keys {
-        const val MODIFIERS = "modifiers"
-    }
-
     data class Packet(val modifiers: Map<Identifier, Double>, val refundablePoints: Int, val skillPoints: Int, val isLevelUpNotified: Boolean)
 
     private fun updateFromPacket(tag: NbtCompound) {
@@ -94,6 +94,7 @@ class PlayerDataComponent(
         return true
     }
 
+    // todo: this function angers me!!!! 😡 remove should be suitable enough instead of a try.
     /**
      * Attempts to remove a special PlayerEX modifier if present on the [EntityAttributeInstance] linked by the provided [Identifier] key.
      *
@@ -101,16 +102,18 @@ class PlayerDataComponent(
      * */
     private fun tryRemove(key: Identifier): Boolean {
         return this.getInstance(key)?.let { (instance, isModifierPresent) ->
-            if (isModifierPresent) instance.removeModifier(PlayerEXModifiers.UUID)
+            if (isModifierPresent) {
+                instance.removeModifier(PlayerEXModifiers.UUID)
+            }
         } != null
     }
 
-    override fun get(attribute: EntityAttribute?): Double {
-        return this._modifiers.getOrDefault(attribute?.id, 0.0)
+    override fun get(attribute: EntityAttribute): Double {
+        return this._modifiers.getOrDefault(attribute.id, 0.0)
     }
 
-    override fun set(attribute: EntityAttribute?, value: Double) {
-        val identifier = attribute?.id ?: return
+    override fun set(attribute: EntityAttribute, value: Double) {
+        val identifier = attribute.id
         val attributeValue = attribute.clamp(value)
 
         if (!this.trySet(identifier, attributeValue)) return
@@ -118,12 +121,12 @@ class PlayerDataComponent(
         this.sync { buf, player -> buf.writeNbt(toPacketNbt())}
     }
 
-    override fun add(attribute: EntityAttribute?, value: Double) {
+    override fun add(attribute: EntityAttribute, value: Double) {
         this.set(attribute, value + this.get(attribute))
     }
 
-    override fun remove(attribute: EntityAttribute?) {
-        val identifier = attribute?.id ?: return
+    override fun remove(attribute: EntityAttribute) {
+        val identifier = attribute.id
         if (!this.tryRemove(identifier).also { if (it) this._modifiers.remove(identifier) }) return
         this.sync { buf, player -> buf.writeNbt(toPacketNbt())}
     }
@@ -133,7 +136,8 @@ class PlayerDataComponent(
 
         for ((id, value) in this._modifiers) {
             if (percent == 0) {
-                if (!this.tryRemove(id)) continue
+                this.tryRemove(id)
+                this._modifiers.remove(id)
             }
             else {
                 val retained = value * 0.1 * percent
@@ -141,10 +145,10 @@ class PlayerDataComponent(
             }
         }
 
-        this._refundablePoints = round(this._refundablePoints * 0.01F * percent).toInt()
-        this._skillPoints = round(this._skillPoints * 0.01F * percent).toInt()
+        this._refundablePoints = round(this._refundablePoints * percent.toDouble()).toInt()
+        this._skillPoints = round(this._skillPoints * percent.toDouble()).toInt()
 
-        this.sync { buf, player -> buf.writeNbt(toPacketNbt())}
+        this.sync { buf, _ -> buf.writeNbt(toPacketNbt())}
     }
 
     override fun addSkillPoints(points: Int) {
@@ -165,6 +169,29 @@ class PlayerDataComponent(
         this.sync { buf, player -> buf.writeNbt(toPacketNbt())}
 
         return this.refundablePoints - previous
+    }
+
+    override fun levelUp(amount: Int, override: Boolean): Boolean {
+        if (amount <= 0) return false
+
+        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map { level ->
+            val expectedLevel = level + amount
+            // get the expected level, but do not go beyond the bounds of the maximum!
+            if (expectedLevel > PlayerEXAttributes.LEVEL.maxValue) return@map false
+
+            val required = PlayerEXUtil.getRequiredExperienceForLevel(expectedLevel)
+
+            val isEnoughExperience = player.experienceLevel >= required || override
+            if (isEnoughExperience) {
+                val skillPoints = CONFIG.skillPointsPerLevelUp * amount
+                val component = PlayerEXComponents.PLAYER_DATA.get(player)
+
+                player.addExperienceLevels(-required)
+                component.addSkillPoints(skillPoints)
+                component.set(PlayerEXAttributes.LEVEL, expectedLevel)
+            }
+            return@map isEnoughExperience
+        }.orElse(false)
     }
 
     override val skillPoints: Int

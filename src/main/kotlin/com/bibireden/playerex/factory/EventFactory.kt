@@ -5,6 +5,7 @@ import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.api.PlayerEXAPI
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
+import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.registry.DamageModificationRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
@@ -17,13 +18,8 @@ import net.minecraft.server.network.ServerPlayerEntity
 object EventFactory {
     fun reset(oldPlayer: ServerPlayerEntity, newPlayer: ServerPlayerEntity, isAlive: Boolean)
     {
-        if (PlayerEX.CONFIG.resetOnDeath)
-        {
-            val playerData = PlayerEXComponents.PLAYER_DATA.maybeGet(newPlayer)
-            if (playerData.isPresent)
-            {
-                playerData.get().reset(0)
-            }
+        if (PlayerEX.CONFIG.resetOnDeath) {
+            PlayerEXComponents.PLAYER_DATA.maybeGet(newPlayer).ifPresent(IPlayerDataComponent::reset)
         }
     }
 
