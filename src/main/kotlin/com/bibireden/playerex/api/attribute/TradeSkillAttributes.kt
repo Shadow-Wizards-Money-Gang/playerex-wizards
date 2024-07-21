@@ -1,6 +1,8 @@
 package com.bibireden.playerex.api.attribute
 
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes.register
+import com.bibireden.playerex.ext.id
+import net.minecraft.util.Identifier
 
 object TradeSkillAttributes {
     @JvmField
@@ -23,4 +25,15 @@ object TradeSkillAttributes {
 
     @JvmField
     val FARMING = register("farming", 0.0, 0.0, 100.0);
+
+    @JvmField
+    val IDS: Set<Identifier> = setOf(
+        MINING.id,
+        ALCHEMY.id,
+        FISHING.id,
+        FARMING.id,
+        LOGGING.id,
+        ENCHANTING.id,
+        ENCHANTING.id
+    )
 }

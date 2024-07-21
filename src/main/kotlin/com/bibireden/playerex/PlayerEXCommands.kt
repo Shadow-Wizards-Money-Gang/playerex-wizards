@@ -24,27 +24,9 @@ import net.minecraft.util.Identifier
 
 // todo: overlords will complete this
 object PlayerEXCommands {
-    val primaries: Set<Identifier> = setOf(
-        PlayerEXAttributes.CONSTITUTION.id,
-        PlayerEXAttributes.STRENGTH.id,
-        PlayerEXAttributes.DEXTERITY.id,
-        PlayerEXAttributes.INTELLIGENCE.id,
-        PlayerEXAttributes.LUCKINESS.id
-    )
+    val primarySuggestionProvider = SuggestionProvider<ServerCommandSource> { ctx, builder -> CommandSource.suggestIdentifiers(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS, builder) }
 
-    val tradeSkills: Set<Identifier> = setOf(
-        TradeSkillAttributes.MINING.id,
-        TradeSkillAttributes.ALCHEMY.id,
-        TradeSkillAttributes.FISHING.id,
-        TradeSkillAttributes.FARMING.id,
-        TradeSkillAttributes.LOGGING.id,
-        TradeSkillAttributes.ENCHANTING.id,
-        TradeSkillAttributes.ENCHANTING.id
-    )
-
-    val primarySuggestionProvider = SuggestionProvider<ServerCommandSource> { ctx, builder -> CommandSource.suggestIdentifiers(primaries, builder) }
-
-    fun executeLevelUpCommand(ctx: CommandContext<ServerCommandSource>): Int {
+    private fun executeLevelUpCommand(ctx: CommandContext<ServerCommandSource>): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
         val component = PlayerEXComponents.PLAYER_DATA.get(player)
 
@@ -58,7 +40,7 @@ object PlayerEXCommands {
 
             component.add(PlayerEXAttributes.LEVEL, 1.0)
             component.addSkillPoints(PlayerEX.CONFIG.skillPointsPerLevelUp)
-            
+
             ctx.source.sendFeedback({ Text.translatable("playerex.command.levelup_alt", player.getName()) }, false)
 
             return@map 1

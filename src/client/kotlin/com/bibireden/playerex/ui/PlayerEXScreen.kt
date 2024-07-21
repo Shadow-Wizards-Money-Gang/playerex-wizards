@@ -18,7 +18,6 @@ import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.ParentComponent
 import net.minecraft.text.Text
-import kotlin.jvm.optionals.getOrNull
 import kotlin.reflect.KClass
 
 // Transformers
@@ -48,7 +47,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val content = rootComponent.childById(FlowLayout::class, "content")!!
         val footer = rootComponent.childById(FlowLayout::class, "footer")!!
 
-        currentLevel.text(Text.translatable("playerex.ui.current_level", playerLevel, PlayerEXUtil.getRequiredXp(player)))
+        currentLevel.text(Text.translatable("playerex.ui.current_level", playerLevel, PlayerEXUtil.getLevelCost(playerLevel + 1.0)))
         pointsAvailable.text(Text.of(playerData.skillPoints.toString()))
         pageCounter.text(Text.of("${currentPage + 1}/${pages.size}"))
 

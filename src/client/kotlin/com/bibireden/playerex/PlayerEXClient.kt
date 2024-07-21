@@ -17,11 +17,8 @@ import org.lwjgl.glfw.GLFW
 
 object PlayerEXClient : ClientModInitializer {
 	val MAIN_UI_SCREEN_ID = PlayerEX.id("main_ui_model")
-	val KEYBINDING_MAIN_SCREEN = KeyBindingHelper.registerKeyBinding(KeyBinding("${PlayerEX.MOD_ID}.key.main_screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.${PlayerEX.MOD_ID}"))
 
-	fun sendUpdatePacket(packet: NetworkingPackets.Update) {
-		NetworkingChannels.MODIFY.clientHandle().send(packet)
-	}
+	private val KEYBINDING_MAIN_SCREEN: KeyBinding = KeyBindingHelper.registerKeyBinding(KeyBinding("${PlayerEX.MOD_ID}.key.main_screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.${PlayerEX.MOD_ID}"))
 
 	override fun onInitializeClient() {
 		NetworkingChannels.NOTIFICATIONS.registerClientbound(NetworkingPackets.Notify::class.java) { (type), ctx ->

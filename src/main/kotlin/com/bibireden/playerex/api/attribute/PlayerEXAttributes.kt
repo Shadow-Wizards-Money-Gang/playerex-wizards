@@ -1,6 +1,7 @@
 package com.bibireden.playerex.api.attribute
 
 import com.bibireden.playerex.PlayerEX
+import com.bibireden.playerex.ext.id
 import net.minecraft.entity.attribute.ClampedEntityAttribute
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -77,4 +78,12 @@ object PlayerEXAttributes {
         val attribute = ClampedEntityAttribute("attribute.name.${PlayerEX.MOD_ID}.$path", base, min, max)
         return Registry.register(Registries.ATTRIBUTE, Identifier.of(PlayerEX.MOD_ID, path)!!, attribute)
     }
+
+    val PRIMARY_ATTRIBUTE_IDS: Set<Identifier> = setOf(
+        PlayerEXAttributes.CONSTITUTION.id,
+        PlayerEXAttributes.STRENGTH.id,
+        PlayerEXAttributes.DEXTERITY.id,
+        PlayerEXAttributes.INTELLIGENCE.id,
+        PlayerEXAttributes.LUCKINESS.id
+    )
 }
