@@ -1,18 +1,9 @@
 package com.bibireden.playerex.config
 
-import com.bibireden.data_attributes.api.DataAttributesAPI
-import com.bibireden.data_attributes.api.util.Maths
 import com.bibireden.playerex.PlayerEX
-import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import io.wispforest.owo.config.Option
+
 import io.wispforest.owo.config.annotation.*
-import net.minecraft.entity.player.PlayerEntity
-import net.objecthunter.exp4j.Expression
-import net.objecthunter.exp4j.ExpressionBuilder
-import net.objecthunter.exp4j.function.Function
-import kotlin.math.abs
-import kotlin.math.min
-import kotlin.math.round
 
 @Modmenu(modId = PlayerEX.MOD_ID)
 @Config(
@@ -58,4 +49,8 @@ class PlayerEXConfigModel {
     @JvmField
     @RangeConstraint(min = 0.0, max = 50.0)
     var textScaleY: Int = 50;
+
+    @JvmField
+    @RangeConstraint(min = 0.0, max = 1.0)
+    var levelNameplateHeight: Double = 0.3;
 }
