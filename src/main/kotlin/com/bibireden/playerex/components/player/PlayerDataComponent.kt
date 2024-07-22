@@ -136,19 +136,21 @@ class PlayerDataComponent(
     override fun reset(percent: Int) {
         if (percent >= 100) return
 
+        val partition = if (percent == 0) 0.0 else percent / 100.0
+
         for ((id, value) in this._modifiers) {
-            if (percent == 0) {
+            if (partition == 0.0) {
                 this.tryRemove(id)
                 this._modifiers.remove(id)
             }
             else {
-                val retained = value * 0.1 * percent
+                val retained = value * partition
                 if (!this.trySet(id, retained)) continue
             }
         }
 
-        this._refundablePoints = round(this._refundablePoints * percent.toDouble()).toInt()
-        this._skillPoints = round(this._skillPoints * percent.toDouble()).toInt()
+        this._refundablePoints = round(this._refundablePoints * partition).toInt()
+        this._skillPoints = round(this._skillPoints * partition).toInt()
 
         this.sync { buf, _ -> buf.writeNbt(toPacketNbt())}
     }

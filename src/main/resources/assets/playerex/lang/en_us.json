@@ -41,10 +41,15 @@
     "attribute.name.playerex.smithing": "Smithing",
     "attribute.name.playerex.farming": "Farming",
 
-    "playerex.command.reset": "Reset attributes to default values for player %s",
     "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "Refunded %s skill points for player %s",
-    "playerex.command.level_up": "Added %s levels to player %s",
+    "playerex.command.level_up": [
+        {"text": "❤ ", "color": "#F6CB3B"},
+        {"text": "Added ", "color": "white"},
+        {"index": 0, "color": "#60DF90"},
+        {"text": " levels to ", "color": "white"},
+        {"index": 1}
+    ],
     "playerex.command.max_error": [
         {"text": "⚑ ", "color": "#F53E3E"},
         {"index": 0, "color": "#EEBC58"},
@@ -78,7 +83,12 @@
     ],
     "playerex.command.skill_error": [
         {"text": "⚑ ", "color": "#F53E3E"},
-        {"index": 0, "color": "white"},
+        {"index": 0, "color": "white"}
+    ],
+    "playerex.command.reset": [
+        {"text": "❤ ", "color": "#F53E3E"},
+        {"text": "Reset level, skills and points for ", "color": "white"},
+        {"index": 0, "color": "#EEBC58"}
     ],
     "playerex.command.refund_attribute": "Refunded %s for player %s.",
     "playerex.command.refund_attribute_error": "%s has no Refunds to spend!",

@@ -31,7 +31,6 @@ private typealias Context = CommandContext<ServerCommandSource>
 
 // todo: overlords will complete this
 object PlayerEXCommands {
-    val primaryAttributesSuggestionProvider = SuggestionProvider<ServerCommandSource> { _, builder -> CommandSource.suggestIdentifiers(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS, builder) }
     val MODIFIABLE_ATTRIBUTES_SUGGESTIONS = SuggestionProvider<ServerCommandSource> { _, builder ->
         CommandSource.suggestIdentifiers(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS, builder)
         CommandSource.suggestIdentifiers(TradeSkillAttributes.IDS, builder)
@@ -59,7 +58,7 @@ object PlayerEXCommands {
                 )
             )
             .then(CommandManager.literal("reset")
-                .then(CommandManager.literal("all").executes(::executeResetAllCommand)
+                .then(CommandManager.literal("@all").executes(::executeResetAllCommand)
                     .then(amountArgument.executes { executeResetAllCommand(it, IntegerArgumentType.getInteger(it, "amount")) })
                 )
                 .then(playerArgument.executes(::executeResetCommand)
