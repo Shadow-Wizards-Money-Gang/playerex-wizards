@@ -9,6 +9,19 @@
         {"index": 1, "color": "#757575", "italic": true, "underline": true },
         {"text": " XP until the next level)", "color": "#757575", "italic": true }
     ],
+    "playerex.ui.level_button": [
+        {"text": "❤ ", "color": "#F6CB3B"},
+        {"text": "Leveling", "color": "white"},"\n\n",
+        {"text": "You will need ", "color": "white"},
+        {"index": 0},
+        {"text": " XP in order to level by ", "color": "white"},
+        {"index": 1},
+        {"text": " points.", "color": "white"}, "\n",
+        {"text": "★ ", "color": "#62D16A"},
+        {"text": " Current XP: ", "color": "white"},
+        {"index": 2}
+    ],
+    "playerex.ui.text.nameplate": "lvl %s",
 
 
     "attribute.name.playerex.level": "Level",
@@ -32,6 +45,7 @@
     "attribute.name.playerex.poison_resistance": "Poison Resistance",
     "attribute.name.playerex.wither_resistance": "Wither Resistance",
     "attribute.name.playerex.breaking_speed": "Breaking Speed",
+    "attribute.name.playerex.focus": "Focus",
 
     "attribute.name.playerex.mining": "Mining",
     "attribute.name.playerex.enchanting": "Enchanting",
@@ -43,11 +57,17 @@
 
     "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "Refunded %s skill points for player %s",
+
+    "playerex.command.updated_result": [
+        {"text": "➜ ", "color": "gray"},
+        {"text": "Updated Result: "},
+        {"index": 0, "color": "#60DF90"}
+    ],
     "playerex.command.level_up": [
         {"text": "❤ ", "color": "#F6CB3B"},
         {"text": "Added ", "color": "white"},
         {"index": 0, "color": "#60DF90"},
-        {"text": " levels to ", "color": "white"},
+        {"text": " level(s) to ", "color": "white"},
         {"index": 1}
     ],
     "playerex.command.max_error": [
@@ -81,6 +101,15 @@
         {"text": " for ", "color": "white"},
         {"index": 2}
     ],
+    "playerex.command.refunded": [
+        {"text": "❤ ", "color": "#4ED780"},
+        {"text": "Refunded ", "color": "white"},
+        {"index": 0, "color": "#60DF90"},
+        {"text": " point(s) from ", "color": "white"},
+        {"index": 1, "color": "#EEBC58"},
+        {"text": " to ", "color": "white"},
+        {"index": 2}
+    ],
     "playerex.command.skill_error": [
         {"text": "⚑ ", "color": "#F53E3E"},
         {"index": 0, "color": "white"}
@@ -90,7 +119,10 @@
         {"text": "Reset level, skills and points for ", "color": "white"},
         {"index": 0, "color": "#EEBC58"}
     ],
-    "playerex.command.refund_attribute": "Refunded %s for player %s.",
-    "playerex.command.refund_attribute_error": "%s has no Refunds to spend!",
+    "playerex.command.refund_error": [
+        {"text": "⚑ ", "color": "#F53E3E"},
+        {"index": 0, "color": "#EEBC58"},
+        {"text": " does not have enough points to refund!", "color": "white"}
+    ],
     "playerex.command.refund_attribute_unskilled": "%s has not been skilled for player %s!"
 }

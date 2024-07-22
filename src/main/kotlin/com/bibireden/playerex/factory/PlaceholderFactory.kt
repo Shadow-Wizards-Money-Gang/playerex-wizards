@@ -5,6 +5,7 @@ import com.bibireden.opc.cache.OfflinePlayerCache
 import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.api.PlayerEXCachedKeys
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
+import com.bibireden.playerex.ext.level
 import eu.pb4.placeholders.api.PlaceholderHandler
 import eu.pb4.placeholders.api.PlaceholderResult
 import net.minecraft.server.MinecraftServer
@@ -79,9 +80,8 @@ object PlaceholderFactory {
                 val player: ServerPlayerEntity? = ctx?.player
 
                 player ?: return@PlaceholderHandler PlaceholderResult.invalid("No player!");
-                val level = DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player)
 
-                return@PlaceholderHandler PlaceholderResult.value(level.toString())
+                return@PlaceholderHandler PlaceholderResult.value(player.level.toString())
             }
         }
 

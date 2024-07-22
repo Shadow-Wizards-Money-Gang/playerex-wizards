@@ -19,12 +19,16 @@ public abstract class ServerPlayerEntityMixin {
         PlayerDataComponent component = (PlayerDataComponent) PlayerEXComponents.PLAYER_DATA.get(player);
 
         int current = player.experienceLevel;
-        int required = PlayerEXUtil.getRequiredXp(player);
+        int required = PlayerEXUtil.getRequiredXpForNextLevel(player);
 
-        boolean isAmountReached = current >= required;
-        if (isAmountReached && !component.isLevelUpNotified()) {
-            NetworkFactory.sendLevelUpNotification(player);
+        if (current >= required) {
+            if (!component.isLevelUpNotified()) {
+                component.setLevelUpNotified(true);
+                NetworkFactory.sendLevelUpNotification(player);
+            }
         }
-        component.setLevelUpNotified(isAmountReached);
+        else {
+            component.setLevelUpNotified(false);
+        }
     }
 }

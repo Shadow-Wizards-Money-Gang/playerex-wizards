@@ -4,6 +4,7 @@ import com.bibireden.playerex.PlayerEX
 import io.wispforest.owo.config.Option
 
 import io.wispforest.owo.config.annotation.*
+import javax.tools.Tool
 
 @Modmenu(modId = PlayerEX.MOD_ID)
 @Config(
@@ -62,4 +63,9 @@ class PlayerEXConfigModel {
     @JvmField
     @RangeConstraint(min = 0.0, max = 1.0)
     var levelNameplateHeight: Double = 0.3;
+
+    @JvmField
+    var tooltip: Tooltip = Tooltip.PlayerEX
+
+    enum class Tooltip { Default, Vanilla, PlayerEX }
 }

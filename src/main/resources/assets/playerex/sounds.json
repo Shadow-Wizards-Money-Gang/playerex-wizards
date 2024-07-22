@@ -1,0 +1,10 @@
+{
+    "level_up": {
+        "subtitle": "sound.playerex.level_up",
+        "sounds": [ "playerex:level_up" ]
+    },
+    "spend": {
+        "subtitle": "sound.playerex.spend",
+        "sounds": [ "playerex:spend" ]
+    }
+}

@@ -11,6 +11,9 @@ import com.bibireden.playerex.api.PlayerEXModifiers
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.ext.id
+import com.bibireden.playerex.networking.NetworkingChannels
+import com.bibireden.playerex.networking.NetworkingPackets
+import com.bibireden.playerex.networking.types.NotificationType
 import com.bibireden.playerex.registry.RefundConditionRegistry
 import com.bibireden.playerex.util.PlayerEXUtil
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent
@@ -27,7 +30,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
-import kotlin.math.exp
 import kotlin.math.round
 
 /**
@@ -42,15 +44,6 @@ class PlayerDataComponent(
     var isLevelUpNotified: Boolean = false,
 ) : IPlayerDataComponent, AutoSyncedComponent {
     data class Packet(val modifiers: Map<Identifier, Double>, val refundablePoints: Int, val skillPoints: Int, val isLevelUpNotified: Boolean)
-
-    private fun updateFromPacket(tag: NbtCompound) {
-        ENDEC.decodeFully(NbtDeserializer::of, tag.get("DART")).also {
-            this._modifiers = it.modifiers.toMutableMap()
-            this._refundablePoints = it.refundablePoints
-            this._skillPoints = it.skillPoints
-            this.isLevelUpNotified = it.isLevelUpNotified
-        }
-    }
 
     private fun toPacketNbt(): NbtCompound = NbtCompound().also(::writeToNbt)
 
@@ -151,6 +144,7 @@ class PlayerDataComponent(
 
         this._refundablePoints = round(this._refundablePoints * partition).toInt()
         this._skillPoints = round(this._skillPoints * partition).toInt()
+        this.isLevelUpNotified = false
 
         this.sync { buf, _ -> buf.writeNbt(toPacketNbt())}
     }
@@ -170,7 +164,7 @@ class PlayerDataComponent(
 
         this._refundablePoints = round(MathHelper.clamp((this.refundablePoints + points).toDouble(), 0.0, maxRefundPoints)).toInt()
 
-        this.sync { buf, player -> buf.writeNbt(toPacketNbt())}
+        this.sync { buf, _ -> buf.writeNbt(toPacketNbt())}
 
         return this.refundablePoints - previous
     }
@@ -183,7 +177,7 @@ class PlayerDataComponent(
             // get the expected level, but do not go beyond the bounds of the maximum!
             if (expectedLevel > PlayerEXAttributes.LEVEL.maxValue) return@map false
 
-            val required = PlayerEXUtil.getRequiredExperienceForLevel(expectedLevel)
+            val required = PlayerEXUtil.getRequiredXpForLevel(player, expectedLevel)
 
             val isEnoughExperience = player.experienceLevel >= required || override
             if (isEnoughExperience) {
@@ -211,6 +205,8 @@ class PlayerDataComponent(
                 this._skillPoints -= amount
             }
             this.set(skill, expected)
+            // signal to a client that an increase has occurred...
+            NetworkingChannels.NOTIFICATIONS.serverHandle(player).send(NetworkingPackets.Notify(NotificationType.Spent))
             return@map true
         }.orElse(false)
     }
@@ -244,6 +240,6 @@ class PlayerDataComponent(
     override fun shouldSyncWith(player: ServerPlayerEntity): Boolean = player == this.player
 
     override fun applySyncPacket(buf: PacketByteBuf) {
-        updateFromPacket(buf.readNbt() ?: return)
+        this.readFromNbt(buf.readNbt() ?: return)
     }
 }

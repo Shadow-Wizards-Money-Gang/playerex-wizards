@@ -23,13 +23,6 @@ object EventFactory {
         }
     }
 
-    // todo: this may be redundant and will have to be replaced by something else, integer property does not exist anymore.
-//    fun clamped(attributeIn: EntityAttribute, valueIn: Double): Double
-//    {
-//        val attribute: IEntityAttribute = attributeIn as IEntityAttribute;
-//        return round(valueIn)
-//    }
-
     fun healed(livingEntity: LivingEntity, amount: Float): Float
     {
         return DataAttributesAPI.getValue(PlayerEXAttributes.HEAL_AMPLIFICATION, livingEntity).map { (amount * (1.0 + it)).toFloat() }.orElse(amount)
@@ -83,12 +76,8 @@ object EventFactory {
 
         if (attacker is LivingEntity && (origin is LivingEntity || origin is PersistentProjectileEntity))
         {
-            val user: LivingEntity = attacker;
-            val lifestealOption = DataAttributesAPI.getValue(PlayerEXAttributes.LIFESTEAL, livingEntity);
-
-            if (lifestealOption.isPresent)
-            {
-                user.heal((original * lifestealOption.get() * 10.0).toFloat());
+            DataAttributesAPI.getValue(PlayerEXAttributes.LIFESTEAL, livingEntity).ifPresent {
+                attacker.heal((original * it * 10.0).toFloat());
             }
         }
 

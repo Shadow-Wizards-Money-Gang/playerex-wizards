@@ -103,7 +103,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
     private void playerex$onRender(T entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
         if (this.playerex$shouldRenderLevel(entity) && PlayerEX.CONFIG.getShowLevelNameplates()) {
             DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, entity).ifPresent((value) -> {
-                Text tag = Text.translatable("playerex.gui.text.nameplate", String.valueOf(Math.round(value))).formatted(Formatting.WHITE);
+                Text tag = Text.translatable("playerex.ui.text.nameplate", String.valueOf(Math.round(value))).formatted(Formatting.WHITE);
                 this.playerex$renderLevel(entity, tag, matrixStack, vertexConsumerProvider, i);
             });
         }

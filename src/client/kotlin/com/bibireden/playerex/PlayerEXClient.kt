@@ -26,7 +26,8 @@ object PlayerEXClient : ClientModInitializer {
 	override fun onInitializeClient() {
 		NetworkingChannels.NOTIFICATIONS.registerClientbound(NetworkingPackets.Notify::class) { (type), ctx ->
 			when (type) {
-				NotificationType.LevelUp -> ctx.player().playSound(PlayerEXSoundEvents.LEVEL_UP_SOUND, SoundCategory.NEUTRAL, PlayerEX.CONFIG.levelUpVolume.toFloat(), 1.5F)
+				NotificationType.LevelUp -> ctx.player().playSound(PlayerEXSoundEvents.LEVEL_UP_SOUND, SoundCategory.NEUTRAL, PlayerEX.CONFIG.levelUpVolume.toFloat(), 1F)
+				NotificationType.Spent -> ctx.player().playSound(PlayerEXSoundEvents.SPEND_SOUND, SoundCategory.NEUTRAL, PlayerEX.CONFIG.skillUpVolume.toFloat(), 1F)
 			}
 		}
 

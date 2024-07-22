@@ -7,18 +7,18 @@ import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.components.player.PlayerDataComponent
 import dev.onyxstudios.cca.api.v3.chunk.ChunkComponentFactoryRegistry
 import dev.onyxstudios.cca.api.v3.chunk.ChunkComponentInitializer
+import dev.onyxstudios.cca.api.v3.component.ComponentKey
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy
-import net.minecraft.util.Identifier
 
 class PlayerEXComponents : EntityComponentInitializer, ChunkComponentInitializer {
     companion object {
         @JvmField
-        val PLAYER_DATA = ComponentRegistry.getOrCreate(PlayerEX.id("player-data"), IPlayerDataComponent::class.java)
+        val PLAYER_DATA: ComponentKey<IPlayerDataComponent> = ComponentRegistry.getOrCreate(PlayerEX.id("player-data"), IPlayerDataComponent::class.java)
         @JvmField
-        val EXPERIENCE_DATA = ComponentRegistry.getOrCreate(PlayerEX.id("experience-data"), IExperienceDataComponent::class.java)
+        val EXPERIENCE_DATA: ComponentKey<IExperienceDataComponent> = ComponentRegistry.getOrCreate(PlayerEX.id("experience-data"), IExperienceDataComponent::class.java)
     }
 
     override fun registerEntityComponentFactories(registry: EntityComponentFactoryRegistry) {

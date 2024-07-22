@@ -84,7 +84,13 @@
 
                         <!-- content -->
                         <flow-layout direction="horizontal" id="content">
-                            <children/>
+                            <children>
+                                <stack-layout>
+                                    <children>
+
+                                    </children>
+                                </stack-layout>
+                            </children>
 
                             <sizing><vertical method="fill">85</vertical><horizontal method="fill">100</horizontal></sizing>
                             <positioning type="relative">0,50</positioning>
@@ -98,7 +104,7 @@
                             <children>
                                 <label id="level:current"/>
                                 <text-box id="level:amount">
-                                    <text>0</text>
+                                    <text>1</text>
 
                                     <sizing>
                                         <vertical method="fixed">10</vertical>
@@ -110,7 +116,6 @@
                                 </text-box>
                                 <button id="level:button">
                                     <text>+</text>
-                                    <tooltip-text>Click here to level up based on the amount you entered.</tooltip-text>
 
                                     <renderer><flat color="black" hovered-color="black" disabled-color="dark-red"/></renderer>
 

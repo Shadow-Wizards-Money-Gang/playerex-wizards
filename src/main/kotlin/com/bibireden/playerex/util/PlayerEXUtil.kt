@@ -1,9 +1,8 @@
 package com.bibireden.playerex.util
 
-import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.util.Maths
 import com.bibireden.playerex.PlayerEX
-import com.bibireden.playerex.api.attribute.PlayerEXAttributes
+import com.bibireden.playerex.ext.level
 import net.minecraft.entity.player.PlayerEntity
 import net.objecthunter.exp4j.Expression
 import net.objecthunter.exp4j.ExpressionBuilder
@@ -29,13 +28,22 @@ object PlayerEXUtil {
         return ExpressionBuilder(PlayerEX.CONFIG.levelFormula).variable(VARIABLE).function(STAIRCASE_FUNCTION).build()
     }
 
+    @JvmStatic
     /** Computes the experience cost of the provided level. */
-    fun getRequiredExperienceForLevel(level: Double): Int = abs(round(expression.setVariable(VARIABLE, round(level)).evaluate())).toInt()
+    fun getRequiredXpForLevel(player: PlayerEntity, target: Double): Int {
+        val steps = (target - player.level).toInt()
+        if (steps <= 0) return 0
 
+        var accumulator = 0
+        for (x in 1..steps) {
+            val k = steps + player.level
+            accumulator += abs(round(expression.setVariable(VARIABLE, k).evaluate())).toInt()
+        }
+
+        return accumulator
+    }
 
     /** todo: document, none evident on former, resolve if orElse is needed here, and if we can do nullable or not without drastically changing things */
     @JvmStatic
-    fun getRequiredXp(player: PlayerEntity): Int {
-        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(::getRequiredExperienceForLevel).orElse(1)
-    }
+    fun getRequiredXpForNextLevel(player: PlayerEntity): Int = getRequiredXpForLevel(player, player.level + 1)
 }
