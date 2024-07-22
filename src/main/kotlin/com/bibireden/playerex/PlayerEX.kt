@@ -1,5 +1,6 @@
 package com.bibireden.playerex
 
+import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
 import com.bibireden.data_attributes.api.factory.DefaultAttributeFactory
 import com.bibireden.playerex.api.PlayerEXAPI
 import com.bibireden.playerex.api.attribute.DefaultAttributeImpl
@@ -12,6 +13,7 @@ import com.bibireden.playerex.factory.*
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.registerServerbound
+import com.bibireden.playerex.networking.types.UpdatePacketType
 import eu.pb4.placeholders.api.Placeholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -34,24 +36,16 @@ object PlayerEX : ModInitializer {
 	fun id(path: String) = Identifier.of(MOD_ID, path)!!
 
 	override fun onInitialize() {
-		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Update::class) { (type, refs), ctx ->
-			val player = ctx.player
-			val server = ctx.player.server
-
-			val component = PlayerEXComponents.PLAYER_DATA.get(player)
-
-			// todo: needs to be redone to support many packed attributes... depending on amount, refundable and skill-points have to be adjusted...
-//			if (type.applyIfValid(server, player, component)) {
-//				for ((id, value) in refs) {
-//					Registries.ATTRIBUTE[id]?.let { attr ->
-//						DataAttributesAPI.getValue(attr, player).ifPresent { component.add(attr, it) }
-//					}
-//				}
-//			}
+		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Update::class) { (type, id, amount), ctx ->
+			EntityAttributeSupplier(id).get()?.let {
+				when (type) {
+					UpdatePacketType.Skill -> PlayerEXComponents.PLAYER_DATA.get(ctx.player).skillUp(it, amount)
+					UpdatePacketType.Refund -> PlayerEXComponents.PLAYER_DATA.get(ctx.player).refund(it, amount)
+				}
+			}
 		}
-		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Level::class) { (levelsToAdd), ctx ->
-			if (levelsToAdd <= 0) return@registerServerbound
-			PlayerEXComponents.PLAYER_DATA.get(ctx.player).levelUp(levelsToAdd)
+		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Level::class) { (amount), ctx ->
+			PlayerEXComponents.PLAYER_DATA.get(ctx.player).levelUp(amount)
 		}
 
 		CommandRegistrationCallback.EVENT.register(PlayerEXCommands::register)

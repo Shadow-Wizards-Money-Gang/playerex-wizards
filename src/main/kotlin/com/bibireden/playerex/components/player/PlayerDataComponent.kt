@@ -215,6 +215,13 @@ class PlayerDataComponent(
         }.orElse(false)
     }
 
+    override fun refund(skill: EntityAttribute, amount: Int): Boolean {
+        if (amount <= 0 || this.refundablePoints < amount) return false
+        this.addRefundablePoints(-1)
+        this.addSkillPoints(1)
+        return true
+    }
+
     override val skillPoints: Int
         get() = this._skillPoints
 

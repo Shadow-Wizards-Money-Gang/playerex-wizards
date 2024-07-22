@@ -41,4 +41,7 @@ interface IPlayerDataComponent : Component {
      * If not possible, it will return `false`.
      * This can be changed by setting `true` to the [override] argument. */
     fun skillUp(skill: EntityAttribute, amount: Int, override: Boolean = false): Boolean
+
+    /** Refunds skill points based on the amount provided and how much [refundablePoints] the player currently has. */
+    fun refund(skill: EntityAttribute, amount: Int): Boolean
 }
