@@ -3,7 +3,6 @@ package com.bibireden.playerex.ui
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
 import com.bibireden.data_attributes.api.attribute.IEntityAttribute
-import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.PlayerEXClient
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
@@ -11,8 +10,8 @@ import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
-import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.networking.types.UpdatePacketType
+import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.util.PlayerEXUtil
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
@@ -41,7 +40,7 @@ fun <T : Component> ParentComponent.childById(clazz: KClass<T>, id: String) = th
 class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, DataSource.asset(PlayerEXClient.MAIN_UI_SCREEN_ID)) {
     private var currentPage = 0
 
-    private val pages: List<Collection<Component>> = AttributesMenuRegistry.get()
+    private val pages: MutableList<MutableList<Component>> = AttributesMenuRegistry.get()
 
     private val playerComponent by lazy { PlayerEXComponents.PLAYER_DATA.get(this.client?.player!!) }
 
@@ -64,7 +63,6 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     // todo: this is subject to change... and needs to be done first
     fun onAttributesUpdated() {
         PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS.forEach {
-            val component = this.uiAdapter.rootComponent.childById(TextBoxComponent::class, "entry:${it}")
             this.uiAdapter.rootComponent.childById(LabelComponent::class, "${it}:current_level")?.apply {
                 text(EntityAttributeSupplier(it).get()?.let { attribute -> attributeLabel(attribute, client?.player!!) })
             }
@@ -145,7 +143,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     }
 
     // todo: migrate to Registry once completed
-    private fun temporarySupplyAttributePage(): List<Component> = listOf(
+    private fun temporarySupplyAttributePage(): MutableList<Component> = mutableListOf(
         Containers.verticalFlow(Sizing.fill(75), Sizing.content()).also {
             it.child(Components.label(Text.translatable("playerex.ui.category.primary_attributes")))
             it.child(Components.box(Sizing.fill(60), Sizing.fixed(2)))
@@ -170,7 +168,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val content = rootComponent.childById(FlowLayout::class, "content")!!
         val footer = rootComponent.childById(FlowLayout::class, "footer")!!
 
-        pages.addAll(listOf(temporarySupplyAttributePage(), testLayout2()))
+        pages.addAll(mutableListOf(temporarySupplyAttributePage()))
 
         this.onLevelUpdated()
         this.onAttributesUpdated()
