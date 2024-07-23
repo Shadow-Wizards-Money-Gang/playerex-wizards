@@ -1,5 +1,7 @@
 package com.bibireden.playerex
 
+import com.bibireden.data_attributes.DataAttributes
+import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.event.EntityAttributeModifiedEvents
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.api.event.PlayerEXSoundEvents
@@ -7,7 +9,9 @@ import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.registerClientbound
 import com.bibireden.playerex.networking.types.NotificationType
+import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.ui.PlayerEXScreen
+import com.bibireden.playerex.ui.menus.AttributeMenu
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -33,17 +37,23 @@ object PlayerEXClient : ClientModInitializer {
 
 		EntityAttributeModifiedEvents.MODIFIED.register { attribute, entity, _, _, _ ->
 			if (entity is PlayerEntity && entity.world.isClient) {
+				if (entity != MinecraftClient.getInstance().player) return@register
+
 				val screen = MinecraftClient.getInstance().currentScreen
 				if (screen is PlayerEXScreen) {
 					if (attribute == PlayerEXAttributes.LEVEL) {
-						screen.onLevelUpdated()
+						DataAttributesAPI.getValue(attribute, entity).map(Double::toInt).ifPresent(screen::onLevelUpdated)
 					}
 					else {
-						screen.onAttributesUpdated()
+						DataAttributesAPI.getValue(attribute, entity).ifPresent { value ->
+							screen.onAttributesUpdated(attribute, value)
+						}
 					}
 				}
 			}
 		}
+
+		AttributesMenuRegistry.register(AttributeMenu::class.java)
 
 		ClientTickEvents.END_CLIENT_TICK.register { client ->
 			if (PlayerEX.CONFIG.disableAttributesGui) return@register
