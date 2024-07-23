@@ -29,11 +29,12 @@ class AttributeComponent(attribute: EntityAttribute, player: PlayerEntity, compo
                     val entries = DataAttributes.FUNCTIONS_CONFIG.functions.data[attribute.id]
                     if (!entries.isNullOrEmpty()) {
                         label.tooltip(Text.translatable("playerex.ui.attribute_functions").also { text ->
+                            text.append("\n")
+                            text.append(Text.literal(attribute.id.toString()).formatted(Formatting.DARK_GRAY))
                             text.append("\n\n")
                             entries.forEach { function ->
-                                EntityAttributeSupplier(function.id).get()?.translationKey?.let { key ->
-                                    text.append(Text.translatable(key).formatted(Formatting.AQUA))
-                                }
+                                val childAttribute = EntityAttributeSupplier(function.id).get() ?: return@forEach
+                                text.append(Text.translatable(childAttribute.translationKey).formatted(Formatting.AQUA))
                                 text.append(Text.literal(" ${function.behavior.symbol}").formatted(Formatting.GREEN))
                                 text.append(Text.literal("${function.value}"))
                                 text.append(Text.literal(" (${DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), player).orElse(0.0)})\n")
