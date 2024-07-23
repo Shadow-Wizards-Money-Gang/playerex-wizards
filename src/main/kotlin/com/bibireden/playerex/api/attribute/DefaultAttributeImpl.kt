@@ -3,11 +3,12 @@ package com.bibireden.playerex.api.attribute
 import com.bibireden.data_attributes.api.attribute.StackingBehavior
 import com.bibireden.data_attributes.config.functions.AttributeFunction
 import com.bibireden.data_attributes.data.EntityTypeData
+import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.ext.id
-import net.fabricmc.loader.api.FabricLoader
+import de.dafuqs.additionalentityattributes.AdditionalEntityAttributes
+import net.fabric_extras.ranged_weapon.api.EntityAttributes_RangedWeapon
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.util.Identifier
-import net.projectile_damage.ProjectileDamageMod
 
 object DefaultAttributeImpl {
     val FUNCTIONS: Map<Identifier, List<AttributeFunction>> = mapOf(
@@ -17,39 +18,43 @@ object DefaultAttributeImpl {
             AttributeFunction(PlayerEXAttributes.POISON_RESISTANCE.id, StackingBehavior.Add, 0.1),
             AttributeFunction(PlayerEXAttributes.FREEZE_RESISTANCE.id, StackingBehavior.Add, 0.1),
             AttributeFunction(PlayerEXAttributes.LIGHTNING_RESISTANCE.id, StackingBehavior.Add, 0.1),
-            // todo: add additionalentityattributes as a modImplementation, making it mandatory.
-            AttributeFunction(Identifier.of("additionalentityattributes", "generic.magic_protection")!!, StackingBehavior.Add, 0.25),
-            AttributeFunction(Identifier.of("additionalentityattributes", "generic.lung_capacity")!!, StackingBehavior.Add, 0.25)
+            AttributeFunction(AdditionalEntityAttributes.MAGIC_PROTECTION.id, StackingBehavior.Add, 0.25),
+            AttributeFunction(AdditionalEntityAttributes.LUNG_CAPACITY.id, StackingBehavior.Add, 0.25)
         ),
         PlayerEXAttributes.STRENGTH.id to listOf(
-            AttributeFunction(EntityAttributes.GENERIC_ATTACK_DAMAGE.id, StackingBehavior.Multiply, 0.02),
+            AttributeFunction(EntityAttributes.GENERIC_ATTACK_DAMAGE.id, StackingBehavior.Add, 0.02),
             AttributeFunction(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id, StackingBehavior.Add, 0.1),
-            AttributeFunction(PlayerEXAttributes.MELEE_CRIT_DAMAGE.id, StackingBehavior.Multiply, 0.05),
+            AttributeFunction(PlayerEXAttributes.MELEE_CRIT_DAMAGE.id, StackingBehavior.Add, 0.05),
             AttributeFunction(PlayerEXAttributes.BREAKING_SPEED.id, StackingBehavior.Add, 0.01),
         ),
         PlayerEXAttributes.DEXTERITY.id to listOf(
-            AttributeFunction(EntityAttributes.GENERIC_ATTACK_SPEED.id, StackingBehavior.Multiply, 0.01),
-            AttributeFunction(PlayerEXAttributes.RANGED_DAMAGE.id, StackingBehavior.Multiply, 0.02),
-            AttributeFunction(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id, StackingBehavior.Multiply, 0.05),
-//            AttributeFunction(.id, StackingBehavior.Multiply, 0.05), idk what or where draw speed is
+            AttributeFunction(EntityAttributes.GENERIC_ATTACK_SPEED.id, StackingBehavior.Add, 0.01),
+            AttributeFunction(PlayerEXAttributes.RANGED_DAMAGE.id, StackingBehavior.Add, 0.02),
+            AttributeFunction(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id, StackingBehavior.Add, 0.05),
+            AttributeFunction(EntityAttributes_RangedWeapon.HASTE.id, StackingBehavior.Add, 0.05),
             AttributeFunction(PlayerEXAttributes.FIRE_RESISTANCE.id, StackingBehavior.Add, 0.1),
         ),
         PlayerEXAttributes.INTELLIGENCE.id to listOf(
-        //   AttributeFunction(.id, StackingBehavior.Multiply, 0.05), idk what or where spell haste is.
-        //            couulldd supply thru wizardex
-            // what is dropped experience
+            AttributeFunction(AdditionalEntityAttributes.DROPPED_EXPERIENCE.id, StackingBehavior.Add, 0.01),
             AttributeFunction(PlayerEXAttributes.WITHER_RESISTANCE.id, StackingBehavior.Add, 0.1),
-            AttributeFunction(PlayerEXAttributes.HEAL_AMPLIFICATION.id, StackingBehavior.Multiply, 0.05),
+            AttributeFunction(PlayerEXAttributes.HEAL_AMPLIFICATION.id, StackingBehavior.Add, 0.05),
             AttributeFunction(PlayerEXAttributes.HEALTH_REGENERATION.id, StackingBehavior.Add, 0.01),
         ),
         PlayerEXAttributes.LUCKINESS.id to listOf(
-            AttributeFunction(PlayerEXAttributes.MELEE_CRIT_CHANCE.id, StackingBehavior.Multiply, 0.02),
-            AttributeFunction(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id, StackingBehavior.Multiply, 0.02),
+            AttributeFunction(PlayerEXAttributes.MELEE_CRIT_CHANCE.id, StackingBehavior.Add, 0.02),
+            AttributeFunction(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id, StackingBehavior.Add, 0.02),
             // cannot find spell crit chance atm, maybe a wizard thing
             // loot table chance?? wh-
             AttributeFunction(PlayerEXAttributes.MELEE_CRIT_CHANCE.id, StackingBehavior.Add, 0.01),
             AttributeFunction(EntityAttributes.GENERIC_LUCK.id, StackingBehavior.Add, 0.05),
-            AttributeFunction(PlayerEXAttributes.EVASION.id, StackingBehavior.Multiply, 0.01),
+            AttributeFunction(PlayerEXAttributes.EVASION.id, StackingBehavior.Add, 0.01),
+        ),
+        PlayerEXAttributes.FOCUS.id to listOf(
+            AttributeFunction(PlayerEXAttributes.HEALTH_REGENERATION.id, StackingBehavior.Add, 0.01),
+            AttributeFunction(PlayerEXAttributes.HEAL_AMPLIFICATION.id, StackingBehavior.Add, 0.05),
+            AttributeFunction(PlayerEXAttributes.FREEZE_RESISTANCE.id, StackingBehavior.Add, 0.1),
+            AttributeFunction(PlayerEXAttributes.LIGHTNING_RESISTANCE.id, StackingBehavior.Add, 0.1),
+            AttributeFunction(PlayerEXAttributes.FIRE_RESISTANCE.id, StackingBehavior.Add, 0.1),
         )
     )
     val ENTITY_TYPES: Map<Identifier, EntityTypeData> = mapOf(

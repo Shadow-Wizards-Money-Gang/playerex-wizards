@@ -20,6 +20,9 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent
 import dev.onyxstudios.cca.api.v3.component.sync.ComponentPacketWriter
 import io.wispforest.endec.Endec
 import io.wispforest.endec.impl.StructEndecBuilder
+import io.wispforest.owo.ui.component.ButtonComponent
+import io.wispforest.owo.ui.component.Components
+import io.wispforest.owo.ui.core.Component
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeInstance
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -28,6 +31,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import kotlin.math.round
@@ -131,17 +135,19 @@ class PlayerDataComponent(
 
         val partition = if (percent == 0) 0.0 else percent / 100.0
 
+        val kept = mutableMapOf<Identifier, Double>()
         for ((id, value) in this.modifiers) {
             if (partition == 0.0) {
                 this.tryRemove(id)
-                this._modifiers.remove(id)
             }
             else {
                 val retained = value * partition
                 if (!this.trySet(id, retained)) continue
+                kept[id] = value
             }
         }
 
+        this._modifiers = kept
         this._refundablePoints = round(this._refundablePoints * partition).toInt()
         this._skillPoints = round(this._skillPoints * partition).toInt()
         this.isLevelUpNotified = false

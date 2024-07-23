@@ -3,6 +3,8 @@
 
     "playerex.ui.category.primary_attributes": "Attributes",
 
+    "playerex.ui.attribute_functions": [ {"text": "❤ Attribute Function(s)", "color": "#F6CB3B"} ],
+
     "playerex.ui.current_level": [
         {"text": "❤ ", "color": "#F6CB3B"},
         {"text": "Level: ", "color": "white"},

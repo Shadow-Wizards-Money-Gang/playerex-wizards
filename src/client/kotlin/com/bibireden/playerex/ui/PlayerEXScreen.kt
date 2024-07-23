@@ -1,8 +1,10 @@
 package com.bibireden.playerex.ui
 
+import com.bibireden.data_attributes.DataAttributes
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
 import com.bibireden.data_attributes.api.attribute.IEntityAttribute
+import com.bibireden.data_attributes.api.attribute.StackingBehavior
 import com.bibireden.playerex.PlayerEXClient
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
@@ -25,6 +27,7 @@ import io.wispforest.owo.ui.core.ParentComponent
 import io.wispforest.owo.ui.core.Positioning
 import io.wispforest.owo.ui.core.Sizing
 import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.client.resource.language.I18n
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
@@ -33,6 +36,9 @@ import net.minecraft.util.Colors
 import net.minecraft.util.Formatting
 import kotlin.reflect.KClass
 
+private val StackingBehavior.symbol: String
+    get() = if (this == StackingBehavior.Add) "+" else "×"
+
 // Transformers
 fun <T : Component> ParentComponent.childById(clazz: KClass<T>, id: String) = this.childById(clazz.java, id)
 
@@ -40,7 +46,7 @@ fun <T : Component> ParentComponent.childById(clazz: KClass<T>, id: String) = th
 class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, DataSource.asset(PlayerEXClient.MAIN_UI_SCREEN_ID)) {
     private var currentPage = 0
 
-    private val pages: MutableList<MutableList<Component>> = AttributesMenuRegistry.get()
+    private var pages: MutableList<MutableList<Component>> = AttributesMenuRegistry.get()
 
     private val playerComponent by lazy { PlayerEXComponents.PLAYER_DATA.get(this.client?.player!!) }
 
@@ -119,7 +125,26 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     // todo: migrate
     private fun createAttributeComponent(attribute: EntityAttribute): Component {
         return Containers.horizontalFlow(Sizing.fill(100), Sizing.fixed(18)).also {
-            it.child(Components.label(Text.translatable(attribute.translationKey)).sizing(Sizing.content(), Sizing.fill(100)))
+            it.child(Components.label(Text.translatable(attribute.translationKey)).sizing(Sizing.content(), Sizing.fill(100))
+                .also { label ->
+                    // todo: allow data_attributes to have API funcs for obtaining this data.
+                    val entries = DataAttributes.FUNCTIONS_CONFIG.functions.data[attribute.id]
+                    if (!entries.isNullOrEmpty()) {
+                        label.tooltip(Text.translatable("playerex.ui.attribute_functions").also { text ->
+                            text.append("\n\n")
+                            entries.forEach { function ->
+                                EntityAttributeSupplier(function.id).get()?.translationKey?.let { key ->
+                                    text.append(Text.translatable(key).formatted(Formatting.AQUA))
+                                }
+                                text.append(Text.literal(" ${function.behavior.symbol}").formatted(Formatting.GREEN))
+                                text.append(Text.literal("${function.value}"))
+                                text.append(Text.literal(" (${DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), this.client?.player!!).orElse(0.0)})\n").formatted(Formatting.GRAY))
+                            }
+                            text.formatted(Formatting.ITALIC)
+                        })
+                    }
+                }.id("${attribute.id}:label")
+            )
             it.child(Components.label(attributeLabel(attribute, this.client?.player!!)).id("${attribute.id}:current_level"))
             it.child(
                 Containers.horizontalFlow(Sizing.fill(50), Sizing.fill(100)).also {
@@ -168,7 +193,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val content = rootComponent.childById(FlowLayout::class, "content")!!
         val footer = rootComponent.childById(FlowLayout::class, "footer")!!
 
-        pages.addAll(mutableListOf(temporarySupplyAttributePage()))
+        pages = mutableListOf(temporarySupplyAttributePage())
 
         this.onLevelUpdated()
         this.onAttributesUpdated()

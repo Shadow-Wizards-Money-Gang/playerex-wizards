@@ -11,7 +11,7 @@
                         <flow-layout direction="horizontal">
                             <children>
                                 <label>
-                                    <text translate="false">⚑ PlayerEX • Attributes Screen</text>
+                                    <text translate="false">⚑ PlayerEX • Leveling Screen</text>
                                     <vertical-text-alignment>center</vertical-text-alignment>
                                     <positioning type="relative">0,50</positioning>
                                 </label>
@@ -20,7 +20,7 @@
                                 <flow-layout direction="ltr-text-flow" id="points_available_window">
                                     <children>
                                         <label id="points_available"><text>0</text></label>
-                                        <label><text>POINTS AVAILABLE</text></label>
+                                        <label><text>POINT(S) AVAILABLE</text></label>
                                     </children>
 
                                     <gap>5</gap>
