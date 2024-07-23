@@ -14,13 +14,17 @@ import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.registerServerbound
 import com.bibireden.playerex.networking.types.UpdatePacketType
+import com.bibireden.playerex.registry.AttributesMenuRegistry
 import eu.pb4.placeholders.api.Placeholders
+import io.wispforest.owo.ui.component.Components
+import io.wispforest.owo.ui.core.Component
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 
@@ -65,6 +69,12 @@ object PlayerEX : ModInitializer {
 		RefundFactory.forEach(PlayerEXAPI::registerRefundCondition)
 
 		PlaceholderFactory.STORE.forEach(Placeholders::register)
+
+		AttributesMenuRegistry.register(mutableListOf(
+			Components.button(Text.literal("Test")) {
+				LOGGER.info("Funny little button")
+			}
+		) as List<Component>)
 
 		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.LEVEL_UP_SOUND.id, PlayerEXSoundEvents.LEVEL_UP_SOUND)
 		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.SPEND_SOUND.id, PlayerEXSoundEvents.SPEND_SOUND)

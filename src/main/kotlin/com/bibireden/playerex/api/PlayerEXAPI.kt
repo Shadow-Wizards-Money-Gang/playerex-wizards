@@ -1,10 +1,8 @@
 package com.bibireden.playerex.api
 
-import com.bibireden.playerex.registry.RefundCondition
-import com.bibireden.playerex.registry.RefundConditionRegistry
 import com.bibireden.playerex.api.damage.DamageFunction
-import com.bibireden.playerex.registry.DamageModificationRegistry
 import com.bibireden.playerex.api.damage.DamagePredicate
+import com.bibireden.playerex.registry.*
 
 object PlayerEXAPI {
     /**
@@ -31,6 +29,15 @@ object PlayerEXAPI {
     fun registerRefundCondition(condition: RefundCondition) {
         RefundConditionRegistry.register(condition)
     }
+
+//    /**
+//     * Registers an Attribute Menu. These are displayed in PlayerEX's attributes screen.
+//     *
+//     * @param screen
+//     */
+//    fun registerAttributeMenu(menu: AttributesMenu) {
+//        AttributesMenuRegistry.register(menu)
+//    }
 
     /**
      * @return Returns all the registered refund conditions. Note that while this is

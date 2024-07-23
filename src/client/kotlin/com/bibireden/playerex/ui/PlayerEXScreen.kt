@@ -11,6 +11,7 @@ import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
+import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.networking.types.UpdatePacketType
 import com.bibireden.playerex.util.PlayerEXUtil
 import io.wispforest.owo.ui.base.BaseUIModelScreen
@@ -40,8 +41,7 @@ fun <T : Component> ParentComponent.childById(clazz: KClass<T>, id: String) = th
 class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, DataSource.asset(PlayerEXClient.MAIN_UI_SCREEN_ID)) {
     private var currentPage = 0
 
-    // TODO: Make registry based?
-    private val pages: MutableList<List<Component>> = mutableListOf() // Temp just to help myself make code - prob will change
+    private val pages: List<Collection<Component>> = AttributesMenuRegistry.get()
 
     private val playerComponent by lazy { PlayerEXComponents.PLAYER_DATA.get(this.client?.player!!) }
 
@@ -199,28 +199,6 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         }
 
         exit.onPress { this.close() }
-    }
-
-    // TODO: Remove
-    private fun testLayout(): List<Component> {
-        return listOf(
-            Components.button(
-                Text.literal("Test Button"),
-            ) {
-                PlayerEX.LOGGER.info("Test Button")
-            }
-        )
-    }
-
-    // TODO: Remove
-    private fun testLayout2(): List<Component> {
-        return listOf(
-            Components.button(
-                Text.literal("Test Button 2"),
-            ) {
-                PlayerEX.LOGGER.info("Test Button 2")
-            }
-        )
     }
 
     enum class AttributeButtonComponentType {
