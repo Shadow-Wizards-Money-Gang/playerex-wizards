@@ -38,8 +38,10 @@ class AttributeComponent(attribute: EntityAttribute, player: PlayerEntity, compo
                                 text.append(Text.translatable(childAttribute.translationKey).formatted(Formatting.AQUA))
                                 text.append(Text.literal(" ${function.behavior.symbol}").formatted(Formatting.GREEN))
                                 text.append(Text.literal("${function.value}"))
-                                text.append(Text.literal(" (${DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), player).orElse(0.0)})\n")
-                                    .formatted(Formatting.GRAY))
+                                text.append(Text.literal(String.format(
+                                    " (%.2f)\n",
+                                    DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), player).orElse(0.0)
+                                )).formatted(Formatting.GRAY))
                             }
                             text.formatted(Formatting.ITALIC)
                         })
