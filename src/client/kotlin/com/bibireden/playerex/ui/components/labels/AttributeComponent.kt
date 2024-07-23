@@ -12,6 +12,7 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Positioning
 import io.wispforest.owo.ui.core.Sizing
+import io.wispforest.owo.ui.core.VerticalAlignment
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
@@ -52,7 +53,7 @@ class AttributeComponent(attribute: EntityAttribute, player: PlayerEntity, compo
                 it.child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Add))
                 it.child(Components.textBox(Sizing.fixed(27)).text("1").verticalSizing(Sizing.fixed(12)).id("entry:${attribute.id}"))
                 it.gap(4)
-            }.positioning(Positioning.relative(100, 0))
+            }.positioning(Positioning.relative(100, 0)).verticalAlignment(VerticalAlignment.CENTER)
         )
         this.gap(3)
     }
