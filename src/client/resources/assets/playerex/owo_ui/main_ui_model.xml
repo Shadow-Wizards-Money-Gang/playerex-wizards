@@ -84,13 +84,7 @@
 
                         <!-- content -->
                         <flow-layout direction="horizontal" id="content">
-                            <children>
-                                <stack-layout>
-                                    <children>
-
-                                    </children>
-                                </stack-layout>
-                            </children>
+                            <children/>
 
                             <sizing><vertical method="fill">85</vertical><horizontal method="fill">100</horizontal></sizing>
                             <positioning type="relative">0,50</positioning>

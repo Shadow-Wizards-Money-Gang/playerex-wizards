@@ -1,6 +1,8 @@
 {
     "playerex.key.main_screen": "Open Main Screen",
 
+    "playerex.ui.category.primary_attributes": "Attributes",
+
     "playerex.ui.current_level": [
         {"text": "❤ ", "color": "#F6CB3B"},
         {"text": "Level: ", "color": "white"},
@@ -16,9 +18,9 @@
         {"index": 0},
         {"text": " XP in order to level by ", "color": "white"},
         {"index": 1},
-        {"text": " points.", "color": "white"}, "\n",
+        {"text": " point(s).", "color": "white"}, "\n",
         {"text": "★ ", "color": "#62D16A"},
-        {"text": " Current XP: ", "color": "white"},
+        {"text": "Current XP: ", "color": "white"},
         {"index": 2}
     ],
     "playerex.ui.text.nameplate": "lvl %s",

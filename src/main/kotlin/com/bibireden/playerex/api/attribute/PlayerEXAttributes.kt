@@ -12,19 +12,22 @@ object PlayerEXAttributes {
     val LEVEL = register("level", 0.0, 0.0, 100.0)
 
     @JvmField
-    val CONSTITUTION = register("constitution", 0.0, 0.0, 1000000.0);
+    val CONSTITUTION = register("constitution", 0.0, 0.0, 100.0);
 
     @JvmField
-    val STRENGTH = register("strength", 0.0, 0.0, 1000000.0);
+    val STRENGTH = register("strength", 0.0, 0.0, 100.0);
 
     @JvmField
-    val DEXTERITY = register("dexterity", 0.0, 0.0, 1000000.0);
+    val DEXTERITY = register("dexterity", 0.0, 0.0, 100.0);
 
     @JvmField
-    val INTELLIGENCE = register("intelligence", 0.0, 0.0, 1000000.0);
+    val INTELLIGENCE = register("intelligence", 0.0, 0.0, 100.0);
 
     @JvmField
-    val LUCKINESS = register("luckiness", 0.0, 0.0, 1000000.0);
+    val LUCKINESS = register("luckiness", 0.0, 0.0, 100.0);
+
+    @JvmField
+    val FOCUS = register("focus", 0.0, 0.0, 100.0)
 
     @JvmField
     val HEALTH_REGENERATION = register("health_regeneration", 0.0, 0.0, 100.0);
@@ -36,10 +39,10 @@ object PlayerEXAttributes {
     val LIFESTEAL = register("lifesteal", 0.0, 0.0, 100.0);
 
     @JvmField
-    val MELEE_CRIT_DAMAGE = register("melee_crit_damage", 0.0, 0.0, 100.0);
+    val MELEE_CRIT_DAMAGE = register("melee_crit_damage", 0.0, 0.0, 1.0);
 
     @JvmField
-    val MELEE_CRIT_CHANCE = register("melee_crit_chance", 0.0, 0.0, 100.0);
+    val MELEE_CRIT_CHANCE = register("melee_crit_chance", 0.0, 0.0, 1.0);
 
     @JvmField
     val BREAKING_SPEED = register("breaking_speed", 0.0, 0.0, 100.0);
@@ -63,13 +66,10 @@ object PlayerEXAttributes {
     val EVASION = register("evasion", 0.0, 0.0, 100.0);
 
     @JvmField
-    val FOCUS = register("focus", 0.0, 0.0, 1_000_000.0)
-
-    @JvmField
     val RANGED_DAMAGE = register("ranged_damage", 0.0, 0.0, 1000000.0)
 
     @JvmField
-    val RANGED_CRITICAL_CHANCE = register("ranged_crit_chance", 0.0, 0.0, 100.0)
+    val RANGED_CRITICAL_CHANCE = register("ranged_crit_chance", 0.0, 0.0, 1.0)
 
     @JvmField
     val RANGED_CRITICAL_DAMAGE = register("ranged_crit_damage", 0.0, 0.0, 1000000.0)
@@ -80,10 +80,11 @@ object PlayerEXAttributes {
     }
 
     val PRIMARY_ATTRIBUTE_IDS: Set<Identifier> = setOf(
-        PlayerEXAttributes.CONSTITUTION.id,
-        PlayerEXAttributes.STRENGTH.id,
-        PlayerEXAttributes.DEXTERITY.id,
-        PlayerEXAttributes.INTELLIGENCE.id,
-        PlayerEXAttributes.LUCKINESS.id
+        CONSTITUTION.id,
+        STRENGTH.id,
+        DEXTERITY.id,
+        INTELLIGENCE.id,
+        LUCKINESS.id,
+        FOCUS.id,
     )
 }

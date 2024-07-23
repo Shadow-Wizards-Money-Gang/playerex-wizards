@@ -120,7 +120,7 @@ object PlayerEXCommands {
             else {
                 val result = it - amount
                 component.addSkillPoints(amount)
-                component.set(attribute, result)
+                component.set(attribute, result.toInt())
                 ctx.source.sendFeedback({ Text.translatable("playerex.command.refunded", amount, Text.translatable(attribute.translationKey), player.name) }, false)
                 ctx.source.sendFeedback(updatedValueText(attribute, result), false)
                 1

@@ -107,9 +107,9 @@ class PlayerDataComponent(
         return this._modifiers.getOrDefault(attribute.id, 0.0)
     }
 
-    override fun set(attribute: EntityAttribute, value: Double) {
+    override fun set(attribute: EntityAttribute, value: Int) {
         val identifier = attribute.id
-        val attributeValue = attribute.clamp(value)
+        val attributeValue = attribute.clamp(value.toDouble())
 
         if (!this.trySet(identifier, attributeValue)) return
 
@@ -117,7 +117,7 @@ class PlayerDataComponent(
     }
 
     override fun add(attribute: EntityAttribute, value: Double) {
-        this.set(attribute, value + this.get(attribute))
+        this.set(attribute, (value + this.get(attribute)).toInt())
     }
 
     override fun remove(attribute: EntityAttribute) {
@@ -131,7 +131,7 @@ class PlayerDataComponent(
 
         val partition = if (percent == 0) 0.0 else percent / 100.0
 
-        for ((id, value) in this._modifiers) {
+        for ((id, value) in this.modifiers) {
             if (partition == 0.0) {
                 this.tryRemove(id)
                 this._modifiers.remove(id)
@@ -186,7 +186,7 @@ class PlayerDataComponent(
 
                 player.addExperienceLevels(-required)
                 component.addSkillPoints(skillPoints)
-                component.set(PlayerEXAttributes.LEVEL, expectedLevel)
+                component.set(PlayerEXAttributes.LEVEL, expectedLevel.toInt())
             }
             return@map isEnoughExperience
         }.orElse(false)
@@ -204,7 +204,7 @@ class PlayerDataComponent(
                 if (skillPoints < amount) return@map false
                 this._skillPoints -= amount
             }
-            this.set(skill, expected)
+            this.set(skill, expected.toInt())
             // signal to a client that an increase has occurred...
             NetworkingChannels.NOTIFICATIONS.serverHandle(player).send(NetworkingPackets.Notify(NotificationType.Spent))
             return@map true
@@ -217,6 +217,9 @@ class PlayerDataComponent(
         this.addSkillPoints(1)
         return true
     }
+
+    val modifiers: Map<Identifier, Double>
+        get() = this._modifiers
 
     override val skillPoints: Int
         get() = this._skillPoints

@@ -13,7 +13,7 @@ interface IPlayerDataComponent : Component {
     /** Gets the cached [EntityAttribute] modifier value, or provides `0` if it does not exist. */
     fun get(attribute: EntityAttribute): Double
     /** Applies the provided modifier value to the [EntityAttribute], and creates it if it does not exist. */
-    fun set(attribute: EntityAttribute, value: Double)
+    fun set(attribute: EntityAttribute, value: Int)
     /** Removes the [EntityAttribute] modifier if it exists. */
     fun remove(attribute: EntityAttribute)
     /** Adds the current [EntityAttribute]'s value with the provided value together. */

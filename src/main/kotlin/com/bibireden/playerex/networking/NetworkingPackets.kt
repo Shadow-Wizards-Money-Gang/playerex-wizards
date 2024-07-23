@@ -15,9 +15,6 @@ object NetworkingPackets {
     /**
      * Updates the provided attribute with an associated [Double] value.
      * Possibility will be dictated based on the [UpdatePacketType]
-     *
-     * todo: make it add the amounts given, not set.
-     * todo: also, ensure they SHOULD be able to do this, based on the amount of skill points.
      */
     @JvmRecord
     data class Update(val type: UpdatePacketType, val id: Identifier, val amount: Int)
