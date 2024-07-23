@@ -2,7 +2,8 @@ package com.bibireden.playerex.mixin;
 
 import com.bibireden.playerex.components.PlayerEXComponents;
 import com.bibireden.playerex.components.player.PlayerDataComponent;
-import com.bibireden.playerex.factory.NetworkFactory;
+import com.bibireden.playerex.factory.ServerNetworkingFactory;
+import com.bibireden.playerex.networking.types.NotificationType;
 import com.bibireden.playerex.util.PlayerEXUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@SuppressWarnings("ALL") // todo: remove when intellij updates and fixes cast
+@SuppressWarnings("UnreachableCode")
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
     @Inject(method = "addExperienceLevels", at = @At("TAIL"))
@@ -24,7 +25,7 @@ public abstract class ServerPlayerEntityMixin {
         if (current >= required) {
             if (!component.isLevelUpNotified()) {
                 component.setLevelUpNotified(true);
-                NetworkFactory.sendLevelUpNotification(player);
+                ServerNetworkingFactory.notify(player, NotificationType.LevelUpAvailable);
             }
         }
         else {

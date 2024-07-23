@@ -50,7 +50,7 @@ object PlayerEX : ModInitializer {
 
 		CommandRegistrationCallback.EVENT.register(PlayerEXCommands::register)
 
-		ServerLoginConnectionEvents.QUERY_START.register(NetworkFactory::onLoginQueryStart)
+		ServerLoginConnectionEvents.QUERY_START.register(ServerNetworkingFactory::onLoginQueryStart)
 		ServerPlayerEvents.COPY_FROM.register(EventFactory::reset)
 
 		LivingEntityEvents.ON_HEAL.register(EventFactory::healed)

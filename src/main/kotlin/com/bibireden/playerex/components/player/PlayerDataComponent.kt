@@ -11,6 +11,7 @@ import com.bibireden.playerex.api.PlayerEXModifiers
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.ext.id
+import com.bibireden.playerex.factory.ServerNetworkingFactory
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.types.NotificationType
@@ -20,9 +21,6 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent
 import dev.onyxstudios.cca.api.v3.component.sync.ComponentPacketWriter
 import io.wispforest.endec.Endec
 import io.wispforest.endec.impl.StructEndecBuilder
-import io.wispforest.owo.ui.component.ButtonComponent
-import io.wispforest.owo.ui.component.Components
-import io.wispforest.owo.ui.core.Component
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeInstance
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -31,7 +29,6 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import kotlin.math.round
@@ -193,6 +190,8 @@ class PlayerDataComponent(
                 player.addExperienceLevels(-required)
                 component.addSkillPoints(skillPoints)
                 component.set(PlayerEXAttributes.LEVEL, expectedLevel.toInt())
+
+                ServerNetworkingFactory.notify(player, NotificationType.Spent)
             }
             return@map isEnoughExperience
         }.orElse(false)

@@ -24,7 +24,7 @@ public abstract class PersistentProjectileEntityMixin extends ProjectileEntity {
         super(entityType, world);
     }
 
-    @SuppressWarnings("ALL")
+    @SuppressWarnings("UnreachableCode")
     @Inject(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;isCritical()Z"))
     private void playerex_onEntityHit(EntityHitResult entityHitResult, CallbackInfo info) {
         PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object)this;
@@ -41,16 +41,14 @@ public abstract class PersistentProjectileEntityMixin extends ProjectileEntity {
         }
     }
 
-    @SuppressWarnings("ALL")
-    @ModifyArg(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = -1)
+    @SuppressWarnings("UnreachableCode")
+    @ModifyArg(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
     private float playerex_onEntityHit(float i) {
         PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object) this;
         Entity owner = persistentProjectileEntity.getOwner();
         double damage = i;
 
-        if(owner instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)owner;
-
+        if(owner instanceof LivingEntity livingEntity) {
             Optional<Double> damageOptional = DataAttributesAPI.getValue(PlayerEXAttributes.RANGED_DAMAGE, livingEntity);
 
             damage = damageOptional.isPresent() ? damageOptional.get() + i : i;
