@@ -1,22 +1,16 @@
 package com.bibireden.playerex.ui
 
-import com.bibireden.data_attributes.DataAttributes
-import com.bibireden.data_attributes.api.DataAttributesAPI
-import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
-import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.playerex.PlayerEXClient
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.components.player.IPlayerDataComponent
-import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.types.UpdatePacketType
 import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.ui.components.MenuComponent
-import com.bibireden.playerex.ui.components.labels.AttributeComponent
-import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
+import com.bibireden.playerex.ui.components.MenuComponent.OnLevelUpdated
 import com.bibireden.playerex.util.PlayerEXUtil
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
@@ -25,6 +19,7 @@ import io.wispforest.owo.ui.component.TextBoxComponent
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.ParentComponent
+import io.wispforest.owo.util.EventSource
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
@@ -42,6 +37,9 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
     private val playerComponent by lazy { PlayerEXComponents.PLAYER_DATA.get(this.client?.player!!) }
 
+    val onLevelUpdatedEvents = OnLevelUpdated.stream
+    val onLevelUpdated: EventSource<OnLevelUpdated> = onLevelUpdatedEvents.source()
+
     override fun shouldPause(): Boolean = false
 
     /** Whenever the level attribute gets modified, and on initialization of the screen, this will be called. */
@@ -55,7 +53,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         }
 
         updatePointsAvailable()
-        updateLevelUpButton(player, root.childById(TextBoxComponent::class, "level:amount")!!.text, root.childById(ButtonComponent::class, "level:button")!!)
+        updateLevelUpButton(player, root.childById(TextBoxComponent::class, "level:amount")!!.text)
 
         this.uiAdapter.rootComponent.forEachDescendant { descendant ->
             if (descendant is MenuComponent) descendant.onLevelUpdatedEvents.sink().onLevelUpdated(level)
@@ -63,7 +61,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     }
 
     /** Whenever any attribute is updated, this will be called. */
-    fun onAttributesUpdated(attribute: EntityAttribute, value: Double) {
+    fun onAttributeUpdated(attribute: EntityAttribute, value: Double) {
         this.uiAdapter.rootComponent.forEachDescendant { descendant ->
             if (descendant is MenuComponent) descendant.onAttributeUpdatedEvents.sink().onAttributeUpdated(attribute, value)
         }
@@ -72,9 +70,9 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
     private fun updatePointsAvailable() {
         this.uiAdapter.rootComponent.childById(LabelComponent::class, "points_available")?.apply {
-            text(Text.literal(playerComponent.skillPoints.toString())
+            text(Text.translatable("playerex.ui.main.skill_points_available", playerComponent.skillPoints)
                 .formatted(when (playerComponent.skillPoints) {
-                    0 -> Formatting.WHITE
+                    0 -> Formatting.GRAY
                     else -> Formatting.YELLOW
                 }
             ))
@@ -91,13 +89,12 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         content.child(pages[currentPage])
     }
 
-    private fun updateLevelUpButton(player: PlayerEntity, text: String, levelUpButton: ButtonComponent) {
+    private fun updateLevelUpButton(player: PlayerEntity, text: String) {
         val amount = text.toIntOrNull() ?: return
         val result = player.level + amount
 
-        if (result > PlayerEXAttributes.LEVEL.maxValue) return
-
-        levelUpButton.tooltip(Text.translatable("playerex.ui.level_button", PlayerEXUtil.getRequiredXpForLevel(player, result), amount, player.experienceLevel))
+        this.uiAdapter.rootComponent.childById(ButtonComponent::class, "level:button")
+            ?.tooltip(Text.translatable("playerex.ui.level_button", PlayerEXUtil.getRequiredXpForLevel(player, result), amount, player.experienceLevel))
     }
 
     override fun build(rootComponent: FlowLayout) {
@@ -106,8 +103,8 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val levelAmount = rootComponent.childById(TextBoxComponent::class, "level:amount")!!
         val levelUpButton = rootComponent.childById(ButtonComponent::class, "level:button")!!
 
-        updateLevelUpButton(player, levelAmount.text, levelUpButton)
-        levelAmount.onChanged().subscribe { updateLevelUpButton(player, it, levelUpButton) }
+        updateLevelUpButton(player, levelAmount.text)
+        levelAmount.onChanged().subscribe { updateLevelUpButton(player, it) }
 
         val previousPage = rootComponent.childById(ButtonComponent::class, "previous")!!
         val pageCounter = rootComponent.childById(LabelComponent::class, "counter")!!
@@ -145,6 +142,10 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
         levelUpButton.onPress {
             levelAmount.text.toIntOrNull()?.let { NetworkingChannels.MODIFY.clientHandle().send(NetworkingPackets.Level(it)) }
+        }
+
+        onLevelUpdated.subscribe {
+            this.updateLevelUpButton(player, rootComponent.childById(TextBoxComponent::class, "level:amount")!!.text)
         }
 
         exit.onPress { this.close() }

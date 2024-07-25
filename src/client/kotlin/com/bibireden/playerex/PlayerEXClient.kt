@@ -45,7 +45,7 @@ object PlayerEXClient : ClientModInitializer {
 					}
 					else {
 						DataAttributesAPI.getValue(attribute, entity).ifPresent { value ->
-							screen.onAttributesUpdated(attribute, value)
+							screen.onAttributeUpdated(attribute, value)
 						}
 					}
 				}

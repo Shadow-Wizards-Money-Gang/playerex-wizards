@@ -1,5 +1,15 @@
 {
+    "key.categories.playerex": "PlayerEX Controls",
     "playerex.key.main_screen": "Open Main Screen",
+
+    "playerex.ui.main.title": "⚑ PlayerEX • Leveling Screen",
+    "playerex.ui.main.exit": "Exit",
+    "playerex.ui.main.exit.tooltip": "Exits from the window.",
+
+    "playerex.ui.main.skill_points_available": [
+        {"index": 0},
+        {"text": " SKILL POINT(S)", "color": "white"}
+    ],
 
     "playerex.ui.category.primary_attributes": "Attributes",
 
