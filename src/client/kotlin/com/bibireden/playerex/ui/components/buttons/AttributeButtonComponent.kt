@@ -1,4 +1,4 @@
-package com.bibireden.playerex.ui.components.labels
+package com.bibireden.playerex.ui.components.buttons
 
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.playerex.components.player.IPlayerDataComponent

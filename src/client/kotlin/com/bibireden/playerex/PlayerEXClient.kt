@@ -10,7 +10,7 @@ import com.bibireden.playerex.networking.registerClientbound
 import com.bibireden.playerex.networking.types.NotificationType
 import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.ui.PlayerEXScreen
-import com.bibireden.playerex.ui.menus.AttributeMenu
+import com.bibireden.playerex.ui.menus.AttributesMenu
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -52,7 +52,7 @@ object PlayerEXClient : ClientModInitializer {
 			}
 		}
 
-		AttributesMenuRegistry.register(AttributeMenu::class.java)
+		AttributesMenuRegistry.register(AttributesMenu::class.java)
 
 		ClientTickEvents.END_CLIENT_TICK.register { client ->
 			if (PlayerEX.CONFIG.disableAttributesGui) return@register

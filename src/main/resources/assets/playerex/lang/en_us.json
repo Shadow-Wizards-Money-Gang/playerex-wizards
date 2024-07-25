@@ -3,17 +3,15 @@
     "playerex.key.main_screen": "Open Main Screen",
 
     "playerex.ui.main.title": "⚑ PlayerEX • Leveling Screen",
+
     "playerex.ui.main.exit": "Exit",
     "playerex.ui.main.exit.tooltip": "Exits from the window.",
 
-    "playerex.ui.main.skill_points_available": [
-        {"index": 0},
-        {"text": " SKILL POINT(S)", "color": "white"}
-    ],
+    "playerex.ui.main.skill_points_available": [{"index": 0}, {"text": " SKILL POINT(S)", "color": "white"}],
+    "playerex.ui.main.modified_attributes": [ {"text": "❤ Modified Attributes", "color": "#F6CB3B"} ],
 
     "playerex.ui.category.primary_attributes": "Attributes",
 
-    "playerex.ui.attribute_functions": [ {"text": "❤ Attribute Function(s)", "color": "#F6CB3B"} ],
 
     "playerex.ui.current_level": [
         {"text": "❤ ", "color": "#F6CB3B"},

@@ -22,5 +22,5 @@ class AttributeLabelComponent(private val attribute: EntityAttribute, private va
         verticalTextAlignment(VerticalAlignment.CENTER)
     }
 
-    fun update(): LabelComponent = text(createTextFromAttribute(attribute, player))
+    fun refresh(): LabelComponent = text(createTextFromAttribute(attribute, player))
 }
