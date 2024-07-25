@@ -1,9 +1,12 @@
 package com.bibireden.playerex.ui.components
 
 import com.bibireden.data_attributes.DataAttributes
+import com.bibireden.data_attributes.DataAttributesClient
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
+import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.data_attributes.api.attribute.StackingBehavior
+import com.bibireden.data_attributes.api.attribute.StackingFormula
 import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ui.PlayerEXScreen.AttributeButtonComponentType
@@ -29,7 +32,7 @@ private val StackingBehavior.symbol: String
 class AttributeComponent(val attribute: EntityAttribute, val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(35), Sizing.fixed(18), Algorithm.HORIZONTAL) {
     fun refresh() {
         // todo: allow data_attributes to have API funcs for obtaining this data.
-        val entries = DataAttributes.FUNCTIONS_CONFIG.functions.data[attribute.id]
+        val entries = DataAttributesClient.MANAGER.data.functions[attribute.id]
         if (!entries.isNullOrEmpty()) {
             this.childById(LabelComponent::class, "${this.attribute.id}:label")?.tooltip(
                 Text.translatable("playerex.ui.main.modified_attributes").also { text ->
@@ -38,19 +41,26 @@ class AttributeComponent(val attribute: EntityAttribute, val player: PlayerEntit
                 text.append("\n\n")
                 entries.forEach { function ->
                     val childAttribute = EntityAttributeSupplier(function.id).get() ?: return@forEach
-                    text.append(Text.translatable(childAttribute.translationKey).formatted(Formatting.AQUA))
-                    text.append(Text.literal(" ${function.behavior.symbol}").formatted(Formatting.GREEN))
-                    text.append(Text.literal("${function.value}"))
-                    text.append(
-                        Text.literal(
-                            String.format(
-                                " (%.2f)\n",
-                                DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), player).orElse(0.0)
-                            )
-                        ).formatted(Formatting.GRAY)
-                    )
+                    val formula = (childAttribute as IEntityAttribute).`data_attributes$formula`()
+
+                    text.apply {
+                        append(Text.translatable(childAttribute.translationKey).styled { it.withColor(0x6EBAE5) })
+                        append(" [")
+                        append(Text.literal(formula.name.uppercase()).styled { it.withColor(if (formula == StackingFormula.Flat) 0xEDCD76 else 0xD63042) })
+                        append("] ")
+                        append(Text.literal(function.behavior.symbol).styled { it.withColor(0x48D19B) })
+                        append(Text.literal("${function.value}"))
+                        append(
+                            Text.literal(
+                                String.format(
+                                    " (%.2f)\n",
+                                    DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), player).orElse(0.0)
+                                )
+                            ).formatted(Formatting.GRAY)
+                        )
+                        formatted(Formatting.ITALIC)
+                    }
                 }
-                text.formatted(Formatting.ITALIC)
             })
         }
     }

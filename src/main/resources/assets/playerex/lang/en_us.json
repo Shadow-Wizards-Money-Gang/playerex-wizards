@@ -96,6 +96,13 @@
         {"text": " is at ", "color": "white"},
         {"index": 1, "color": "#60DF90"}
     ],
+    "playerex.command.refund.get": [
+        {"text": "» ", "color": "#F6CB3B"},
+        {"index": 0, "color": "#60DF90"},
+        {"text": " currently has ", "color": "white"},
+        {"index": 1, "color": "#F6CB3B"},
+        {"text": " refundable points.", "color": "white"}
+    ],
     "playerex.command.skill_get": [
         {"text": "» ", "color": "#F6CB3B"},
         {"index": 0, "color": "#EEBC58"},

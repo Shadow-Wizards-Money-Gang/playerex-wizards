@@ -6,6 +6,7 @@ import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.api.attribute.TradeSkillAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
+import com.bibireden.playerex.ext.data
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
@@ -25,6 +26,7 @@ import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.MathHelper
 
 private typealias Context = CommandContext<ServerCommandSource>
 
@@ -56,7 +58,7 @@ object PlayerEXCommands {
             )
             .then(CommandManager.literal("reset")
                 .then(playerArgument.executes(::executeResetCommand)
-                    .then(CommandManager.argument("amount", IntegerArgumentType.integer(0, 100)).executes { executeResetCommand(it, IntegerArgumentType.getInteger(it, "amount")) })
+                    .then(CommandManager.argument("retain", IntegerArgumentType.integer(0, 100)).executes { executeResetCommand(it, IntegerArgumentType.getInteger(it, "retain")) })
                 )
                 .then(CommandManager.literal("@all").executes(::executeResetAllCommand)
                     .then(amountArgument.executes { executeResetAllCommand(it, IntegerArgumentType.getInteger(it, "amount")) })
@@ -73,6 +75,7 @@ object PlayerEXCommands {
                     )
                 )
             ).then(CommandManager.literal("refund")
+                .then(CommandManager.literal("get").then(playerArgument.executes(::executeRefundGetCommand)))
                 .then(
                     CommandManager.literal("add").then(
                         playerArgument.executes(::executeRefundAddCommand).then(
@@ -81,11 +84,12 @@ object PlayerEXCommands {
                     )
                 )
                 .then(
-                    CommandManager.literal("attribute").then(
+                    CommandManager.literal("skill").then(
                         identifierArgument.suggests(MODIFIABLE_ATTRIBUTES_SUGGESTIONS)
                             .then(playerArgument.then(
                                 amountArgument.executes { executeRefundAttributeCommand(it, IntegerArgumentType.getInteger(it, "amount")) }
-                            ))
+                            )
+                        )
                     )
                 )
             )
@@ -113,24 +117,28 @@ object PlayerEXCommands {
         }.orElse(-1)
     }
 
+    private fun executeRefundGetCommand(ctx: Context): Int {
+        val player = EntityArgumentType.getPlayer(ctx, "player")
+        ctx.source.sendFeedback({ Text.translatable("playerex.command.refund.get", player.name, player.data.refundablePoints) }, false)
+        return 1
+    }
 
     private fun executeRefundAttributeCommand(ctx: Context, amount: Int = 1): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
-        val component = PlayerEXComponents.PLAYER_DATA.get(player)
+
         val supplier = EntityAttributeSupplier(IdentifierArgumentType.getIdentifier(ctx, "id"))
 
         return DataAttributesAPI.getValue(supplier, player).map {
             val attribute = supplier.get()!!
-            if (it < amount) {
-                ctx.source.sendFeedback({ Text.translatable("playerex.command.refund_error", player.name) }, false)
-                -1
+            val computed = MathHelper.clamp(amount, 0, it.toInt())
+
+            if (player.data.refund(attribute, computed)) {
+                ctx.source.sendFeedback({ Text.translatable("playerex.command.refunded", amount, Text.translatable(attribute.translationKey), player.name) }, false)
+                ctx.source.sendFeedback(updatedValueText(attribute, it - amount), false)
+                1
             }
             else {
-                if (component.refund(attribute, amount)) {
-                    ctx.source.sendFeedback({ Text.translatable("playerex.command.refunded", amount, Text.translatable(attribute.translationKey), player.name) }, false)
-                    ctx.source.sendFeedback(updatedValueText(attribute, it - amount), false)
-                }
-                1
+                -1
             }
         }.orElse(-1)
     }
@@ -138,7 +146,7 @@ object PlayerEXCommands {
     private fun executeRefundAddCommand(ctx: Context, amount: Int = 1): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
 
-        PlayerEXComponents.PLAYER_DATA.get(player).addRefundablePoints(amount)
+        player.data.addRefundablePoints(amount)
 
         ctx.source.sendFeedback({ Text.translatable("playerex.command.refund.add", amount, player.name) }, false)
 
@@ -147,14 +155,15 @@ object PlayerEXCommands {
 
     private fun executeSkillUpCommand(ctx: Context, amount: Int = 1): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
-        val component = PlayerEXComponents.PLAYER_DATA.get(player)
         val supplier = EntityAttributeSupplier(IdentifierArgumentType.getIdentifier(ctx, "id"))
 
         return DataAttributesAPI.getValue(supplier, player).map {
             val attribute = supplier.get()!!
-            if (component.skillUp(attribute, amount, true)) {
-                ctx.source.sendFeedback({ Text.translatable("playerex.command.skill_up", amount, Text.translatable(attribute.translationKey), player.name) }, false)
-                ctx.source.sendFeedback(updatedValueText(attribute, it + amount), false)
+            val computed = MathHelper.clamp(amount, 0, (attribute as IEntityAttribute).`data_attributes$max`().toInt() - it.toInt())
+
+            if (player.data.skillUp(attribute, computed, true)) {
+                ctx.source.sendFeedback({ Text.translatable("playerex.command.skill_up", computed, Text.translatable(attribute.translationKey), player.name) }, false)
+                ctx.source.sendFeedback(updatedValueText(attribute, it + computed), false)
                 1
             }
             else {
@@ -166,7 +175,6 @@ object PlayerEXCommands {
 
     private fun executeLevelUpCommand(ctx: Context, amount: Int = 1): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
-        val component = PlayerEXComponents.PLAYER_DATA.get(player)
 
         return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map { value ->
             val attribute = PlayerEXAttributes.LEVEL
@@ -177,7 +185,7 @@ object PlayerEXCommands {
                 return@map -1
             }
 
-            if (!PlayerEXComponents.PLAYER_DATA.get(player).levelUp(amount, true)) {
+            if (!player.data.levelUp(amount, true)) {
                 // todo: err message, for now just -1
                 return@map -1
             }
