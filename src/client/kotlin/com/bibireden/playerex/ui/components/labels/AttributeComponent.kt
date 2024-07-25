@@ -12,6 +12,7 @@ import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
+import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Positioning
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.VerticalAlignment
@@ -23,7 +24,7 @@ import net.minecraft.util.Formatting
 private val StackingBehavior.symbol: String
     get() = if (this == StackingBehavior.Add) "+" else "×"
 
-class AttributeComponent(val attribute: EntityAttribute, val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(100), Sizing.fixed(18), Algorithm.HORIZONTAL) {
+class AttributeComponent(val attribute: EntityAttribute, val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(35), Sizing.fixed(18), Algorithm.HORIZONTAL) {
     fun updateTooltip() {
         // todo: allow data_attributes to have API funcs for obtaining this data.
         val entries = DataAttributes.FUNCTIONS_CONFIG.functions.data[attribute.id]
@@ -54,18 +55,25 @@ class AttributeComponent(val attribute: EntityAttribute, val player: PlayerEntit
 
     init {
         this.child(
-            Components.label(Text.translatable(attribute.translationKey)).sizing(Sizing.content(), Sizing.fill(100))
-                .also { this.updateTooltip() }.id("${attribute.id}:label")
+            Components.label(Text.translatable(attribute.translationKey))
+                .verticalTextAlignment(VerticalAlignment.CENTER)
+                .sizing(Sizing.content(), Sizing.fill(100))
+                .also { this.updateTooltip() }
+                .id("${attribute.id}:label")
         )
         this.child(AttributeLabelComponent(attribute, player))
         this.child(
-            Containers.horizontalFlow(Sizing.fill(50), Sizing.fill(100)).also {
+            Containers.horizontalFlow(Sizing.content(), Sizing.fill(100)).also {
                 it.child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Remove))
                 it.child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Add))
                 it.child(Components.textBox(Sizing.fixed(27)).text("1").verticalSizing(Sizing.fixed(12)).id("entry:${attribute.id}"))
                 it.gap(4)
-            }.positioning(Positioning.relative(100, 0)).verticalAlignment(VerticalAlignment.CENTER)
+            }
+                .horizontalAlignment(HorizontalAlignment.RIGHT)
+                .verticalAlignment(VerticalAlignment.CENTER)
+                .positioning(Positioning.relative(100, 0))
         )
         this.gap(3)
+        this.verticalAlignment(VerticalAlignment.CENTER)
     }
 }
