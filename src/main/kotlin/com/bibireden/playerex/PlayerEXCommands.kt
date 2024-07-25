@@ -6,10 +6,6 @@ import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.api.attribute.TradeSkillAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
-import com.bibireden.playerex.ext.id
-import com.bibireden.playerex.networking.NetworkingChannels
-import com.bibireden.playerex.networking.NetworkingPackets
-import com.bibireden.playerex.networking.types.NotificationType
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
@@ -23,7 +19,6 @@ import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.command.argument.IdentifierArgumentType
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.Registries
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.CommandManager.RegistrationEnvironment
 import net.minecraft.server.command.ServerCommandSource
@@ -75,11 +70,22 @@ object PlayerEXCommands {
                             .executes(::executeSkillUpCommand)
                             .then(amountArgument.executes { executeSkillUpCommand(it, IntegerArgumentType.getInteger(it, "amount")) })
                         )
-                    ).then(CommandManager.literal("refund")
-                        .then(playerArgument
-                            .executes(::executeRefundCommand)
-                            .then(amountArgument.executes { executeRefundCommand(it, IntegerArgumentType.getInteger(it, "amount")) })
+                    )
+                )
+            ).then(CommandManager.literal("refund")
+                .then(
+                    CommandManager.literal("add").then(
+                        playerArgument.executes(::executeRefundAddCommand).then(
+                            amountArgument.executes { executeRefundAddCommand(it, IntegerArgumentType.getInteger(it, "amount")) }
                         )
+                    )
+                )
+                .then(
+                    CommandManager.literal("attribute").then(
+                        identifierArgument.suggests(MODIFIABLE_ATTRIBUTES_SUGGESTIONS)
+                            .then(playerArgument.then(
+                                amountArgument.executes { executeRefundAttributeCommand(it, IntegerArgumentType.getInteger(it, "amount")) }
+                            ))
                     )
                 )
             )
@@ -95,6 +101,7 @@ object PlayerEXCommands {
             1
         }.orElse(-1)
     }
+    
     private fun executeSkillGetCommand(ctx: Context): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
         val component = PlayerEXComponents.PLAYER_DATA.get(player)
@@ -106,7 +113,8 @@ object PlayerEXCommands {
         }.orElse(-1)
     }
 
-    private fun executeRefundCommand(ctx: Context, amount: Int = 1): Int {
+
+    private fun executeRefundAttributeCommand(ctx: Context, amount: Int = 1): Int {
         val player = EntityArgumentType.getPlayer(ctx, "player")
         val component = PlayerEXComponents.PLAYER_DATA.get(player)
         val supplier = EntityAttributeSupplier(IdentifierArgumentType.getIdentifier(ctx, "id"))
@@ -118,14 +126,23 @@ object PlayerEXCommands {
                 -1
             }
             else {
-                val result = it - amount
-                component.addSkillPoints(amount)
-                component.set(attribute, result.toInt())
-                ctx.source.sendFeedback({ Text.translatable("playerex.command.refunded", amount, Text.translatable(attribute.translationKey), player.name) }, false)
-                ctx.source.sendFeedback(updatedValueText(attribute, result), false)
+                if (component.refund(attribute, amount)) {
+                    ctx.source.sendFeedback({ Text.translatable("playerex.command.refunded", amount, Text.translatable(attribute.translationKey), player.name) }, false)
+                    ctx.source.sendFeedback(updatedValueText(attribute, it - amount), false)
+                }
                 1
             }
         }.orElse(-1)
+    }
+
+    private fun executeRefundAddCommand(ctx: Context, amount: Int = 1): Int {
+        val player = EntityArgumentType.getPlayer(ctx, "player")
+
+        PlayerEXComponents.PLAYER_DATA.get(player).addRefundablePoints(amount)
+
+        ctx.source.sendFeedback({ Text.translatable("playerex.command.refund.add", amount, player.name) }, false)
+
+        return 1
     }
 
     private fun executeSkillUpCommand(ctx: Context, amount: Int = 1): Int {

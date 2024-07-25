@@ -123,6 +123,13 @@
         {"text": "Reset level, skills and points for ", "color": "white"},
         {"index": 0, "color": "#EEBC58"}
     ],
+    "playerex.command.refund.add": [
+        {"text": "❤ ", "color": "#F53E3E"},
+        {"text": "Added ", "color": "white"},
+        {"index": 0, "color": "#EEBC58"},
+        {"text": " refundable points to ", "color": "white"},
+        {"index": 1}
+    ],
     "playerex.command.refund_error": [
         {"text": "⚑ ", "color": "#F53E3E"},
         {"index": 0, "color": "#EEBC58"},

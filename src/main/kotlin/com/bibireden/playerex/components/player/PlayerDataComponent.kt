@@ -128,8 +128,6 @@ class PlayerDataComponent(
     }
 
     override fun reset(percent: Int) {
-        if (percent >= 100) return
-
         val partition = if (percent == 0) 0.0 else percent / 100.0
 
         val kept = mutableMapOf<Identifier, Double>()
@@ -187,7 +185,7 @@ class PlayerDataComponent(
                 val skillPoints = CONFIG.skillPointsPerLevelUp * amount
                 val component = PlayerEXComponents.PLAYER_DATA.get(player)
 
-                player.addExperienceLevels(-required)
+                if (!override) player.addExperienceLevels(-required)
                 component.addSkillPoints(skillPoints)
                 component.set(PlayerEXAttributes.LEVEL, expectedLevel.toInt())
 
@@ -218,9 +216,14 @@ class PlayerDataComponent(
 
     override fun refund(skill: EntityAttribute, amount: Int): Boolean {
         if (amount <= 0 || this.refundablePoints < amount) return false
-        this.addRefundablePoints(-1)
-        this.addSkillPoints(1)
-        return true
+        return DataAttributesAPI.getValue(skill, player).map { value ->
+            if (amount > value) return@map false
+
+            this.addRefundablePoints(-amount)
+            this.addSkillPoints(amount)
+            this.set(skill, (value - amount).toInt())
+            true
+        }.orElse(false)
     }
 
     val modifiers: Map<Identifier, Double>

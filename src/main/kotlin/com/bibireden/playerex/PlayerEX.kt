@@ -36,6 +36,8 @@ object PlayerEX : ModInitializer {
 	fun id(path: String) = Identifier.of(MOD_ID, path)!!
 
 	override fun onInitialize() {
+		NetworkingChannels.NOTIFICATIONS.registerClientboundDeferred(NetworkingPackets.Notify::class.java)
+
 		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Update::class) { (type, id, amount), ctx ->
 			EntityAttributeSupplier(id).get()?.let {
 				when (type) {

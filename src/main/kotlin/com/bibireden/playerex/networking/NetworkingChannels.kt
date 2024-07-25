@@ -16,5 +16,5 @@ fun <R : Record> OwoNetChannel.registerClientbound(clazz: KClass<R>, handler: Ow
 
 object NetworkingChannels {
     val MODIFY = OwoNetChannel.create(PlayerEX.id("modify"))
-    val NOTIFICATIONS = OwoNetChannel.create(PlayerEX.id("notify"))
+    val NOTIFICATIONS = OwoNetChannel.create(PlayerEX.id("notifications"))
 }

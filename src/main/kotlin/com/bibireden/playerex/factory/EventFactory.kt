@@ -18,9 +18,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 object EventFactory {
     fun reset(oldPlayer: ServerPlayerEntity, newPlayer: ServerPlayerEntity, isAlive: Boolean)
     {
-        if (PlayerEX.CONFIG.resetOnDeath) {
-            PlayerEXComponents.PLAYER_DATA.maybeGet(newPlayer).ifPresent(IPlayerDataComponent::reset)
-        }
+        PlayerEXComponents.PLAYER_DATA.get(newPlayer).reset(if (PlayerEX.CONFIG.resetOnDeath) 0 else 100)
     }
 
     fun healed(livingEntity: LivingEntity, amount: Float): Float
