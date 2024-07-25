@@ -13,6 +13,7 @@ import com.bibireden.playerex.ui.PlayerEXScreen.AttributeButtonComponentType
 import com.bibireden.playerex.ui.childById
 import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
 import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
+import com.bibireden.playerex.ui.util.Colors
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.Containers
@@ -29,39 +30,40 @@ import net.minecraft.util.Formatting
 private val StackingBehavior.symbol: String
     get() = if (this == StackingBehavior.Add) "+" else "×"
 
-class AttributeComponent(val attribute: EntityAttribute, val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(35), Sizing.fixed(18), Algorithm.HORIZONTAL) {
+class AttributeComponent(private val attribute: EntityAttribute, private val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(35), Sizing.fixed(18), Algorithm.HORIZONTAL) {
     fun refresh() {
         // todo: allow data_attributes to have API funcs for obtaining this data.
         val entries = DataAttributesClient.MANAGER.data.functions[attribute.id]
         if (!entries.isNullOrEmpty()) {
             this.childById(LabelComponent::class, "${this.attribute.id}:label")?.tooltip(
                 Text.translatable("playerex.ui.main.modified_attributes").also { text ->
-                text.append("\n")
-                text.append(Text.literal(attribute.id.toString()).formatted(Formatting.DARK_GRAY))
-                text.append("\n\n")
-                entries.forEach { function ->
-                    val childAttribute = EntityAttributeSupplier(function.id).get() ?: return@forEach
-                    val formula = (childAttribute as IEntityAttribute).`data_attributes$formula`()
+                    text.append("\n")
+                    text.append(Text.literal(attribute.id.toString()).formatted(Formatting.DARK_GRAY))
+                    text.append("\n\n")
+                    entries.forEach { function ->
+                        val childAttribute = EntityAttributeSupplier(function.id).get() ?: return@forEach
+                        val formula = (childAttribute as IEntityAttribute).`data_attributes$formula`()
 
-                    text.apply {
-                        append(Text.translatable(childAttribute.translationKey).styled { it.withColor(0x6EBAE5) })
-                        append(" [")
-                        append(Text.literal(formula.name.uppercase()).styled { it.withColor(if (formula == StackingFormula.Flat) 0xEDCD76 else 0xD63042) })
-                        append("] ")
-                        append(Text.literal(function.behavior.symbol).styled { it.withColor(0x48D19B) })
-                        append(Text.literal("${function.value}"))
-                        append(
-                            Text.literal(
-                                String.format(
-                                    " (%.2f)\n",
-                                    DataAttributesAPI.getValue(EntityAttributeSupplier(function.id), player).orElse(0.0)
-                                )
-                            ).formatted(Formatting.GRAY)
-                        )
-                        formatted(Formatting.ITALIC)
+                        text.apply {
+                            append(Text.translatable(childAttribute.translationKey).styled { it.withColor(Colors.SATURATED_BLUE) })
+                            append(" [")
+                            append(Text.literal(formula.name.uppercase()).styled { it.withColor(if (formula == StackingFormula.Flat) Colors.SANDY else Colors.IMPISH_RED) })
+                            append("] ")
+                            append(Text.literal(function.behavior.symbol).styled { it.withColor(Colors.DARK_GREEN) })
+                            append(Text.literal("${function.value}"))
+                            append(
+                                Text.literal(
+                                    String.format(
+                                        " (%.2f)\n",
+                                        DataAttributesAPI.getValue(childAttribute, player).orElse(0.0)
+                                    )
+                                ).formatted(Formatting.GRAY)
+                            )
+                            formatted(Formatting.ITALIC)
+                        }
                     }
                 }
-            })
+            )
         }
     }
 

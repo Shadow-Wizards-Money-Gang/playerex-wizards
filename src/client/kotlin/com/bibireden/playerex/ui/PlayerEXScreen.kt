@@ -11,6 +11,8 @@ import com.bibireden.playerex.networking.types.UpdatePacketType
 import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.ui.components.MenuComponent
 import com.bibireden.playerex.ui.components.MenuComponent.OnLevelUpdated
+import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
+import com.bibireden.playerex.ui.util.Colors
 import com.bibireden.playerex.util.PlayerEXUtil
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.ButtonComponent
@@ -57,6 +59,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
         this.uiAdapter.rootComponent.forEachDescendant { descendant ->
             if (descendant is MenuComponent) descendant.onLevelUpdatedEvents.sink().onLevelUpdated(level)
+            if (descendant is AttributeButtonComponent) descendant.refresh()
         }
     }
 
@@ -64,6 +67,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     fun onAttributeUpdated(attribute: EntityAttribute, value: Double) {
         this.uiAdapter.rootComponent.forEachDescendant { descendant ->
             if (descendant is MenuComponent) descendant.onAttributeUpdatedEvents.sink().onAttributeUpdated(attribute, value)
+            if (descendant is AttributeButtonComponent) descendant.refresh()
         }
         updatePointsAvailable()
     }
@@ -71,11 +75,12 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     private fun updatePointsAvailable() {
         this.uiAdapter.rootComponent.childById(LabelComponent::class, "points_available")?.apply {
             text(Text.translatable("playerex.ui.main.skill_points_available", playerComponent.skillPoints)
-                .formatted(when (playerComponent.skillPoints) {
-                    0 -> Formatting.GRAY
-                    else -> Formatting.YELLOW
-                }
-            ))
+                .styled {
+                    it.withColor(when (playerComponent.skillPoints) {
+                        0 -> Colors.GRAY
+                        else -> Colors.SATURATED_BLUE
+                    })
+                })
         }
     }
 

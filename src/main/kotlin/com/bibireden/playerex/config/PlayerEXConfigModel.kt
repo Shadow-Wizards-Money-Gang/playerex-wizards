@@ -4,8 +4,8 @@ import com.bibireden.playerex.PlayerEX
 import io.wispforest.owo.config.Option
 
 import io.wispforest.owo.config.annotation.*
-import javax.tools.Tool
 
+@Suppress("UNUSED")
 @Modmenu(modId = PlayerEX.MOD_ID)
 @Config(
     name = "playerex-config",
@@ -17,25 +17,32 @@ class PlayerEXConfigModel {
     @JvmField
     var resetOnDeath: Boolean = false
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var disableAttributesGui: Boolean = false
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
-    var showLevelNameplates: Boolean = true
+    var showLevelOnNameplates: Boolean = true
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var skillPointsPerLevelUp: Int = 1
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     @Hook
     var levelFormula: String = "stairs(x,0.2,2.4,17,10,25)"
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var restorativeForceTicks: Int = 600
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var restorativeForceMultiplier: Int = 110
 
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var expNegationFactor: Int = 95
 
@@ -48,22 +55,12 @@ class PlayerEXConfigModel {
     @RangeConstraint(min = 0.0, max = 150.0)
     var levelUpVolume: Int = 100
 
+    @Sync(Option.SyncMode.NONE)
     @JvmField
     @RangeConstraint(min = 0.0, max = 150.0)
     var skillUpVolume: Int = 100
 
-    @JvmField
-    @RangeConstraint(min = 0.0, max = 50.0)
-    var textScaleX: Int = 50;
-
-    @JvmField
-    @RangeConstraint(min = 0.0, max = 50.0)
-    var textScaleY: Int = 50;
-
-    @JvmField
-    @RangeConstraint(min = 0.0, max = 1.0)
-    var levelNameplateHeight: Double = 0.3;
-
+    @Sync(Option.SyncMode.NONE)
     @JvmField
     var tooltip: Tooltip = Tooltip.PlayerEX
 
