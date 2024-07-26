@@ -21,6 +21,7 @@ import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.*
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 
@@ -48,10 +49,12 @@ class AttributeComponent(private val attribute: EntityAttribute, private val pla
                             append(Text.translatable(childAttribute.translationKey).styled { it.withColor(Colors.SATURATED_BLUE) })
                             append(" (")
                             append(Text.literal(function.behavior.symbol).styled { it.withColor(Colors.DARK_GREEN) })
-                            append(Text.literal("${function.value}:"))
+                            append(Text.literal("${function.value}"))
+                            append(Text.literal(":").fillStyle(Style.EMPTY.withColor(Colors.DARK_GRAY)))
                             append(Text.literal(formula.name.lowercase()).styled { it.withColor(if (formula == StackingFormula.Flat) Colors.SANDY else Colors.IMPISH_RED) })
                             append(")")
-                            append(Text.literal(" (%.2f)\n".format(DataAttributesAPI.getValue(childAttribute, player).orElse(0.0))).formatted(Formatting.GRAY))
+                            val decLength = function.value.toString().substringAfter('.').length
+                            append(Text.literal(" (%.${decLength}f)\n".format(DataAttributesAPI.getValue(childAttribute, player).orElse(0.0))).formatted(Formatting.GRAY))
                             formatted(Formatting.ITALIC)
                         }
                     }

@@ -2,6 +2,7 @@ package com.bibireden.playerex.ui.util
 
 object Colors {
     const val GRAY = 0x9C9C9C
+    const val DARK_GRAY = 0x5F5F5F
     const val GOLD = 0xF0C25E
     const val SATURATED_BLUE = 0x6EBAE5
     const val SANDY = 0xEDCD76
