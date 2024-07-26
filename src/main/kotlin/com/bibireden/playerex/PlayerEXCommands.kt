@@ -178,20 +178,15 @@ object PlayerEXCommands {
 
         return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map { value ->
             val attribute = PlayerEXAttributes.LEVEL
+            val computed = MathHelper.clamp(amount, 0, (attribute as IEntityAttribute).`data_attributes$max`().toInt() - value.toInt())
 
-            // todo: will be useless after new error message... maybe...
-            if ((attribute as IEntityAttribute).`data_attributes$max`() <= value) {
-                ctx.source.sendFeedback(maxErrorMessage(player, attribute),false)
-                return@map -1
-            }
-
-            if (!player.data.levelUp(amount, true)) {
+            if (!player.data.levelUp(computed, true)) {
                 // todo: err message, for now just -1
                 return@map -1
             }
 
-            ctx.source.sendFeedback({ Text.translatable("playerex.command.level_up", amount, player.name) }, false)
-            ctx.source.sendFeedback(updatedValueText(attribute, value + amount), false)
+            ctx.source.sendFeedback({ Text.translatable("playerex.command.level_up", computed, player.name) }, false)
+            ctx.source.sendFeedback(updatedValueText(attribute, value + computed), false)
 
             return@map 1
         }.orElse(-1)

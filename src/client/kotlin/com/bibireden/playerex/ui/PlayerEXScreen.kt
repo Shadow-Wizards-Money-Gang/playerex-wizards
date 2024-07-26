@@ -3,6 +3,7 @@ package com.bibireden.playerex.ui
 import com.bibireden.playerex.PlayerEXClient
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.components.player.IPlayerDataComponent
+import com.bibireden.playerex.ext.data
 import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
@@ -17,7 +18,9 @@ import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.*
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component
+import io.wispforest.owo.ui.core.Easing
 import io.wispforest.owo.ui.core.ParentComponent
+import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.util.EventSource
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
@@ -33,17 +36,18 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
     private val pages: MutableList<MenuComponent> = mutableListOf()
 
-    private val playerComponent by lazy { PlayerEXComponents.PLAYER_DATA.get(this.client?.player!!) }
+    private val player by lazy { this.client!!.player!! }
 
-    val onLevelUpdatedEvents = OnLevelUpdated.stream
-    val onLevelUpdated: EventSource<OnLevelUpdated> = onLevelUpdatedEvents.source()
+    private val content by lazy { uiAdapter.rootComponent.childById(FlowLayout::class, "content")!! }
+    private val footer by lazy { uiAdapter.rootComponent.childById(FlowLayout::class, "footer")!! }
+
+    private val onLevelUpdatedEvents = OnLevelUpdated.stream
+    private val onLevelUpdated: EventSource<OnLevelUpdated> = onLevelUpdatedEvents.source()
 
     override fun shouldPause(): Boolean = false
 
     /** Whenever the level attribute gets modified, and on initialization of the screen, this will be called. */
     fun onLevelUpdated(level: Int) {
-        val player = client?.player ?: return
-
         val root = this.uiAdapter.rootComponent
 
         root.childById(LabelComponent::class, "level:current")?.apply {
@@ -52,6 +56,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
         updatePointsAvailable()
         updateLevelUpButton(player, root.childById(TextBoxComponent::class, "level:amount")!!.text)
+        updateProgressBar(player)
 
         this.uiAdapter.rootComponent.forEachDescendant { descendant ->
             if (descendant is MenuComponent) descendant.onLevelUpdatedEvents.sink().onLevelUpdated(level)
@@ -71,8 +76,8 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     private fun updatePointsAvailable() {
         this.uiAdapter.rootComponent.childById(LabelComponent::class, "points_available")?.apply {
             text(Text.translatable("playerex.ui.main.skill_points_header").append(": [").append(
-                Text.literal("${playerComponent.skillPoints}").styled {
-                    it.withColor(when (playerComponent.skillPoints) {
+                Text.literal("${player.data.skillPoints}").styled {
+                    it.withColor(when (player.data.skillPoints) {
                         0 -> Colors.GRAY else -> Colors.SATURATED_BLUE
                     })
                 }).append("]")
@@ -98,6 +103,15 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
             ?.tooltip(Text.translatable("playerex.ui.level_button", PlayerEXUtil.getRequiredXpForLevel(player, result), amount, player.experienceLevel))
     }
 
+    private fun updateProgressBar(player: PlayerEntity) {
+        var result = 0.0
+        if (player.experienceLevel > 0) {
+            result = (player.experienceLevel.toDouble() / PlayerEXUtil.getRequiredXpForNextLevel(player)) * 100
+        }
+       footer.childById(BoxComponent::class, "progress")!!
+            .horizontalSizing().animate(2, Easing.SINE, Sizing.fill(result.toInt())).forwards()
+    }
+
     override fun build(rootComponent: FlowLayout) {
         val player = client?.player ?: return
 
@@ -111,17 +125,16 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val pageCounter = rootComponent.childById(LabelComponent::class, "counter")!!
         val nextPage = rootComponent.childById(ButtonComponent::class, "next")!!
         val exit = rootComponent.childById(ButtonComponent::class, "exit")!!
-        val content = rootComponent.childById(FlowLayout::class, "content")!!
-        val footer = rootComponent.childById(FlowLayout::class, "footer")!!
 
         AttributesMenuRegistry.get().forEach {
             val instance = it.getDeclaredConstructor().newInstance()
-            instance.build(player, this.uiAdapter, playerComponent)
+            instance.build(player, this.uiAdapter, player.data)
             pages.add(instance)
         }
 
         this.onLevelUpdated(player.level.toInt())
         this.onPagesUpdated()
+        updateProgressBar(player)
 
         pageCounter.text(Text.of("${currentPage + 1}/${pages.size}"))
 

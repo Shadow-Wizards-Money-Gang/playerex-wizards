@@ -95,37 +95,64 @@
                         </flow-layout>
 
                         <!-- footer -->
-                        <flow-layout direction="horizontal" id="footer">
+                        <flow-layout direction="vertical" id="footer">
                             <children>
-                                <label id="level:current">
-                                    <margins><vertical>1</vertical></margins>
-                                </label>
-                                <text-box id="level:amount">
-                                    <text>1</text>
+                                <box>
+                                    <sizing><horizontal method="fill">100</horizontal><vertical method="fixed">2</vertical></sizing>
+                                    <fill>true</fill>
+                                    <positioning type="relative">0,15</positioning>
+                                </box>
 
-                                    <sizing>
-                                        <vertical method="fixed">10</vertical>
-                                        <horizontal method="fixed">27</horizontal>
-                                    </sizing>
+                                <box id="progress">
+                                    <sizing><horizontal method="fill">0</horizontal><vertical method="fixed">2</vertical></sizing>
 
-                                    <max-length>3</max-length>
+                                    <fill>true</fill>
+
+                                    <direction>left-to-right</direction>
+                                    <start-color>gold</start-color>
+                                    <end-color>red</end-color>
+
+                                    <positioning type="relative">0,15</positioning>
+                                    <z-index>1</z-index>
+                                </box>
+
+                                <flow-layout direction="horizontal">
+                                    <children>
+                                        <label id="level:current">
+                                            <margins><vertical>1</vertical></margins>
+                                        </label>
+                                        <text-box id="level:amount">
+                                            <text>1</text>
+
+                                            <sizing>
+                                                <vertical method="fixed">10</vertical>
+                                                <horizontal method="fixed">27</horizontal>
+                                            </sizing>
+
+                                            <max-length>3</max-length>
+                                            <vertical-alignment>bottom</vertical-alignment>
+                                        </text-box>
+                                        <button id="level:button">
+                                            <text>+</text>
+
+                                            <renderer><flat color="black" hovered-color="black" disabled-color="dark-red"/></renderer>
+
+                                            <sizing><vertical method="fixed">12</vertical><horizontal method="fixed">12</horizontal></sizing>
+                                        </button>
+                                    </children>
+
+                                    <sizing><vertical method="fill">60</vertical><horizontal method="fill">100</horizontal></sizing>
                                     <vertical-alignment>bottom</vertical-alignment>
-                                </text-box>
-                                <button id="level:button">
-                                    <text>+</text>
 
-                                    <renderer><flat color="black" hovered-color="black" disabled-color="dark-red"/></renderer>
-
-                                    <sizing><vertical method="fixed">12</vertical><horizontal method="fixed">12</horizontal></sizing>
-                                </button>
+                                    <gap>2</gap>
+                                </flow-layout>
                             </children>
 
+                            <gap>4</gap>
+                            <padding><all>8</all></padding>
+                            <vertical-alignment>bottom</vertical-alignment>
                             <sizing><vertical method="fill">15</vertical><horizontal method="fill">100</horizontal></sizing>
                             <positioning type="relative">0,100</positioning>
-
-                            <gap>2</gap>
-                            <padding><all>10</all></padding>
-                            <vertical-alignment>bottom</vertical-alignment>
                         </flow-layout>
                     </children>
 
