@@ -10,13 +10,10 @@ import com.bibireden.data_attributes.api.attribute.StackingFormula
 import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ui.PlayerEXScreen.AttributeButtonComponentType
-import com.bibireden.playerex.ui.childById
 import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
 import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
 import com.bibireden.playerex.ui.util.Colors
 import io.wispforest.owo.ui.component.Components
-import io.wispforest.owo.ui.component.LabelComponent
-import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.*
 import net.minecraft.entity.attribute.EntityAttribute

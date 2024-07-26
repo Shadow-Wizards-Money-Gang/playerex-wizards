@@ -4,17 +4,16 @@
 
     "playerex.ui.main.title":[
         {"text": "\uD83D\uDDB3 ", "color": "#F0C25E"},
-        {"text": "PlayerEX • Leveling Screen", "color": "white"}
+        {"text": "PlayerEX • Main Screen", "color": "white"}
     ],
 
     "playerex.ui.main.exit": "Exit",
     "playerex.ui.main.exit.tooltip": "Exits from the window.",
 
     "playerex.ui.main.skill_points_header": "SKILL POINTS",
-    "playerex.ui.main.modified_attributes": [ {"text": "❤ Modified Attributes", "color": "#F6CB3B"} ],
+    "playerex.ui.main.modified_attributes": [ {"text": "❤ ", "color": "#48D19B"}, {"text": "Modified Attributes", "color": "white"} ],
 
     "playerex.ui.category.primary_attributes": "Attributes",
-
 
     "playerex.ui.current_level": [
         {"text": "❤ ", "color": "#F0C25E"},

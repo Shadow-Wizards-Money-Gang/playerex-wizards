@@ -109,7 +109,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
             result = (player.experienceLevel.toDouble() / PlayerEXUtil.getRequiredXpForNextLevel(player)) * 100
         }
        footer.childById(BoxComponent::class, "progress")!!
-            .horizontalSizing().animate(2, Easing.SINE, Sizing.fill(result.toInt())).forwards()
+            .horizontalSizing().animate(1000, Easing.CUBIC, Sizing.fill(result.toInt())).forwards()
     }
 
     override fun build(rootComponent: FlowLayout) {
@@ -134,7 +134,6 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
         this.onLevelUpdated(player.level.toInt())
         this.onPagesUpdated()
-        updateProgressBar(player)
 
         pageCounter.text(Text.of("${currentPage + 1}/${pages.size}"))
 

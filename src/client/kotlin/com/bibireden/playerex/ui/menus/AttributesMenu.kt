@@ -6,6 +6,7 @@ import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.ui.components.MenuComponent
 import com.bibireden.playerex.ui.components.AttributeComponent
 import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
+import com.bibireden.playerex.util.PlayerEXUtil
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
@@ -40,6 +41,9 @@ class AttributesMenu : MenuComponent(Sizing.fill(100), Sizing.fill(100), Algorit
             child(Components.label(Text.translatable("playerex.ui.category.primary_attributes")))
             child(
                 Components.textBox(Sizing.fixed(27))
+                    .also {
+                        it.setMaxLength(4)
+                    }
                     .text("1")
                     .verticalSizing(Sizing.fixed(10))
                     .positioning(Positioning.relative(100, 0))
@@ -50,7 +54,7 @@ class AttributesMenu : MenuComponent(Sizing.fill(100), Sizing.fill(100), Algorit
             children(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS.mapNotNull(Registries.ATTRIBUTE::get).map { AttributeComponent(it, player, component) })
         })
 
-        padding(Insets.both(4, 4))
+        padding(Insets.both(12, 12))
 
 
 
