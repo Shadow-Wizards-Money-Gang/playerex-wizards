@@ -15,7 +15,6 @@
                                     <vertical-text-alignment>center</vertical-text-alignment>
                                     <sizing>
                                         <horizontal method="fill">30</horizontal>
-                                        <vertical method="fill">25</vertical>
                                     </sizing>
                                     <positioning type="relative">0,50</positioning>
                                 </label>

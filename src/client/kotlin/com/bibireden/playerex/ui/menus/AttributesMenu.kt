@@ -7,7 +7,9 @@ import com.bibireden.playerex.ui.components.MenuComponent
 import com.bibireden.playerex.ui.components.AttributeComponent
 import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
 import io.wispforest.owo.ui.component.Components
+import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
+import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Positioning
 import io.wispforest.owo.ui.core.Sizing
@@ -21,19 +23,34 @@ class AttributesMenu : MenuComponent(Sizing.fill(100), Sizing.fill(100), Algorit
     /** Whenever ANY attribute gets updated. */
     private fun onAttributeUpdate() {
         // refresh all attribute labels
-        this.children().forEach { component ->
-            if (component !is AttributeComponent) return@forEach
-            component.refresh()
-            component.children().filterIsInstance<AttributeLabelComponent>().forEach(AttributeLabelComponent::refresh)
+        this.forEachDescendant { component ->
+            if (component is AttributeComponent) {
+                component.refresh()
+                return@forEachDescendant
+            }
+            if (component is AttributeLabelComponent) {
+                component.refresh()
+                return@forEachDescendant
+            }
         }
     }
 
     override fun build(player: ClientPlayerEntity, adapter: OwoUIAdapter<FlowLayout>, component: IPlayerDataComponent) {
-        child(Components.label(Text.translatable("playerex.ui.category.primary_attributes")))
-        child(Components.box(Sizing.fill(35), Sizing.fixed(2)))
-        gap(5)
-        children(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS.mapNotNull(Registries.ATTRIBUTE::get).map { AttributeComponent(it, player, component) })
-        positioning(Positioning.relative(10, 25))
+        child(Containers.verticalFlow(Sizing.fill(35), Sizing.fill(100)).apply {
+            child(Components.label(Text.translatable("playerex.ui.category.primary_attributes")))
+            child(
+                Components.textBox(Sizing.fixed(27))
+                    .text("1")
+                    .verticalSizing(Sizing.fixed(10))
+                    .positioning(Positioning.relative(100, 0))
+                    .id("input")
+            )
+            child(Components.box(Sizing.fill(100), Sizing.fixed(2)))
+            gap(5)
+            children(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS.mapNotNull(Registries.ATTRIBUTE::get).map { AttributeComponent(it, player, component) })
+        })
+
+        padding(Insets.both(4, 4))
 
 
 

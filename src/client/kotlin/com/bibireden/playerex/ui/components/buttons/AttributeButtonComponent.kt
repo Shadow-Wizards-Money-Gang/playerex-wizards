@@ -19,7 +19,7 @@ class AttributeButtonComponent(private val attribute: EntityAttribute, private v
     Text.literal(type.symbol),
     {
         // reference text-box to get needed value to send to server
-        it.parent()?.childById(TextBoxComponent::class, "entry:${attribute.id}")?.let { box ->
+        it.parent()?.parent()?.childById(TextBoxComponent::class, "input")?.let { box ->
             val amount = box.text.toDoubleOrNull() ?: return@let
             val points = type.getPointsFromComponent(component)
 

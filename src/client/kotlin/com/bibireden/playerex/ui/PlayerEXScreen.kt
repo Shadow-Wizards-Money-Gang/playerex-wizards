@@ -1,7 +1,6 @@
 package com.bibireden.playerex.ui
 
 import com.bibireden.playerex.PlayerEXClient
-import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.ext.level
@@ -15,9 +14,7 @@ import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
 import com.bibireden.playerex.ui.util.Colors
 import com.bibireden.playerex.util.PlayerEXUtil
 import io.wispforest.owo.ui.base.BaseUIModelScreen
-import io.wispforest.owo.ui.component.ButtonComponent
-import io.wispforest.owo.ui.component.LabelComponent
-import io.wispforest.owo.ui.component.TextBoxComponent
+import io.wispforest.owo.ui.component.*
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.ParentComponent
@@ -25,7 +22,6 @@ import io.wispforest.owo.util.EventSource
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 import kotlin.reflect.KClass
 
 // Transformers

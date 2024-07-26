@@ -2,7 +2,10 @@
     "key.categories.playerex": "PlayerEX Controls",
     "playerex.key.main_screen": "Open Main Screen",
 
-    "playerex.ui.main.title": "⚑ PlayerEX • Leveling Screen",
+    "playerex.ui.main.title":[
+        {"text": "\uD83D\uDDB3 ", "color": "#F0C25E"},
+        {"text": "PlayerEX • Leveling Screen", "color": "white"}
+    ],
 
     "playerex.ui.main.exit": "Exit",
     "playerex.ui.main.exit.tooltip": "Exits from the window.",

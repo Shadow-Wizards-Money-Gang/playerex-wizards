@@ -18,10 +18,7 @@ import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
-import io.wispforest.owo.ui.core.HorizontalAlignment
-import io.wispforest.owo.ui.core.Positioning
-import io.wispforest.owo.ui.core.Sizing
-import io.wispforest.owo.ui.core.VerticalAlignment
+import io.wispforest.owo.ui.core.*
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
@@ -30,12 +27,15 @@ import net.minecraft.util.Formatting
 private val StackingBehavior.symbol: String
     get() = if (this == StackingBehavior.Add) "+" else "×"
 
-class AttributeComponent(private val attribute: EntityAttribute, private val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(35), Sizing.fixed(18), Algorithm.HORIZONTAL) {
+class AttributeComponent(private val attribute: EntityAttribute, private val player: PlayerEntity, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(100), Sizing.fixed(18), Algorithm.HORIZONTAL) {
+    val label: AttributeLabelComponent
+
     fun refresh() {
         // todo: allow data_attributes to have API funcs for obtaining this data.
+        //  from manager directly, e.g. (getFunctions() ...)
         val entries = DataAttributesClient.MANAGER.data.functions[attribute.id]
         if (!entries.isNullOrEmpty()) {
-            this.childById(LabelComponent::class, "${this.attribute.id}:label")?.tooltip(
+            label.tooltip(
                 Text.translatable("playerex.ui.main.modified_attributes").also { text ->
                     text.append("\n")
                     text.append(Text.literal(attribute.id.toString()).formatted(Formatting.DARK_GRAY))
@@ -46,19 +46,12 @@ class AttributeComponent(private val attribute: EntityAttribute, private val pla
 
                         text.apply {
                             append(Text.translatable(childAttribute.translationKey).styled { it.withColor(Colors.SATURATED_BLUE) })
-                            append(" [")
-                            append(Text.literal(formula.name.uppercase()).styled { it.withColor(if (formula == StackingFormula.Flat) Colors.SANDY else Colors.IMPISH_RED) })
-                            append("] ")
+                            append(" (")
                             append(Text.literal(function.behavior.symbol).styled { it.withColor(Colors.DARK_GREEN) })
-                            append(Text.literal("${function.value}"))
-                            append(
-                                Text.literal(
-                                    String.format(
-                                        " (%.2f)\n",
-                                        DataAttributesAPI.getValue(childAttribute, player).orElse(0.0)
-                                    )
-                                ).formatted(Formatting.GRAY)
-                            )
+                            append(Text.literal("${function.value}:"))
+                            append(Text.literal(formula.name.lowercase()).styled { it.withColor(if (formula == StackingFormula.Flat) Colors.SANDY else Colors.IMPISH_RED) })
+                            append(")")
+                            append(Text.literal(" (%.2f)\n".format(DataAttributesAPI.getValue(childAttribute, player).orElse(0.0))).formatted(Formatting.GRAY))
                             formatted(Formatting.ITALIC)
                         }
                     }
@@ -68,26 +61,26 @@ class AttributeComponent(private val attribute: EntityAttribute, private val pla
     }
 
     init {
-        this.child(
+        child(
             Components.label(Text.translatable(attribute.translationKey))
                 .verticalTextAlignment(VerticalAlignment.CENTER)
                 .sizing(Sizing.content(), Sizing.fill(100))
-                .also { this.refresh() }
+                .positioning(Positioning.relative(0, 50))
                 .id("${attribute.id}:label")
         )
-        this.child(AttributeLabelComponent(attribute, player))
-        this.child(
-            Containers.horizontalFlow(Sizing.content(), Sizing.fill(100)).also {
-                it.child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Remove))
-                it.child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Add))
-                it.child(Components.textBox(Sizing.fixed(27)).text("1").verticalSizing(Sizing.fixed(12)).id("entry:${attribute.id}"))
-                it.gap(4)
-            }
-            .horizontalAlignment(HorizontalAlignment.RIGHT)
-            .verticalAlignment(VerticalAlignment.CENTER)
-            .positioning(Positioning.relative(100, 0))
+
+        child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Remove))
+        child(
+            AttributeLabelComponent(attribute, player).also { label = it }
+                .horizontalSizing(Sizing.fill(34))
         )
-        this.gap(3)
-        this.verticalAlignment(VerticalAlignment.CENTER)
+        child(AttributeButtonComponent(attribute, player, component, AttributeButtonComponentType.Add))
+
+        horizontalAlignment(HorizontalAlignment.RIGHT)
+        verticalAlignment(VerticalAlignment.CENTER)
+
+        verticalAlignment(VerticalAlignment.CENTER)
+
+        refresh()
     }
 }

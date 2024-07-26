@@ -5,6 +5,7 @@ import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ui.util.Colors
 import io.wispforest.owo.ui.component.LabelComponent
+import io.wispforest.owo.ui.core.HorizontalAlignment
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.VerticalAlignment
 import net.minecraft.entity.attribute.EntityAttribute
@@ -20,9 +21,10 @@ private fun createTextFromAttribute(attribute: EntityAttribute, player: PlayerEn
 
 class AttributeLabelComponent(private val attribute: EntityAttribute, private val player: PlayerEntity) : LabelComponent(createTextFromAttribute(attribute, player)) {
     init {
-        id("${attribute.id}:current_level")
-        verticalSizing(Sizing.fill(100))
+        horizontalTextAlignment(HorizontalAlignment.CENTER)
         verticalTextAlignment(VerticalAlignment.CENTER)
+
+        id("${attribute.id}:current_level")
     }
 
     fun refresh(): LabelComponent = text(createTextFromAttribute(attribute, player))

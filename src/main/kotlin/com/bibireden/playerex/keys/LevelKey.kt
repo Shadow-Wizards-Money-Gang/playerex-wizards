@@ -9,8 +9,8 @@ import net.minecraft.server.network.ServerPlayerEntity
 import kotlin.jvm.optionals.getOrNull
 
 class LevelKey : CachedPlayerKey<Int>(PlayerEX.id("level")) {
-    override fun get(player: ServerPlayerEntity): Int? {
-        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(Double::toInt).getOrNull()
+    override fun get(player: ServerPlayerEntity): Int {
+        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map(Double::toInt).orElse(0)
     }
 
     override fun readFromNbt(tag: NbtCompound): Int {
