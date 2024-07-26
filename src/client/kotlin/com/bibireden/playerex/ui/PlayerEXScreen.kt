@@ -74,13 +74,13 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
     private fun updatePointsAvailable() {
         this.uiAdapter.rootComponent.childById(LabelComponent::class, "points_available")?.apply {
-            text(Text.translatable("playerex.ui.main.skill_points_available", playerComponent.skillPoints)
-                .styled {
+            text(Text.translatable("playerex.ui.main.skill_points_header").append(": [").append(
+                Text.literal("${playerComponent.skillPoints}").styled {
                     it.withColor(when (playerComponent.skillPoints) {
-                        0 -> Colors.GRAY
-                        else -> Colors.SATURATED_BLUE
+                        0 -> Colors.GRAY else -> Colors.SATURATED_BLUE
                     })
-                })
+                }).append("]")
+            )
         }
     }
 

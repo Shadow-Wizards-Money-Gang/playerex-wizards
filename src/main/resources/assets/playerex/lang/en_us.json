@@ -7,7 +7,7 @@
     "playerex.ui.main.exit": "Exit",
     "playerex.ui.main.exit.tooltip": "Exits from the window.",
 
-    "playerex.ui.main.skill_points_available": [{"text": "SKILL POINTS: ", "color": "white"}, {"index": 0}],
+    "playerex.ui.main.skill_points_header": "SKILL POINTS",
     "playerex.ui.main.modified_attributes": [ {"text": "❤ Modified Attributes", "color": "#F6CB3B"} ],
 
     "playerex.ui.category.primary_attributes": "Attributes",
