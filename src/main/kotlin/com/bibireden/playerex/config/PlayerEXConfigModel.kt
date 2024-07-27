@@ -7,23 +7,45 @@ import io.wispforest.owo.config.annotation.*
 
 @Suppress("UNUSED")
 @Modmenu(modId = PlayerEX.MOD_ID)
-@Config(
-    name = "playerex-config",
-    wrapperName = "PlayerEXConfig"
-)
+@Config(name = "playerex-config", wrapperName = "PlayerEXConfig")
 class PlayerEXConfigModel {
-    @SectionHeader("Server Options")
+    @SectionHeader("client_options")
+
+    @Sync(Option.SyncMode.NONE)
+    @JvmField
+    var tooltip: Tooltip = Tooltip.PlayerEX
+
+    @Sync(Option.SyncMode.NONE)
+    @JvmField
+    var showLevelOnNameplates: Boolean = true
+
+    data class SoundSettings(
+        @Sync(Option.SyncMode.NONE)
+        @JvmField
+        @RangeConstraint(min = 0.0, max = 150.0)
+        var levelUpVolume: Int = 100,
+
+        @Sync(Option.SyncMode.NONE)
+        @JvmField
+        @RangeConstraint(min = 0.0, max = 150.0)
+        var skillUpVolume: Int = 100,
+
+        @Sync(Option.SyncMode.NONE)
+        @JvmField
+        @RangeConstraint(min = 0.0, max = 150.0)
+        var refundVolume: Int = 100
+    )
+
+    @JvmField @Nest var soundSettings = SoundSettings()
+
+    @SectionHeader("server_options")
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var resetOnDeath: Boolean = false
 
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
-    var disableAttributesGui: Boolean = false
-
-    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    @JvmField
-    var showLevelOnNameplates: Boolean = true
+    var disableUI: Boolean = false
 
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
@@ -33,6 +55,9 @@ class PlayerEXConfigModel {
     @JvmField
     @Hook
     var levelFormula: String = "stairs(x,0.2,2.4,17,10,25)"
+
+//    @JvmField
+//    var expression: Expression
 
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
@@ -45,24 +70,6 @@ class PlayerEXConfigModel {
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @JvmField
     var expNegationFactor: Int = 95
-
-//    @JvmField
-//    var expression: Expression
-
-    @SectionHeader("Client Options")
-    @Sync(Option.SyncMode.NONE)
-    @JvmField
-    @RangeConstraint(min = 0.0, max = 150.0)
-    var levelUpVolume: Int = 100
-
-    @Sync(Option.SyncMode.NONE)
-    @JvmField
-    @RangeConstraint(min = 0.0, max = 150.0)
-    var skillUpVolume: Int = 100
-
-    @Sync(Option.SyncMode.NONE)
-    @JvmField
-    var tooltip: Tooltip = Tooltip.PlayerEX
 
     enum class Tooltip { Default, Vanilla, PlayerEX }
 }

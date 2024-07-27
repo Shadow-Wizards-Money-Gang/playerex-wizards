@@ -222,6 +222,9 @@ class PlayerDataComponent(
             this.addRefundablePoints(-amount)
             this.addSkillPoints(amount)
             this.set(skill, (value - amount).toInt())
+
+            ServerNetworkingFactory.notify(player, NotificationType.Refunded)
+
             true
         }.orElse(false)
     }

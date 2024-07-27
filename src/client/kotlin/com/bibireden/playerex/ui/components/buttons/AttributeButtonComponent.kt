@@ -15,7 +15,7 @@ import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 
-class AttributeButtonComponent(private val attribute: EntityAttribute, private val player: PlayerEntity, private val component: IPlayerDataComponent, private val type: PlayerEXScreen.AttributeButtonComponentType) : ButtonComponent(
+class AttributeButtonComponent(val attribute: EntityAttribute, private val player: PlayerEntity, private val component: IPlayerDataComponent, val type: PlayerEXScreen.AttributeButtonComponentType) : ButtonComponent(
     Text.literal(type.symbol),
     {
         // reference text-box to get needed value to send to server

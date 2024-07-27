@@ -6,4 +6,5 @@ import net.minecraft.sound.SoundEvent
 object PlayerEXSoundEvents {
     val LEVEL_UP_SOUND = SoundEvent.of(PlayerEX.id("level_up"))
     val SPEND_SOUND = SoundEvent.of(PlayerEX.id("spend"))
+    val REFUND_SOUND = SoundEvent.of(PlayerEX.id("refund"))
 }

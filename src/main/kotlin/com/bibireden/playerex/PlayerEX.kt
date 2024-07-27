@@ -70,6 +70,7 @@ object PlayerEX : ModInitializer {
 
 		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.LEVEL_UP_SOUND.id, PlayerEXSoundEvents.LEVEL_UP_SOUND)
 		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.SPEND_SOUND.id, PlayerEXSoundEvents.SPEND_SOUND)
+		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.REFUND_SOUND.id, PlayerEXSoundEvents.REFUND_SOUND)
 
 		DefaultAttributeFactory.registerEntityTypes(DefaultAttributeImpl.ENTITY_TYPES)
 		DefaultAttributeFactory.registerFunctions(DefaultAttributeImpl.FUNCTIONS)

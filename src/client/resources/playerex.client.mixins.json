@@ -3,6 +3,7 @@
     "package": "com.bibireden.playerex.mixin",
     "compatibilityLevel": "JAVA_17",
     "client": [
+        "ClientPlayerEntityMixin",
         "EntityRendererMixin"
     ],
     "injectors": {

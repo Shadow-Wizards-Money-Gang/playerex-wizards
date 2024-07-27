@@ -100,7 +100,7 @@
                                 <box>
                                     <sizing><horizontal method="fill">100</horizontal><vertical method="fixed">2</vertical></sizing>
                                     <fill>true</fill>
-                                    <positioning type="relative">0,15</positioning>
+                                    <positioning type="relative">0,10</positioning>
                                 </box>
 
                                 <box id="progress">
@@ -112,7 +112,7 @@
                                     <start-color>gold</start-color>
                                     <end-color>red</end-color>
 
-                                    <positioning type="relative">0,15</positioning>
+                                    <positioning type="relative">0,10</positioning>
                                     <z-index>1</z-index>
                                 </box>
 
@@ -135,13 +135,11 @@
                                         <button id="level:button">
                                             <text>+</text>
 
-                                            <renderer><flat color="black" hovered-color="black" disabled-color="dark-red"/></renderer>
-
                                             <sizing><vertical method="fixed">12</vertical><horizontal method="fixed">12</horizontal></sizing>
                                         </button>
                                     </children>
 
-                                    <sizing><vertical method="fill">60</vertical><horizontal method="fill">100</horizontal></sizing>
+                                    <sizing><vertical method="fill">65</vertical><horizontal method="fill">100</horizontal></sizing>
                                     <vertical-alignment>bottom</vertical-alignment>
 
                                     <gap>2</gap>

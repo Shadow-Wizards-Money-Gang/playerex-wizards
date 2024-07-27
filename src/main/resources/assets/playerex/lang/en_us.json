@@ -24,8 +24,7 @@
         {"text": " XP until the next level)", "color": "#757575", "italic": true }
     ],
     "playerex.ui.level_button": [
-        {"text": "❤ ", "color": "#F6CB3B"},
-        {"text": "Leveling", "color": "white"},"\n\n",
+        {"text": "", "color": "#F0C25E"},
         {"text": "You will need ", "color": "white"},
         {"index": 0},
         {"text": " XP in order to level by ", "color": "white"},
@@ -152,5 +151,31 @@
         {"index": 0, "color": "#EEBC58"},
         {"text": " does not have enough points to refund!", "color": "white"}
     ],
-    "playerex.command.refund_attribute_unskilled": "%s has not been skilled for player %s!"
+    "playerex.command.refund_attribute_unskilled": "%s has not been skilled for player %s!",
+
+    "text.config.playerex-config.section.client_options": "Client Options",
+    "text.config.playerex-config.section.server_options": "Server Options",
+
+    "text.config.playerex-config.option.tooltip": "Tooltip",
+    "text.config.playerex-config.enum.tooltip.default": "Tooltip",
+    "text.config.playerex-config.enum.tooltip.playerex": [
+        {"text": "PlayerEX", "color": "#FF4646"}
+    ],
+    "text.config.playerex-config.enum.tooltip.vanilla": "Vanilla",
+
+    "text.config.playerex-config.option.showLevelOnNameplates": "Show Level on Nameplates",
+
+    "text.config.playerex-config.category.soundSettings": "Sound Options",
+    "text.config.playerex-config.option.soundSettings.levelUpVolume": "Level Up Volume",
+    "text.config.playerex-config.option.soundSettings.skillUpVolume": "Skill Up Volume",
+    "text.config.playerex-config.option.soundSettings.refundVolume": "Refund Volume",
+
+    "text.config.playerex-config.option.resetOnDeath": "Reset on Death",
+    "text.config.playerex-config.option.skillPointsPerLevelUp": "Skill Points per. Level Up",
+    "text.config.playerex-config.option.levelFormula": "Leveling Formula",
+    "text.config.playerex-config.option.restorativeForceTicks": "Restorative Force Ticks",
+    "text.config.playerex-config.option.restorativeForceMultiplier": "Restorative Force Multiplier",
+    "text.config.playerex-config.option.expNegationFactor": "Experience Negation Factor",
+
+    "text.config.playerex-config.option.disableUI": "Disable UI"
 }

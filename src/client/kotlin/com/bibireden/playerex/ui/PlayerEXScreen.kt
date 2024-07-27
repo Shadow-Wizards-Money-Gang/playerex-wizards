@@ -1,8 +1,10 @@
 package com.bibireden.playerex.ui
 
+import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.PlayerEXClient
 import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.components.player.IPlayerDataComponent
+import com.bibireden.playerex.ext.canLevelUp
 import com.bibireden.playerex.ext.data
 import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.networking.NetworkingChannels
@@ -25,6 +27,7 @@ import io.wispforest.owo.util.EventSource
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
+import net.minecraft.util.math.MathHelper
 import kotlin.reflect.KClass
 
 // Transformers
@@ -41,6 +44,8 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     private val content by lazy { uiAdapter.rootComponent.childById(FlowLayout::class, "content")!! }
     private val footer by lazy { uiAdapter.rootComponent.childById(FlowLayout::class, "footer")!! }
 
+    private val levelAmount by lazy { uiAdapter.rootComponent.childById(TextBoxComponent::class, "level:amount")!! }
+
     private val onLevelUpdatedEvents = OnLevelUpdated.stream
     private val onLevelUpdated: EventSource<OnLevelUpdated> = onLevelUpdatedEvents.source()
 
@@ -55,8 +60,8 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         }
 
         updatePointsAvailable()
-        updateLevelUpButton(player, root.childById(TextBoxComponent::class, "level:amount")!!.text)
-        updateProgressBar(player)
+        updateLevelUpButton()
+        updateProgressBar()
 
         this.uiAdapter.rootComponent.forEachDescendant { descendant ->
             if (descendant is MenuComponent) descendant.onLevelUpdatedEvents.sink().onLevelUpdated(level)
@@ -95,18 +100,20 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         content.child(pages[currentPage])
     }
 
-    private fun updateLevelUpButton(player: PlayerEntity, text: String) {
-        val amount = text.toIntOrNull() ?: return
+    private fun updateLevelUpButton() {
+        val amount = levelAmount.text.toIntOrNull() ?: return
         val result = player.level + amount
 
-        this.uiAdapter.rootComponent.childById(ButtonComponent::class, "level:button")
-            ?.tooltip(Text.translatable("playerex.ui.level_button", PlayerEXUtil.getRequiredXpForLevel(player, result), amount, player.experienceLevel))
+        this.uiAdapter.rootComponent.childById(ButtonComponent::class, "level:button")!!
+            .active(player.canLevelUp())
+            .tooltip(Text.translatable("playerex.ui.level_button", PlayerEXUtil.getRequiredXpForLevel(player, result), amount, player.experienceLevel))
     }
 
-    private fun updateProgressBar(player: PlayerEntity) {
+    private fun updateProgressBar() {
         var result = 0.0
         if (player.experienceLevel > 0) {
-            result = (player.experienceLevel.toDouble() / PlayerEXUtil.getRequiredXpForNextLevel(player)) * 100
+            val required = PlayerEXUtil.getRequiredXpForNextLevel(player)
+            result = MathHelper.clamp((player.experienceLevel.toDouble() / required) * 100, 0.0, 100.0)
         }
        footer.childById(BoxComponent::class, "progress")!!
             .horizontalSizing().animate(1000, Easing.CUBIC, Sizing.fill(result.toInt())).forwards()
@@ -115,11 +122,10 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     override fun build(rootComponent: FlowLayout) {
         val player = client?.player ?: return
 
-        val levelAmount = rootComponent.childById(TextBoxComponent::class, "level:amount")!!
         val levelUpButton = rootComponent.childById(ButtonComponent::class, "level:button")!!
 
-        updateLevelUpButton(player, levelAmount.text)
-        levelAmount.onChanged().subscribe { updateLevelUpButton(player, it) }
+        updateLevelUpButton()
+        levelAmount.onChanged().subscribe { updateLevelUpButton() }
 
         val previousPage = rootComponent.childById(ButtonComponent::class, "previous")!!
         val pageCounter = rootComponent.childById(LabelComponent::class, "counter")!!
@@ -157,11 +163,23 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
             levelAmount.text.toIntOrNull()?.let { NetworkingChannels.MODIFY.clientHandle().send(NetworkingPackets.Level(it)) }
         }
 
-        onLevelUpdated.subscribe {
-            this.updateLevelUpButton(player, rootComponent.childById(TextBoxComponent::class, "level:amount")!!.text)
-        }
+        onLevelUpdated.subscribe { this.updateLevelUpButton() }
 
         exit.onPress { this.close() }
+    }
+
+    /** Whenever the player's experience is changed, refreshing the current status of experience-tied ui elements. */
+    fun onExperienceUpdated() {
+        updateLevelUpButton()
+        updateProgressBar()
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (PlayerEXClient.KEYBINDING_MAIN_SCREEN.matchesKey(keyCode, scanCode)) {
+            this.close()
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     enum class AttributeButtonComponentType {

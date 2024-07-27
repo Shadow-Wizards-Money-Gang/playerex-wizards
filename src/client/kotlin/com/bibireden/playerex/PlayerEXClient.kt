@@ -24,13 +24,15 @@ import org.lwjgl.glfw.GLFW
 object PlayerEXClient : ClientModInitializer {
 	val MAIN_UI_SCREEN_ID = PlayerEX.id("main_ui_model")
 
-	private val KEYBINDING_MAIN_SCREEN: KeyBinding = KeyBindingHelper.registerKeyBinding(KeyBinding("${PlayerEX.MOD_ID}.key.main_screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.${PlayerEX.MOD_ID}"))
+	val KEYBINDING_MAIN_SCREEN: KeyBinding = KeyBindingHelper.registerKeyBinding(KeyBinding("${PlayerEX.MOD_ID}.key.main_screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.${PlayerEX.MOD_ID}"))
 
 	override fun onInitializeClient() {
 		NetworkingChannels.NOTIFICATIONS.registerClientbound(NetworkingPackets.Notify::class) { (type), ctx ->
+			val soundSettings = PlayerEX.CONFIG.soundSettings
 			when (type) {
-				NotificationType.LevelUpAvailable -> ctx.player().playSound(PlayerEXSoundEvents.LEVEL_UP_SOUND, SoundCategory.NEUTRAL, PlayerEX.CONFIG.levelUpVolume.toFloat(), 1F)
-				NotificationType.Spent -> ctx.player().playSound(PlayerEXSoundEvents.SPEND_SOUND, SoundCategory.NEUTRAL, PlayerEX.CONFIG.skillUpVolume.toFloat(), 1F)
+				NotificationType.LevelUpAvailable -> ctx.player().playSound(PlayerEXSoundEvents.LEVEL_UP_SOUND, SoundCategory.NEUTRAL, soundSettings.levelUpVolume.toFloat(), 1F)
+				NotificationType.Spent -> ctx.player().playSound(PlayerEXSoundEvents.SPEND_SOUND, SoundCategory.NEUTRAL, soundSettings.skillUpVolume.toFloat(), 1F)
+				NotificationType.Refunded -> ctx.player().playSound(PlayerEXSoundEvents.REFUND_SOUND, SoundCategory.NEUTRAL, soundSettings.refundVolume.toFloat(), 0.7F)
 			}
 		}
 
@@ -55,9 +57,11 @@ object PlayerEXClient : ClientModInitializer {
 		AttributesMenuRegistry.register(AttributesMenu::class.java)
 
 		ClientTickEvents.END_CLIENT_TICK.register { client ->
-			if (PlayerEX.CONFIG.disableAttributesGui) return@register
+			if (PlayerEX.CONFIG.disableUI) return@register
 			while (KEYBINDING_MAIN_SCREEN.wasPressed()) {
-				if (client.currentScreen == null) client.setScreen(PlayerEXScreen())
+				if (client.currentScreen == null) {
+					client.setScreen(PlayerEXScreen())
+				}
 			}
 		}
 	}

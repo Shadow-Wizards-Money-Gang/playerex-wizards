@@ -6,5 +6,9 @@
     "spend": {
         "subtitle": "sound.playerex.spend",
         "sounds": [ "playerex:spend" ]
+    },
+    "refund": {
+        "subtitle": "sound.playerex.refund",
+        "sounds": [ "playerex:refund" ]
     }
 }

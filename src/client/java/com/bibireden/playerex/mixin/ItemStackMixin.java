@@ -1,6 +1,5 @@
 package com.bibireden.playerex.mixin;
 
-import com.bibireden.data_attributes.api.attribute.IEntityAttribute;
 import com.bibireden.data_attributes.api.item.ItemFields;
 import com.bibireden.playerex.PlayerEX;
 import com.bibireden.playerex.config.PlayerEXConfigModel;
