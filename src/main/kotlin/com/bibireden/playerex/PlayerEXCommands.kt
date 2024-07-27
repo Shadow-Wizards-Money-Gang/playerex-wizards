@@ -112,7 +112,7 @@ object PlayerEXCommands {
         val supplier = EntityAttributeSupplier(IdentifierArgumentType.getIdentifier(ctx, "id"))
 
         return DataAttributesAPI.getValue(supplier, player).map { value ->
-            ctx.source.sendFeedback({ Text.translatable("playerex.command.skill_get", Text.translatable(supplier.get()!!.translationKey), value.toInt(), player.name) }, false)
+            ctx.source.sendFeedback({ Text.translatable("playerex.command.skill_get", Text.translatable(supplier.get().get().translationKey), value.toInt(), player.name) }, false)
             1
         }.orElse(-1)
     }
@@ -129,7 +129,7 @@ object PlayerEXCommands {
         val supplier = EntityAttributeSupplier(IdentifierArgumentType.getIdentifier(ctx, "id"))
 
         return DataAttributesAPI.getValue(supplier, player).map {
-            val attribute = supplier.get()!!
+            val attribute = supplier.get().get()
             val computed = MathHelper.clamp(amount, 0, it.toInt())
 
             if (player.data.refund(attribute, computed)) {
@@ -158,7 +158,7 @@ object PlayerEXCommands {
         val supplier = EntityAttributeSupplier(IdentifierArgumentType.getIdentifier(ctx, "id"))
 
         return DataAttributesAPI.getValue(supplier, player).map {
-            val attribute = supplier.get()!!
+            val attribute = supplier.get().get()
             val computed = MathHelper.clamp(amount, 0, (attribute as IEntityAttribute).`data_attributes$max`().toInt() - it.toInt())
 
             if (player.data.skillUp(attribute, computed, true)) {

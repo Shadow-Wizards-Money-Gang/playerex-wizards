@@ -21,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import kotlin.jvm.optionals.getOrNull
 
 private val StackingBehavior.symbol: String
     get() = if (this == StackingBehavior.Add) "+" else "×"
@@ -39,7 +40,7 @@ class AttributeComponent(private val attribute: EntityAttribute, private val pla
                     text.append(Text.literal(attribute.id.toString()).formatted(Formatting.DARK_GRAY))
                     text.append("\n\n")
                     entries.forEach { function ->
-                        val childAttribute = EntityAttributeSupplier(function.id).get() ?: return@forEach
+                        val childAttribute = EntityAttributeSupplier(function.id).get().getOrNull() ?: return@forEach
                         val formula = (childAttribute as IEntityAttribute).`data_attributes$formula`()
 
                         text.apply {

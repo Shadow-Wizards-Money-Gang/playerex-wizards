@@ -1,10 +1,6 @@
 package com.bibireden.playerex.components.experience
 
-import com.bibireden.data_attributes.endec.nbt.NbtDeserializer
-import com.bibireden.data_attributes.endec.nbt.NbtSerializer
 import com.bibireden.playerex.PlayerEX
-import io.wispforest.endec.Endec
-import io.wispforest.endec.impl.StructEndecBuilder
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.world.chunk.Chunk
 import kotlin.math.max

@@ -1,6 +1,7 @@
 package com.bibireden.playerex
 
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
+import com.bibireden.data_attributes.api.event.EntityAttributeModifiedEvents
 import com.bibireden.data_attributes.api.factory.DefaultAttributeFactory
 import com.bibireden.playerex.api.PlayerEXAPI
 import com.bibireden.playerex.api.attribute.DefaultAttributeImpl
@@ -14,14 +15,17 @@ import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.registerServerbound
 import com.bibireden.playerex.networking.types.UpdatePacketType
+import de.dafuqs.additionalentityattributes.AdditionalEntityAttributes
 import eu.pb4.placeholders.api.Placeholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents
+import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.MathHelper
 import org.slf4j.LoggerFactory
 
 object PlayerEX : ModInitializer {
@@ -35,11 +39,16 @@ object PlayerEX : ModInitializer {
 
 	fun id(path: String) = Identifier.of(MOD_ID, path)!!
 
+	private val gimmick = listOf(
+		"Let's do it right this time...",
+		"PlayerEX: Bringing leveling and attribute manipulation to your doorstep."
+	).random()
+
 	override fun onInitialize() {
 		NetworkingChannels.NOTIFICATIONS.registerClientboundDeferred(NetworkingPackets.Notify::class.java)
 
 		NetworkingChannels.MODIFY.registerServerbound(NetworkingPackets.Update::class) { (type, id, amount), ctx ->
-			EntityAttributeSupplier(id).get()?.let {
+			EntityAttributeSupplier(id).get().ifPresent {
 				when (type) {
 					UpdatePacketType.Skill -> PlayerEXComponents.PLAYER_DATA.get(ctx.player).skillUp(it, amount)
 					UpdatePacketType.Refund -> PlayerEXComponents.PLAYER_DATA.get(ctx.player).refund(it, amount)
@@ -74,5 +83,20 @@ object PlayerEX : ModInitializer {
 
 		DefaultAttributeFactory.registerEntityTypes(DefaultAttributeImpl.ENTITY_TYPES)
 		DefaultAttributeFactory.registerFunctions(DefaultAttributeImpl.FUNCTIONS)
+
+		EntityAttributeModifiedEvents.MODIFIED.register { attribute, entity, _, _, _ ->
+			if (entity?.world == null) return@register // no entity & no world, skip
+
+			if (!entity.world.isClient) {
+				if (attribute == EntityAttributes.GENERIC_MAX_HEALTH) {
+					entity.health = attribute.clamp(entity.health.toDouble()).toFloat()
+				}
+				else if (attribute == AdditionalEntityAttributes.LUNG_CAPACITY) {
+					entity.air = attribute.clamp(entity.air.toDouble()).toInt()
+				}
+			}
+		}
+
+		LOGGER.info(gimmick)
 	}
 }
