@@ -53,8 +53,8 @@ class AttributesMenu : MenuComponent(Sizing.fill(100), Sizing.fill(100), Algorit
                     val max = (descendant.attribute as IEntityAttribute).`data_attributes$max`()
                     val current = DataAttributesAPI.getValue(descendant.attribute, player).orElse(0.0)
                     when (descendant.type) {
-                        PlayerEXScreen.AttributeButtonComponentType.Add -> descendant.active(component.skillPoints >= result && (current + result) < max)
-                        PlayerEXScreen.AttributeButtonComponentType.Remove -> descendant.active(component.refundablePoints >= 0 && (current - result > 0))
+                        PlayerEXScreen.AttributeButtonComponentType.Add -> descendant.active(result > 0 && component.skillPoints >= result && (current + result) <= max)
+                        PlayerEXScreen.AttributeButtonComponentType.Remove -> descendant.active(result > 0 && component.refundablePoints > 0 && (current - result > 0))
                     }
                 }
             }
@@ -88,6 +88,9 @@ class AttributesMenu : MenuComponent(Sizing.fill(100), Sizing.fill(100), Algorit
         onInputFieldUpdated(player, component)
 
         onLevelUpdated.subscribe(::onLevelUpdate)
-        onAttributeUpdated.subscribe { _, _ -> onAttributeUpdate() }
+        onAttributeUpdated.subscribe { _, _ ->
+            onAttributeUpdate()
+            onInputFieldUpdated(player, component)
+        }
     }
 }
