@@ -18,7 +18,7 @@ import org.jetbrains.annotations.ApiStatus
  * and have the benefits of a unique instance that is attached to the primary mod.
  */
 @ApiStatus.OverrideOnly
-abstract class MenuComponent(horizontalSizing: Sizing, verticalSizing: Sizing, algorithm: Algorithm) : FlowLayout(horizontalSizing, verticalSizing, algorithm) {
+abstract class MenuComponent(horizontalSizing: Sizing = Sizing.fill(100), verticalSizing: Sizing = Sizing.fill(100), algorithm: Algorithm) : FlowLayout(horizontalSizing, verticalSizing, algorithm) {
     val onLevelUpdatedEvents = OnLevelUpdated.stream
     val onAttributeUpdatedEvents = OnAttributeUpdated.stream
 

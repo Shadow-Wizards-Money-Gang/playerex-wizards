@@ -10,11 +10,13 @@ import com.bibireden.playerex.networking.registerClientbound
 import com.bibireden.playerex.networking.types.NotificationType
 import com.bibireden.playerex.registry.AttributesMenuRegistry
 import com.bibireden.playerex.ui.PlayerEXScreen
-import com.bibireden.playerex.ui.menus.AttributesMenu
+import com.bibireden.playerex.ui.menus.PlayerEXAttributesMenu
+import com.bibireden.playerex.ui.menus.PlayerEXStatsMenu
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import net.minecraft.entity.player.PlayerEntity
@@ -37,9 +39,7 @@ object PlayerEXClient : ClientModInitializer {
 		}
 
 		EntityAttributeModifiedEvents.MODIFIED.register { attribute, entity, _, _, _ ->
-			if (entity is PlayerEntity && entity.world.isClient) {
-				if (entity != MinecraftClient.getInstance().player) return@register
-
+			if (entity is ClientPlayerEntity) {
 				val screen = MinecraftClient.getInstance().currentScreen
 				if (screen is PlayerEXScreen) {
 					if (attribute == PlayerEXAttributes.LEVEL) {
@@ -54,7 +54,8 @@ object PlayerEXClient : ClientModInitializer {
 			}
 		}
 
-		AttributesMenuRegistry.register(AttributesMenu::class.java)
+		AttributesMenuRegistry.register(PlayerEXAttributesMenu::class.java)
+		AttributesMenuRegistry.register(PlayerEXStatsMenu::class.java)
 
 		ClientTickEvents.END_CLIENT_TICK.register { client ->
 			if (PlayerEX.CONFIG.disableUI) return@register

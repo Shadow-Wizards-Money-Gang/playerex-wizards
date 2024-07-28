@@ -34,8 +34,12 @@
         {"text": "Current XP: ", "color": "white"},
         {"index": 2}
     ],
+
     "playerex.ui.nameplate.level": "<Lv. %s>",
 
+    "playerex.ui.main.categories.melee_combat": "⚔️ Melee",
+    "playerex.ui.main.categories.ranged_combat": "🏹 Ranged",
+    "playerex.ui.main.categories.defense_combat": "🛡️ Defense",
 
     "attribute.name.playerex.level": "Level",
     "attribute.name.playerex.constitution": "Constitution",

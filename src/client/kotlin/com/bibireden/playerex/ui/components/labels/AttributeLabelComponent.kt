@@ -19,12 +19,14 @@ private fun createTextFromAttribute(attribute: EntityAttribute, player: PlayerEn
     })
     .append("/${(attribute as IEntityAttribute).`data_attributes$max`().toInt()})")
 
-class AttributeLabelComponent(private val attribute: EntityAttribute, private val player: PlayerEntity) : LabelComponent(createTextFromAttribute(attribute, player)) {
+open class AttributeLabelComponent(private val attribute: EntityAttribute, private val player: PlayerEntity) : LabelComponent(Text.empty()) {
     init {
-        horizontalTextAlignment(HorizontalAlignment.CENTER)
-        verticalTextAlignment(VerticalAlignment.CENTER)
+        this.horizontalTextAlignment(HorizontalAlignment.CENTER)
+        this.verticalTextAlignment(VerticalAlignment.CENTER)
 
-        id("${attribute.id}:current_level")
+        this.id("${attribute.id}:current_level")
+
+        this.refresh()
     }
 
     fun refresh(): LabelComponent = text(createTextFromAttribute(attribute, player))

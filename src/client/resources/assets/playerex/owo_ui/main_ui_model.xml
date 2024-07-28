@@ -88,7 +88,7 @@
                             <children/>
 
                             <sizing><vertical method="fill">85</vertical><horizontal method="fill">100</horizontal></sizing>
-                            <positioning type="relative">0,50</positioning>
+                            <positioning type="relative">0,40</positioning>
 
                             <padding><all>10</all></padding>
                             <vertical-alignment>center</vertical-alignment>
