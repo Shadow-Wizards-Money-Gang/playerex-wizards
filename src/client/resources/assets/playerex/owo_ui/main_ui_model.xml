@@ -10,14 +10,17 @@
                         <!-- top-bar -->
                         <flow-layout direction="horizontal">
                             <children>
-                                <label>
-                                    <text translate="true">playerex.ui.main.title</text>
-                                    <vertical-text-alignment>center</vertical-text-alignment>
-                                    <sizing>
-                                        <horizontal method="fill">30</horizontal>
-                                    </sizing>
+                                <scroll direction="horizontal">
+                                    <label>
+                                        <text translate="true">playerex.ui.main.title</text>
+                                        <vertical-text-alignment>center</vertical-text-alignment>
+                                        <sizing><horizontal method="content">0</horizontal></sizing>
+                                    </label>
+
+                                    <scrollbar-thiccness>0</scrollbar-thiccness>
                                     <positioning type="relative">0,50</positioning>
-                                </label>
+                                    <sizing><horizontal method="fill">30</horizontal></sizing>
+                                </scroll>
 
                                 <!-- points available area-->
                                 <flow-layout direction="horizontal">

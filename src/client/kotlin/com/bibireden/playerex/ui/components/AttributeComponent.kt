@@ -30,9 +30,7 @@ class AttributeComponent(private val attribute: EntityAttribute, private val pla
     val label: AttributeLabelComponent
 
     fun refresh() {
-        // todo: allow data_attributes to have API funcs for obtaining this data.
-        //  from manager directly, e.g. (getFunctions() ...)
-        val entries = DataAttributesClient.MANAGER.data.functions[attribute.id]
+        val entries = DataAttributesAPI.clientManager.data.functions[attribute.id]
         if (!entries.isNullOrEmpty()) {
             label.tooltip(
                 Text.translatable("playerex.ui.main.modified_attributes").also { text ->

@@ -105,7 +105,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val result = player.level + amount
 
         this.uiAdapter.rootComponent.childById(ButtonComponent::class, "level:button")!!
-            .active(player.canLevelUp())
+            .active(player.experienceLevel >= PlayerEXUtil.getRequiredXpForLevel(player, result))
             .tooltip(Text.translatable("playerex.ui.level_button", PlayerEXUtil.getRequiredXpForLevel(player, result), amount, player.experienceLevel))
     }
 

@@ -5,6 +5,7 @@ import com.bibireden.playerex.ui.util.FormattingPredicates
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
+import io.wispforest.owo.ui.core.Insets
 import io.wispforest.owo.ui.core.Positioning
 import io.wispforest.owo.ui.core.Sizing
 import net.minecraft.entity.attribute.EntityAttribute
@@ -19,7 +20,7 @@ private fun transform(array: List<Pair<EntityAttributeSupplier, FormattingPredic
     return filtered
 }
 
-class AttributeListComponent(translationKey: String, private val player: PlayerEntity, private val gimmie: List<Pair<EntityAttributeSupplier, FormattingPredicates>>) : FlowLayout(Sizing.fill(45), Sizing.content(), Algorithm.VERTICAL) {
+class AttributeListComponent(translationKey: String, private val player: PlayerEntity, private val gimmie: List<Pair<EntityAttributeSupplier, FormattingPredicates>>) : FlowLayout(Sizing.fill(25), Sizing.content(), Algorithm.VERTICAL) {
     val entriesSection: FlowLayout
 
     init {
@@ -27,6 +28,7 @@ class AttributeListComponent(translationKey: String, private val player: PlayerE
             Components.label(Text.translatable(translationKey))
                 .horizontalSizing(Sizing.fill(100))
         )
+        child(Components.box(Sizing.fill(100), Sizing.fixed(2)))
         entriesSection = Containers.verticalFlow(Sizing.fill(100), Sizing.content())
             .apply {
                 gap(4)
@@ -38,6 +40,8 @@ class AttributeListComponent(translationKey: String, private val player: PlayerE
 
     fun refresh() {
         entriesSection.children().filterIsInstance<AttributeListEntryComponent>().forEach(::removeChild)
-        entriesSection.children(transform(gimmie).map { AttributeListEntryComponent(it.first, player, it.second) })
+        entriesSection.children(transform(gimmie).map {
+            Containers.horizontalScroll(Sizing.fill(100), Sizing.content(), AttributeListEntryComponent(it.first, player, it.second)).scrollbarThiccness(2)
+        })
     }
 }

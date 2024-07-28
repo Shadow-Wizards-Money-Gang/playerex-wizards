@@ -16,7 +16,6 @@ import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
 import com.bibireden.playerex.ui.util.FormattingPredicates
 import de.dafuqs.additionalentityattributes.AdditionalEntityAttributes
 import io.wispforest.owo.ui.component.Components
-import io.wispforest.owo.ui.component.LabelComponent
 import io.wispforest.owo.ui.component.TextBoxComponent
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
@@ -32,7 +31,44 @@ import org.jetbrains.annotations.ApiStatus
 // todo: cache buttons/certain UI elements
 
 @ApiStatus.Internal
-class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.VERTICAL) {
+class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
+    val MELEE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ATTACK_DAMAGE.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ATTACK_SPEED.id) to FormattingPredicates.Normal,
+        ModdedAttributes.ATTACK_RANGE to FormattingPredicates.Normal,
+        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRIT_DAMAGE.id) to FormattingPredicates.PercentageDiv,
+        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRIT_CHANCE.id) to FormattingPredicates.PercentageDiv
+    )
+
+    val RANGED_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_DAMAGE.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id) to FormattingPredicates.PercentageDiv,
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id) to FormattingPredicates.PercentageDiv,
+        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id) to FormattingPredicates.Percent,
+    )
+
+    val DEFENSE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ARMOR.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(AdditionalEntityAttributes.MAGIC_PROTECTION.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id) to FormattingPredicates.PercentageDiv,
+        EntityAttributeSupplier(PlayerEXAttributes.EVASION.id) to FormattingPredicates.PercentageDiv,
+    )
+
+    val VITALITY_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.HEALTH_REGENERATION.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(PlayerEXAttributes.HEAL_AMPLIFICATION.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(PlayerEXAttributes.LIFESTEAL.id) to FormattingPredicates.PercentageDiv,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_MOVEMENT_SPEED.id) to FormattingPredicates.Normal,
+        EntityAttributeSupplier(ModdedAttributes.REACH_DISTANCE.id) to FormattingPredicates.Normal,
+    )
+
+    val RESISTANCE_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.FIRE_RESISTANCE.id) to FormattingPredicates.PercentageMul,
+        EntityAttributeSupplier(PlayerEXAttributes.FREEZE_RESISTANCE.id) to FormattingPredicates.PercentageMul,
+        EntityAttributeSupplier(PlayerEXAttributes.LIGHTNING_RESISTANCE.id) to FormattingPredicates.PercentageMul,
+        EntityAttributeSupplier(PlayerEXAttributes.POISON_RESISTANCE.id) to FormattingPredicates.PercentageMul,
+    )
 
     private fun onLevelUpdate(level: Int) {}
 
@@ -46,6 +82,10 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.VERTICAL) {
                 return@forEachDescendant
             }
             if (component is AttributeLabelComponent) {
+                component.refresh()
+                return@forEachDescendant
+            }
+            if (component is AttributeListEntryComponent) {
                 component.refresh()
                 return@forEachDescendant
             }
@@ -89,11 +129,38 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.VERTICAL) {
                     )
                 })
                 child(Components.box(Sizing.fill(100), Sizing.fixed(2)))
-                verticalAlignment(VerticalAlignment.CENTER)
+                verticalAlignment(VerticalAlignment.TOP)
                 gap(5)
+                padding(Insets.right(5))
                 children(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS.mapNotNull(Registries.ATTRIBUTE::get).map { AttributeComponent(it, player, component) })
             }.id("attributes"))
         )
+        child(Containers.verticalScroll(
+            Sizing.content(),
+            Sizing.fill(100),
+            Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+                child(AttributeListComponent("playerex.ui.main.categories.vitality", player, VITALITY_STATS))
+                child(AttributeListComponent("playerex.ui.main.categories.resistance", player, RESISTANCE_STATS))
+                padding(Insets.right(5))
+                gap(8)
+            }
+        ))
+
+        child(
+            Containers.verticalScroll(
+                Sizing.content(),
+                Sizing.fill(100),
+                Containers.verticalFlow(Sizing.content(), Sizing.content()).apply {
+                    child(AttributeListComponent("playerex.ui.main.categories.melee_combat", player, MELEE_COMBAT_STATS))
+                    child(AttributeListComponent("playerex.ui.main.categories.ranged_combat", player, RANGED_COMBAT_STATS))
+                    child(AttributeListComponent("playerex.ui.main.categories.defense_combat", player, DEFENSE_COMBAT_STATS))
+                    padding(Insets.right(5))
+                    gap(10)
+                }.id("combat_stats")
+            )
+        )
+
+        gap(10)
 
         padding(Insets.both(8, 8))
 
