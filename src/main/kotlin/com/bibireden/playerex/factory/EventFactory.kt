@@ -2,10 +2,8 @@ package com.bibireden.playerex.factory
 
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.playerex.PlayerEX
-import com.bibireden.playerex.api.PlayerEXAPI
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.PlayerEXComponents
-import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.registry.DamageModificationRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
@@ -94,7 +92,7 @@ object EventFactory {
     {
         if (target !is LivingEntity) return amount;
 
-        val meleeCritOption = DataAttributesAPI.getValue(PlayerEXAttributes.MELEE_CRIT_DAMAGE, player);
+        val meleeCritOption = DataAttributesAPI.getValue(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE, player);
 
         if (meleeCritOption.isPresent)
         {
@@ -108,7 +106,7 @@ object EventFactory {
     {
         if (target !is LivingEntity) return original;
 
-        val critChanceOptional = DataAttributesAPI.getValue(PlayerEXAttributes.MELEE_CRIT_CHANCE, player);
+        val critChanceOptional = DataAttributesAPI.getValue(PlayerEXAttributes.MELEE_CRITICAL_CHANCE, player);
 
         if (critChanceOptional.isPresent)
         {

@@ -33,22 +33,17 @@ class AttributeButtonComponent(val attribute: EntityAttribute, private val playe
 ) {
     init {
         sizing(Sizing.fixed(12), Sizing.fixed(12))
+
         refresh()
     }
 
     fun refresh() {
        DataAttributesAPI.getValue(attribute, player).ifPresent { value ->
-           var active = true
            val max = (attribute as IEntityAttribute).`data_attributes$max`();
-           when (type) {
-               PlayerEXScreen.AttributeButtonComponentType.Add -> {
-                    active = component.skillPoints > 0 && max > value
-               }
-               PlayerEXScreen.AttributeButtonComponentType.Remove -> {
-                   active = component.refundablePoints > 0 && value > 0
-               }
-           }
-           this.active(active)
+           this.active(when (type) {
+               PlayerEXScreen.AttributeButtonComponentType.Add -> component.skillPoints > 0 && max > value
+               PlayerEXScreen.AttributeButtonComponentType.Remove -> component.refundablePoints > 0 && value > 0
+           })
        }
     }
 }

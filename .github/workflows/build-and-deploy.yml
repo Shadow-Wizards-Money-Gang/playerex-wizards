@@ -63,7 +63,7 @@ jobs:
           github-commitish: ${{ steps.commitish.outputs.commitish }}
 
           version: "${{ steps.outputs.mod_version }}"
-          changelog-file: CHANGELOG.md
+          changelog-file: CHANGELOG.md.md
 
           game-versions: "${{ steps.minecraft_version.outputs.minecraft_version }}"
           java: "${{ matrix.java }}"

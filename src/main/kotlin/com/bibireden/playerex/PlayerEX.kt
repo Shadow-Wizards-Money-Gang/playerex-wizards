@@ -81,8 +81,9 @@ object PlayerEX : ModInitializer {
 		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.SPEND_SOUND.id, PlayerEXSoundEvents.SPEND_SOUND)
 		Registry.register(Registries.SOUND_EVENT, PlayerEXSoundEvents.REFUND_SOUND.id, PlayerEXSoundEvents.REFUND_SOUND)
 
-		DefaultAttributeFactory.registerEntityTypes(DefaultAttributeImpl.ENTITY_TYPES)
+		DefaultAttributeFactory.registerOverrides(DefaultAttributeImpl.OVERRIDES)
 		DefaultAttributeFactory.registerFunctions(DefaultAttributeImpl.FUNCTIONS)
+		DefaultAttributeFactory.registerEntityTypes(DefaultAttributeImpl.ENTITY_TYPES)
 
 		EntityAttributeModifiedEvents.MODIFIED.register { attribute, entity, _, _, _ ->
 			if (entity?.world == null) return@register // no entity & no world, skip

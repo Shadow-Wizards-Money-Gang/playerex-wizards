@@ -39,10 +39,10 @@ object PlayerEXAttributes {
     val LIFESTEAL = register("lifesteal", 0.0, 0.0, 100.0);
 
     @JvmField
-    val MELEE_CRIT_DAMAGE = register("melee_crit_damage", 0.0, 0.0, 1.0);
+    val MELEE_CRITICAL_DAMAGE = register("melee_crit_damage", 0.0, 0.0, 1.0);
 
     @JvmField
-    val MELEE_CRIT_CHANCE = register("melee_crit_chance", 0.0, 0.0, 1.0);
+    val MELEE_CRITICAL_CHANCE = register("melee_crit_chance", 0.0, 0.0, 1.0);
 
     @JvmField
     val BREAKING_SPEED = register("breaking_speed", 0.0, 0.0, 100.0);

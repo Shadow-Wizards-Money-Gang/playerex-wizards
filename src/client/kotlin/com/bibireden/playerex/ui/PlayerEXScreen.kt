@@ -1,16 +1,13 @@
 package com.bibireden.playerex.ui
 
-import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.PlayerEXClient
-import com.bibireden.playerex.components.PlayerEXComponents
 import com.bibireden.playerex.components.player.IPlayerDataComponent
-import com.bibireden.playerex.ext.canLevelUp
 import com.bibireden.playerex.ext.data
 import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.types.UpdatePacketType
-import com.bibireden.playerex.registry.AttributesMenuRegistry
+import com.bibireden.playerex.registry.PlayerEXMenuRegistry
 import com.bibireden.playerex.ui.components.MenuComponent
 import com.bibireden.playerex.ui.components.MenuComponent.OnLevelUpdated
 import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
@@ -25,7 +22,6 @@ import io.wispforest.owo.ui.core.ParentComponent
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.util.EventSource
 import net.minecraft.entity.attribute.EntityAttribute
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.MathHelper
 import kotlin.reflect.KClass
@@ -132,7 +128,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
         val nextPage = rootComponent.childById(ButtonComponent::class, "next")!!
         val exit = rootComponent.childById(ButtonComponent::class, "exit")!!
 
-        AttributesMenuRegistry.get().forEach {
+        PlayerEXMenuRegistry.get().forEach {
             val instance = it.getDeclaredConstructor().newInstance()
             instance.build(player, this.uiAdapter, player.data)
             pages.add(instance)

@@ -62,15 +62,18 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
+	// in-house
+	modImplementation("maven.modrinth:data-attributes-directors-cut:${project.data_attributes_version}")
+	modImplementation include("maven.modrinth:opc-directors-cut:${project.opc_version}")
+
 	// Cardinal Components
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}")
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cardinal_components_version}")
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-level:${project.cardinal_components_version}")
 
-	modImplementation "maven.modrinth:projectile-damage-attribute:${project.projectile_damage_attribute_version}"
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
-	modImplementation include("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}")
+	modImplementation("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}")
 
 	modImplementation include("io.wispforest:endec:${project.endec_version}")
 	modImplementation include("io.wispforest.endec:gson:${project.endec_gson_version}")
@@ -86,12 +89,7 @@ dependencies {
 
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 
-	// in-house
-	modImplementation("maven.modrinth:data-attributes-directors-cut:${project.data_attributes_version}")
-	modImplementation include("maven.modrinth:opc-directors-cut:${project.opc_version}")
-
-	implementation 'net.objecthunter:exp4j:0.4.8'
-	include 'net.objecthunter:exp4j:0.4.8'
+	implementation include("net.objecthunter:exp4j:${project.exp4j_version}")
 }
 
 processResources {

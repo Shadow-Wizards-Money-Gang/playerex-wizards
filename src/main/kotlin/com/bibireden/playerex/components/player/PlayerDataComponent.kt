@@ -138,7 +138,7 @@ class PlayerDataComponent(
             else {
                 val retained = value * partition
                 if (!this.trySet(id, retained)) continue
-                kept[id] = value
+                kept[id] = retained
             }
         }
 

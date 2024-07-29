@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AttributesMenuRegistry {
+public final class PlayerEXMenuRegistry {
     @NotNull
     private static final List<Class<? extends MenuComponent>> ENTRIES = new ArrayList<>();
 

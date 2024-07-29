@@ -3,23 +3,90 @@ package com.bibireden.playerex.api.attribute
 import com.bibireden.data_attributes.api.attribute.StackingBehavior
 import com.bibireden.data_attributes.api.attribute.StackingFormula
 import com.bibireden.data_attributes.config.functions.AttributeFunction
-import com.bibireden.data_attributes.config.models.OverridesConfigModel
 import com.bibireden.data_attributes.config.models.OverridesConfigModel.AttributeOverride
 import com.bibireden.data_attributes.data.EntityTypeData
+import com.bibireden.playerex.compat.CompatUtils
 import com.bibireden.playerex.ext.id
 import de.dafuqs.additionalentityattributes.AdditionalEntityAttributes
 import net.fabric_extras.ranged_weapon.api.EntityAttributes_RangedWeapon
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.util.Identifier
-import net.projectile_damage.api.EntityAttributes_ProjectileDamage
 
 object DefaultAttributeImpl {
-    val OVERRIDES: Map<Identifier, AttributeOverride> = mapOf(
-        EntityAttributes.GENERIC_ARMOR.id to AttributeOverride(
-            max = 1024.0,
+    val OVERRIDES: Map<Identifier, AttributeOverride> = mutableMapOf(
+        PlayerEXAttributes.POISON_RESISTANCE.id to AttributeOverride(
+            smoothness = 1.0,
             formula = StackingFormula.Diminished
-        )
-    )
+        ),
+        EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        EntityAttributes.GENERIC_ATTACK_SPEED.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.WITHER_RESISTANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.FREEZE_RESISTANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.LIGHTNING_RESISTANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.HEALTH_REGENERATION.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.HEAL_AMPLIFICATION.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.FIRE_RESISTANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        EntityAttributes.GENERIC_LUCK.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+        PlayerEXAttributes.EVASION.id to AttributeOverride(
+            smoothness = 1.0,
+            formula = StackingFormula.Diminished
+        ),
+    ).apply {
+        if (CompatUtils.isModLoaded("spell_power")) {
+            put(ModdedAttributes.SPELL_HASTE.id, AttributeOverride(
+                smoothness = 1.0,
+                formula = StackingFormula.Diminished
+            ))
+            put(ModdedAttributes.SPELL_CRITICAL_CHANCE.id, AttributeOverride(
+                smoothness = 1.0,
+                formula = StackingFormula.Diminished
+            ))
+        }
+    }
+
     val FUNCTIONS: Map<Identifier, List<AttributeFunction>> = mapOf(
         PlayerEXAttributes.CONSTITUTION.id to listOf(
             AttributeFunction(EntityAttributes.GENERIC_MAX_HEALTH.id, StackingBehavior.Add, 0.5),
@@ -31,7 +98,7 @@ object DefaultAttributeImpl {
         PlayerEXAttributes.STRENGTH.id to listOf(
             AttributeFunction(EntityAttributes.GENERIC_ATTACK_DAMAGE.id, StackingBehavior.Multiply, 0.02),
             AttributeFunction(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id, StackingBehavior.Add, 0.1),
-            AttributeFunction(PlayerEXAttributes.MELEE_CRIT_DAMAGE.id, StackingBehavior.Multiply, 0.05),
+            AttributeFunction(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id, StackingBehavior.Multiply, 0.05),
             AttributeFunction(PlayerEXAttributes.BREAKING_SPEED.id, StackingBehavior.Add, 0.01),
         ),
         PlayerEXAttributes.DEXTERITY.id to listOf(
@@ -39,15 +106,18 @@ object DefaultAttributeImpl {
             AttributeFunction(PlayerEXAttributes.RANGED_DAMAGE.id, StackingBehavior.Multiply, 0.02),
             AttributeFunction(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id, StackingBehavior.Multiply, 0.05),
             AttributeFunction(EntityAttributes_RangedWeapon.HASTE.id, StackingBehavior.Multiply, 0.02),
-            AttributeFunction(EntityAttributes_ProjectileDamage.GENERIC_PROJECTILE_DAMAGE.id, StackingBehavior.Multiply, 0.1),
+            AttributeFunction(EntityAttributes_RangedWeapon.DAMAGE.id, StackingBehavior.Multiply, 0.1),
         ),
-        PlayerEXAttributes.INTELLIGENCE.id to listOf(
-            // todo: spell haste? (see wizards/spell power)
+        PlayerEXAttributes.INTELLIGENCE.id to mutableListOf(
             AttributeFunction(AdditionalEntityAttributes.DROPPED_EXPERIENCE.id, StackingBehavior.Multiply, 0.01),
             AttributeFunction(PlayerEXAttributes.WITHER_RESISTANCE.id, StackingBehavior.Add, 0.1),
             // todo: max mana? (see archon)
             // todo: enchanting power? (see zenith)
-        ),
+        ).apply {
+            if (CompatUtils.isModLoaded("spell_power")) {
+                add(AttributeFunction(ModdedAttributes.SPELL_HASTE.id, StackingBehavior.Add, 0.002))
+            }
+        },
         PlayerEXAttributes.FOCUS.id to listOf(
             AttributeFunction(PlayerEXAttributes.HEALTH_REGENERATION.id, StackingBehavior.Add, 0.01),
             AttributeFunction(PlayerEXAttributes.HEAL_AMPLIFICATION.id, StackingBehavior.Multiply, 0.05),
@@ -55,14 +125,17 @@ object DefaultAttributeImpl {
             AttributeFunction(PlayerEXAttributes.LIGHTNING_RESISTANCE.id, StackingBehavior.Add, 0.1),
             AttributeFunction(PlayerEXAttributes.FIRE_RESISTANCE.id, StackingBehavior.Add, 0.1),
         ),
-        PlayerEXAttributes.LUCKINESS.id to listOf(
-            AttributeFunction(PlayerEXAttributes.MELEE_CRIT_CHANCE.id, StackingBehavior.Multiply, 0.02),
+        PlayerEXAttributes.LUCKINESS.id to mutableListOf(
+            AttributeFunction(PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id, StackingBehavior.Multiply, 0.02),
             AttributeFunction(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id, StackingBehavior.Multiply, 0.02),
-            // todo: spell crit chance (see wizards/spell power)
             // loot table chance?? wh-
             AttributeFunction(EntityAttributes.GENERIC_LUCK.id, StackingBehavior.Add, 0.05),
             AttributeFunction(PlayerEXAttributes.EVASION.id, StackingBehavior.Add, 0.01),
-        ),
+        ).apply {
+            if (CompatUtils.isModLoaded("spell_power")) {
+                add(AttributeFunction(ModdedAttributes.SPELL_CRITICAL_CHANCE.id, StackingBehavior.Add, 0.02))
+            }
+        },
     )
     val ENTITY_TYPES: Map<Identifier, EntityTypeData> = mapOf(
         Identifier.of("minecraft", "player")!! to EntityTypeData(mapOf(
@@ -79,8 +152,8 @@ object DefaultAttributeImpl {
             PlayerEXAttributes.HEALTH_REGENERATION.id to 0.0,
             PlayerEXAttributes.HEAL_AMPLIFICATION.id to 0.0,
             PlayerEXAttributes.HEAL_AMPLIFICATION.id to 0.0,
-            PlayerEXAttributes.MELEE_CRIT_DAMAGE.id to 0.0,
-            PlayerEXAttributes.MELEE_CRIT_CHANCE.id to 0.0,
+            PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id to 0.0,
+            PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id to 0.0,
             PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id to 0.0,
             PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id to 0.0,
             PlayerEXAttributes.RANGED_DAMAGE.id to 0.0,

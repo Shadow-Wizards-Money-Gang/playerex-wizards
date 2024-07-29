@@ -8,7 +8,7 @@ import net.minecraft.client.network.ClientPlayerEntity
 import org.jetbrains.annotations.ApiStatus
 
 @ApiStatus.Internal
-class PlayerEXStatsMenu : MenuComponent(algorithm = Algorithm.VERTICAL) {
+class ConceptMenu : MenuComponent(algorithm = Algorithm.VERTICAL) {
     override fun build(player: ClientPlayerEntity, adapter: OwoUIAdapter<FlowLayout>, component: IPlayerDataComponent) {
     }
 }

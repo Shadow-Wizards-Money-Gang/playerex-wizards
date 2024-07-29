@@ -51,7 +51,6 @@ class AttributeComponent(private val attribute: EntityAttribute, private val pla
                             append(")")
                             val decLength = function.value.toString().substringAfter('.').length
                             append(Text.literal(" (%.${decLength}f)\n".format(DataAttributesAPI.getValue(childAttribute, player).orElse(0.0))).formatted(Formatting.GRAY))
-                            formatted(Formatting.ITALIC)
                         }
                     }
                 }

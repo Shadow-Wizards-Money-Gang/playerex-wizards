@@ -37,9 +37,9 @@
 
     "playerex.ui.nameplate.level": "<Lv. %s>",
 
-    "playerex.ui.main.categories.melee_combat": "⚔️ MELEE",
+    "playerex.ui.main.categories.melee_combat": "⚔ MELEE",
     "playerex.ui.main.categories.ranged_combat": "🏹 RANGED",
-    "playerex.ui.main.categories.defense_combat": "🛡️ DEFENSE",
+    "playerex.ui.main.categories.defense_combat": "🛡 DEFENSE",
     "playerex.ui.main.categories.vitality": "💖 VITALITY",
     "playerex.ui.main.categories.resistance": "🩹 RESISTANCE",
 
@@ -163,7 +163,7 @@
     "text.config.playerex-config.section.server_options": "Server Options",
 
     "text.config.playerex-config.option.tooltip": "Tooltip",
-    "text.config.playerex-config.enum.tooltip.default": "Tooltip",
+    "text.config.playerex-config.enum.tooltip.default": "Default",
     "text.config.playerex-config.enum.tooltip.playerex": [
         {"text": "PlayerEX", "color": "#FF4646"}
     ],

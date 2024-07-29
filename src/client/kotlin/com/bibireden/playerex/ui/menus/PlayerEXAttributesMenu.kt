@@ -3,7 +3,6 @@ package com.bibireden.playerex.ui.menus
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
 import com.bibireden.data_attributes.api.attribute.IEntityAttribute
-import com.bibireden.playerex.api.attribute.ModdedAttributes
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.ext.id
@@ -32,42 +31,40 @@ import org.jetbrains.annotations.ApiStatus
 
 @ApiStatus.Internal
 class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
-    val MELEE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
-        EntityAttributeSupplier(EntityAttributes.GENERIC_ATTACK_DAMAGE.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(EntityAttributes.GENERIC_ATTACK_SPEED.id) to FormattingPredicates.Normal,
-        ModdedAttributes.ATTACK_RANGE to FormattingPredicates.Normal,
-        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRIT_DAMAGE.id) to FormattingPredicates.PercentageDiv,
-        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRIT_CHANCE.id) to FormattingPredicates.PercentageDiv
+    private val MELEE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ATTACK_DAMAGE.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ATTACK_SPEED.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
+        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id) to FormattingPredicates.PERCENTAGE_DIVIDE
     )
 
-    val RANGED_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
-        EntityAttributeSupplier(PlayerEXAttributes.RANGED_DAMAGE.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id) to FormattingPredicates.PercentageDiv,
-        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id) to FormattingPredicates.PercentageDiv,
-        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id) to FormattingPredicates.Percent,
+    private val RANGED_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_DAMAGE.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
+        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id) to FormattingPredicates.fromBaseValue(EntityAttributes_RangedWeapon.HASTE.attribute),
     )
 
-    val DEFENSE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
-        EntityAttributeSupplier(EntityAttributes.GENERIC_ARMOR.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(AdditionalEntityAttributes.MAGIC_PROTECTION.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id) to FormattingPredicates.PercentageDiv,
-        EntityAttributeSupplier(PlayerEXAttributes.EVASION.id) to FormattingPredicates.PercentageDiv,
+    private val DEFENSE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ARMOR.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(AdditionalEntityAttributes.MAGIC_PROTECTION.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
+        EntityAttributeSupplier(PlayerEXAttributes.EVASION.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
     )
 
-    val VITALITY_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
-        EntityAttributeSupplier(PlayerEXAttributes.HEALTH_REGENERATION.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(PlayerEXAttributes.HEAL_AMPLIFICATION.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(PlayerEXAttributes.LIFESTEAL.id) to FormattingPredicates.PercentageDiv,
-        EntityAttributeSupplier(EntityAttributes.GENERIC_MOVEMENT_SPEED.id) to FormattingPredicates.Normal,
-        EntityAttributeSupplier(ModdedAttributes.REACH_DISTANCE.id) to FormattingPredicates.Normal,
+    private val VITALITY_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.HEALTH_REGENERATION.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(PlayerEXAttributes.HEAL_AMPLIFICATION.id) to FormattingPredicates.NORMAL,
+        EntityAttributeSupplier(PlayerEXAttributes.LIFESTEAL.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
+        EntityAttributeSupplier(EntityAttributes.GENERIC_MOVEMENT_SPEED.id) to FormattingPredicates.NORMAL,
     )
 
-    val RESISTANCE_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicates>> = listOf(
-        EntityAttributeSupplier(PlayerEXAttributes.FIRE_RESISTANCE.id) to FormattingPredicates.PercentageMul,
-        EntityAttributeSupplier(PlayerEXAttributes.FREEZE_RESISTANCE.id) to FormattingPredicates.PercentageMul,
-        EntityAttributeSupplier(PlayerEXAttributes.LIGHTNING_RESISTANCE.id) to FormattingPredicates.PercentageMul,
-        EntityAttributeSupplier(PlayerEXAttributes.POISON_RESISTANCE.id) to FormattingPredicates.PercentageMul,
+    private val RESISTANCE_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.FIRE_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
+        EntityAttributeSupplier(PlayerEXAttributes.FREEZE_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
+        EntityAttributeSupplier(PlayerEXAttributes.LIGHTNING_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
+        EntityAttributeSupplier(PlayerEXAttributes.POISON_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
     )
 
     private fun onLevelUpdate(level: Int) {}
@@ -111,7 +108,7 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
     override fun build(player: ClientPlayerEntity, adapter: OwoUIAdapter<FlowLayout>, component: IPlayerDataComponent) {
         child(Containers.verticalScroll(
-            Sizing.fill(35),
+            Sizing.fill(45),
             Sizing.fill(100),
             Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
                 child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content(2)).apply {

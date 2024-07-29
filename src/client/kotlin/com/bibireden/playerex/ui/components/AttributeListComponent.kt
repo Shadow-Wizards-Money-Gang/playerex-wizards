@@ -12,15 +12,15 @@ import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 
-private fun transform(array: List<Pair<EntityAttributeSupplier, FormattingPredicates>>): List<Pair<EntityAttribute, FormattingPredicate>> {
+private fun transform(array: List<Pair<EntityAttributeSupplier, FormattingPredicate>>): List<Pair<EntityAttribute, FormattingPredicate>> {
     val filtered = mutableListOf<Pair<EntityAttribute, FormattingPredicate>>()
     for ((attribute, pred) in array) {
-        if (attribute.get().isPresent) filtered.add(Pair(attribute.get().get(), pred.predicate))
+        if (attribute.get().isPresent) filtered.add(Pair(attribute.get().get(), pred))
     }
     return filtered
 }
 
-class AttributeListComponent(translationKey: String, private val player: PlayerEntity, private val gimmie: List<Pair<EntityAttributeSupplier, FormattingPredicates>>) : FlowLayout(Sizing.fill(25), Sizing.content(), Algorithm.VERTICAL) {
+class AttributeListComponent(translationKey: String, private val player: PlayerEntity, private val gimmie: List<Pair<EntityAttributeSupplier, FormattingPredicate>>) : FlowLayout(Sizing.fill(25), Sizing.content(), Algorithm.VERTICAL) {
     val entriesSection: FlowLayout
 
     init {

@@ -9,7 +9,6 @@ import io.wispforest.owo.ui.core.VerticalAlignment
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 typealias FormattingPredicate = (Double) -> String
 

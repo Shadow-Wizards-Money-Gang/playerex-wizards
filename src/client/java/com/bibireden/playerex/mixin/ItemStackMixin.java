@@ -45,7 +45,7 @@ abstract class ItemStackMixin {
 
         if (modifier != null) value -= modifier.getValue();
 
-        return PlayerEX.CONFIG.getTooltip() == PlayerEXConfigModel.Tooltip.PlayerEX ? valSubBase : value;
+        return PlayerEX.CONFIG.getTooltip() == PlayerEXConfigModel.Tooltip.Vanilla ? valSubBase : value;
     }
 
     @Unique
@@ -66,12 +66,12 @@ abstract class ItemStackMixin {
 
     @ModifyVariable(method = "getTooltip", at = @At(value = "STORE", ordinal = 1), ordinal = 0)
     private boolean playerex$flagAttackDamage(boolean original) {
-        return PlayerEX.CONFIG.getTooltip() != PlayerEXConfigModel.Tooltip.PlayerEX && original;
+        return PlayerEX.CONFIG.getTooltip() != PlayerEXConfigModel.Tooltip.Vanilla && original;
     }
 
     @ModifyVariable(method = "getTooltip", at = @At(value = "STORE", ordinal = 2), ordinal = 0)
     private boolean playerex$flagAttackSpeed(boolean original) {
-        return PlayerEX.CONFIG.getTooltip() != PlayerEXConfigModel.Tooltip.PlayerEX && original;
+        return PlayerEX.CONFIG.getTooltip() != PlayerEXConfigModel.Tooltip.Vanilla && original;
     }
 
     @ModifyVariable(method = "getTooltip", at = @At(value = "STORE", ordinal = 1), ordinal = 1)

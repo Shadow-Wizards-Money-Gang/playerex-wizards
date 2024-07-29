@@ -13,7 +13,7 @@ class PlayerEXConfigModel {
 
     @Sync(Option.SyncMode.NONE)
     @JvmField
-    var tooltip: Tooltip = Tooltip.PlayerEX
+    var tooltip: Tooltip = Tooltip.Vanilla
 
     @Sync(Option.SyncMode.NONE)
     @JvmField

@@ -7,12 +7,14 @@ import io.wispforest.owo.ui.core.OwoUIAdapter
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.util.EventSource
 import io.wispforest.owo.util.EventStream
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.attribute.EntityAttribute
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * A component meant to be used in the **PlayerEX** screen.
+ * A component meant to be used for the **PlayerEX** screen.
  *
  * This allows for other mods to create their own custom logic,
  * and have the benefits of a unique instance that is attached to the primary mod.

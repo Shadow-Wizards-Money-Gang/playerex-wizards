@@ -8,10 +8,9 @@ import com.bibireden.playerex.networking.NetworkingChannels
 import com.bibireden.playerex.networking.NetworkingPackets
 import com.bibireden.playerex.networking.registerClientbound
 import com.bibireden.playerex.networking.types.NotificationType
-import com.bibireden.playerex.registry.AttributesMenuRegistry
+import com.bibireden.playerex.registry.PlayerEXMenuRegistry
 import com.bibireden.playerex.ui.PlayerEXScreen
 import com.bibireden.playerex.ui.menus.PlayerEXAttributesMenu
-import com.bibireden.playerex.ui.menus.PlayerEXStatsMenu
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -19,7 +18,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundCategory
 import org.lwjgl.glfw.GLFW
 
@@ -54,8 +52,7 @@ object PlayerEXClient : ClientModInitializer {
 			}
 		}
 
-		AttributesMenuRegistry.register(PlayerEXAttributesMenu::class.java)
-		AttributesMenuRegistry.register(PlayerEXStatsMenu::class.java)
+		PlayerEXMenuRegistry.register(PlayerEXAttributesMenu::class.java)
 
 		ClientTickEvents.END_CLIENT_TICK.register { client ->
 			if (PlayerEX.CONFIG.disableUI) return@register
