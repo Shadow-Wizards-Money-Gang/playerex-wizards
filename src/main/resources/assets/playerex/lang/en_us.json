@@ -159,6 +159,7 @@
     ],
     "playerex.command.refund_attribute_unskilled": "%s has not been skilled for player %s!",
 
+    "text.config.playerex-config.title": "PlayerEX Config",
     "text.config.playerex-config.section.client_options": "Client Options",
     "text.config.playerex-config.section.server_options": "Server Options",
 

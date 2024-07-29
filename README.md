@@ -15,7 +15,11 @@
 
 ### Preamble
 
-PlayerEX: Directors Cut is port of **[PlayerEx](https://www.curseforge.com/minecraft/mc-mods/playerex)**, a mod built using Fabric that adds RPG themed attributes to the game and the player. It is available to download from [Curseforge](https://curseforge.com/minecraft/mc-mods/playerex-directors-cut) and [Modrinth](https://modrinth.com/mod/playerex-directors-cut).
+PlayerEX:
+Directors Cut is an entire rewrite of **[PlayerEx](https://www.curseforge.com/minecraft/mc-mods/playerex)**
+(1.20.1+, though a ported version is available) and
+a mod built using Fabric that adds RPG themed attributes to the game and the player.
+It is available to download from [Curseforge](https://curseforge.com/minecraft/mc-mods/playerex-directors-cut) and [Modrinth](https://modrinth.com/mod/playerex-directors-cut).
 
 Find the original mod [here!](https://modrinth.com/mod/playerex)
 
@@ -23,7 +27,7 @@ Find the original mod [here!](https://modrinth.com/mod/playerex)
 
 In addition to attributes powered by [Data Attributes: Directors Cut](https://www.curseforge.com/minecraft/mc-mods/data-attributes-directors-cut), PlayerEX: Directors Cut adds a levelling system and skill points to spend, enabled through a nonintrusive vanilla-styled gui accessible from the inventory or by hotkey. For further documentation, as well as how to use the PlayerEX:Directors Cut API in your own project, please see the [wiki](https://github.com/CleverNucleus/PlayerEx/wiki).
 
-### Contributors
+### Contributors (Former)
  - [gyular](https://github.com/gyular) - Korean translation.
  - [Hertz](https://github.com/elhertz) - Spanish translation.
  - [MrTYZzik](https://github.com/MrTYZzik) - Russian translation.

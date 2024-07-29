@@ -28,12 +28,6 @@
 				"adapter": "kotlin"
 			}
 		],
-		"fabric-datagen": [
-			{
-				"value": "com.bibireden.playerex.PlayerEXDataGenerator",
-				"adapter": "kotlin"
-			}
-		],
 		"cardinal-components": [
 			"com.bibireden.playerex.components.PlayerEXComponents"
 		]
