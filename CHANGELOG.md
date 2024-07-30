@@ -1,5 +1,4 @@
 ## Fixes ⚒️
-- Most if not all values should display properly now, there were incorrect calculations.
-- Applied the proper ranged damage to the screen and removed a useless playerex specific ranged attribute.
-- Updated AdditionalEntityAttributes
-- Resolved values to be what was intended. To use this, delete the previous (data-attributes) config folder.
+- Resolved spell power attribute addition to the proper percentage.
+- Fixed some overlooked dependency issues with mc-publish.
+- To use this, delete the previous (data-attributes) config folder (or change spell power based attribute addition in the functions from 0.0# to #.0)

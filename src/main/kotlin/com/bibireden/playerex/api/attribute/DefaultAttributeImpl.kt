@@ -109,7 +109,7 @@ object DefaultAttributeImpl {
             // todo: max mana? (see archon)
         ).apply {
             if (CompatUtils.isModLoaded("spell_power")) {
-                add(AttributeFunction(ModdedAttributes.SPELL_HASTE.id, StackingBehavior.Add, 0.002))
+                add(AttributeFunction(ModdedAttributes.SPELL_HASTE.id, StackingBehavior.Add, 2.0))
             }
         },
         PlayerEXAttributes.FOCUS.id to listOf(
@@ -127,7 +127,7 @@ object DefaultAttributeImpl {
             AttributeFunction(PlayerEXAttributes.EVASION.id, StackingBehavior.Add, 0.01),
         ).apply {
             if (CompatUtils.isModLoaded("spell_power")) {
-                add(AttributeFunction(ModdedAttributes.SPELL_CRITICAL_CHANCE.id, StackingBehavior.Add, 0.02))
+                add(AttributeFunction(ModdedAttributes.SPELL_CRITICAL_CHANCE.id, StackingBehavior.Add, 2.0))
             }
         },
     )
