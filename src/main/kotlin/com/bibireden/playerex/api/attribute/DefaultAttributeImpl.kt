@@ -89,11 +89,11 @@ object DefaultAttributeImpl {
             AttributeFunction(EntityAttributes.GENERIC_ARMOR.id, StackingBehavior.Add, 0.25),
             AttributeFunction(AdditionalEntityAttributes.MAGIC_PROTECTION.id, StackingBehavior.Add, 0.25),
             AttributeFunction(AdditionalEntityAttributes.LUNG_CAPACITY.id, StackingBehavior.Add, 0.01),
-            AttributeFunction(PlayerEXAttributes.POISON_RESISTANCE.id, StackingBehavior.Add, 0.1),
+            AttributeFunction(PlayerEXAttributes.POISON_RESISTANCE.id, StackingBehavior.Add, 0.01),
         ),
         PlayerEXAttributes.STRENGTH.id to listOf(
             AttributeFunction(EntityAttributes.GENERIC_ATTACK_DAMAGE.id, StackingBehavior.Multiply, 0.02),
-            AttributeFunction(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id, StackingBehavior.Add, 0.1),
+            AttributeFunction(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.id, StackingBehavior.Add, 0.01),
             AttributeFunction(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id, StackingBehavior.Add, 0.005),
             AttributeFunction(PlayerEXAttributes.BREAKING_SPEED.id, StackingBehavior.Add, 0.01),
         ),
@@ -105,7 +105,7 @@ object DefaultAttributeImpl {
         ),
         PlayerEXAttributes.INTELLIGENCE.id to mutableListOf(
             AttributeFunction(AdditionalEntityAttributes.DROPPED_EXPERIENCE.id, StackingBehavior.Multiply, 0.01),
-            AttributeFunction(PlayerEXAttributes.WITHER_RESISTANCE.id, StackingBehavior.Add, 0.1),
+            AttributeFunction(PlayerEXAttributes.WITHER_RESISTANCE.id, StackingBehavior.Add, 0.01),
             // todo: max mana? (see archon)
         ).apply {
             if (CompatUtils.isModLoaded("spell_power")) {
@@ -115,9 +115,9 @@ object DefaultAttributeImpl {
         PlayerEXAttributes.FOCUS.id to listOf(
             AttributeFunction(PlayerEXAttributes.HEALTH_REGENERATION.id, StackingBehavior.Add, 0.01),
             AttributeFunction(PlayerEXAttributes.HEAL_AMPLIFICATION.id, StackingBehavior.Add, 0.05),
-            AttributeFunction(PlayerEXAttributes.FREEZE_RESISTANCE.id, StackingBehavior.Add, 0.1),
-            AttributeFunction(PlayerEXAttributes.LIGHTNING_RESISTANCE.id, StackingBehavior.Add, 0.1),
-            AttributeFunction(PlayerEXAttributes.FIRE_RESISTANCE.id, StackingBehavior.Add, 0.1),
+            AttributeFunction(PlayerEXAttributes.FREEZE_RESISTANCE.id, StackingBehavior.Add, 0.01),
+            AttributeFunction(PlayerEXAttributes.LIGHTNING_RESISTANCE.id, StackingBehavior.Add, 0.01),
+            AttributeFunction(PlayerEXAttributes.FIRE_RESISTANCE.id, StackingBehavior.Add, 0.01),
         ),
         PlayerEXAttributes.LUCKINESS.id to mutableListOf(
             AttributeFunction(PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id, StackingBehavior.Add, 0.02),
