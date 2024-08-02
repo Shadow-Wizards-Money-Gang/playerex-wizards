@@ -15,6 +15,7 @@ object PlayerEXAPI {
      * @param function  Using the incoming damage conditions, modifies the incoming
      *                  damage before it actually damages.
      */
+    @JvmStatic
     fun registerDamageModification(predicate: DamagePredicate, function: DamageFunction) {
         DamageModificationRegistry.register(predicate, function)
     }
@@ -26,18 +27,10 @@ object PlayerEXAPI {
      *
      * @param condition
      */
+    @JvmStatic
     fun registerRefundCondition(condition: RefundCondition) {
         RefundConditionRegistry.register(condition)
     }
-
-//    /**
-//     * Registers an Attribute Menu. These are displayed in PlayerEX's attributes screen.
-//     *
-//     * @param screen
-//     */
-//    fun registerAttributeMenu(menu: AttributesMenu) {
-//        AttributesMenuRegistry.register(menu)
-//    }
 
     /**
      * @return Returns all the registered refund conditions. Note that while this is
@@ -45,6 +38,7 @@ object PlayerEXAPI {
      *         you should avoid modification and treat as read-only!
      * @since 3.5.0
      */
+    @JvmStatic
     val refundConditions: List<RefundCondition>
         get() = RefundConditionRegistry.get()
 }

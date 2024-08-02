@@ -20,14 +20,11 @@ import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.*
 import net.fabric_extras.ranged_weapon.api.EntityAttributes_RangedWeapon
-import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.network.chat.Component
 import org.jetbrains.annotations.ApiStatus
-
-// todo: cache buttons/certain UI elements
 
 @ApiStatus.Internal
 class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
@@ -41,7 +38,7 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
     private val RANGED_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
         EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
         EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id) to FormattingPredicates.fromBaseValue(EntityAttributes_RangedWeapon.HASTE.attribute),
+        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id) to FormattingPredicates.fromBaseValue(EntityAttributes_RangedWeapon.HASTE.attribute, true),
         EntityAttributeSupplier(EntityAttributes_RangedWeapon.DAMAGE.id) to FormattingPredicates.NORMAL,
     )
 
@@ -73,18 +70,11 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
     private fun onAttributeUpdate() {
         // refresh all attribute labels
         this.forEachDescendant { component ->
-            // todo: use derived interface to check instance
-            if (component is AttributeComponent) {
-                component.refresh()
-                return@forEachDescendant
-            }
-            if (component is AttributeLabelComponent) {
-                component.refresh()
-                return@forEachDescendant
-            }
-            if (component is AttributeListEntryComponent) {
-                component.refresh()
-                return@forEachDescendant
+            // a bit more tolerable
+            when (component) {
+                is AttributeComponent -> component.refresh()
+                is AttributeLabelComponent -> component.refresh()
+                is AttributeListEntryComponent -> component.refresh()
             }
         }
     }
@@ -106,7 +96,10 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
     }
 
-    override fun build(player: LocalPlayer, adapter: OwoUIAdapter<FlowLayout>, component: IPlayerDataComponent) {
+    override fun build(rootComponent: FlowLayout) {
+        val player = client?.player ?: return
+        val component = playerComponent ?: return
+
         child(Containers.verticalScroll(
             Sizing.fill(45),
             Sizing.fill(100),
