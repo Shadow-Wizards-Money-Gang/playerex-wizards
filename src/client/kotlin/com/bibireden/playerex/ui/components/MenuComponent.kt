@@ -36,7 +36,7 @@ abstract class MenuComponent(horizontalSizing: Sizing = Sizing.fill(100), vertic
     }
 
     /** Where ui-based logic should occur at, built off of the root of the screen's provided content area. */
-    abstract fun build(rootComponent: FlowLayout)
+    abstract fun build(screenRoot: FlowLayout)
 
     fun interface OnLevelUpdated {
         fun onLevelUpdated(level: Int)

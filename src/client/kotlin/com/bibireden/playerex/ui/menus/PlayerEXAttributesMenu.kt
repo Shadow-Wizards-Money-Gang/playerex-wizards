@@ -96,7 +96,7 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
     }
 
-    override fun build(rootComponent: FlowLayout) {
+    override fun build(screenRoot: FlowLayout) {
         val player = client?.player ?: return
         val component = playerComponent ?: return
 

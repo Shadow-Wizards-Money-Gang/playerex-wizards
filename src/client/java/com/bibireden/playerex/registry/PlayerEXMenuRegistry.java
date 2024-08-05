@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public final class PlayerEXMenuRegistry {
     @NotNull
-    private static final List<Pair<ResourceLocation, Class<? extends MenuComponent>>> ENTRIES = new ArrayList<>();
+    private static final ArrayList<Pair<ResourceLocation, Class<? extends MenuComponent>>> ENTRIES = new ArrayList<>();
 
     @NotNull
     private static final HashMap<String, Integer> PRIORITY_ORDER = new HashMap<>();
@@ -29,19 +29,12 @@ public final class PlayerEXMenuRegistry {
      * which will be applied to the {@link PlayerEXScreen} as a page.
      */
     public static void register(ResourceLocation id, @NotNull Class<? extends MenuComponent> menu) {
-        Integer position = PRIORITY_ORDER.get(id.getNamespace());
-        if (position != null) {
-            for (int i = 0; i < ENTRIES.size(); i++) {
-                ResourceLocation entryId = ENTRIES.get(i).getFirst();
-                if (PRIORITY_ORDER.get(entryId.getNamespace()) >= position) {
-                    position = i + 1;
-                }
-            }
-            ENTRIES.add(position, new Pair<>(id, menu));
-        }
-        else {
-            ENTRIES.add(new Pair<>(id, menu));
-        }
+        ENTRIES.add(new Pair<>(id, menu));
+        ENTRIES.sort((a, b) -> {
+            var order = PRIORITY_ORDER.getOrDefault(a.getFirst().getNamespace(), Integer.MAX_VALUE);
+            var order2 = PRIORITY_ORDER.getOrDefault(b.getFirst().getNamespace(), Integer.MAX_VALUE);
+            return order.compareTo(order2);
+        });
     }
 
     @NotNull
