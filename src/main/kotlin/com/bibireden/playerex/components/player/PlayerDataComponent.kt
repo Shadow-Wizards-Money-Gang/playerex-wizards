@@ -81,7 +81,7 @@ class PlayerDataComponent(
     private fun trySet(key: ResourceLocation, value: Double): Boolean {
         val (instance, isPlayerEXModifierPresent) = this.getInstance(key) ?: return false
         if (isPlayerEXModifierPresent) {
-            (instance as IEntityAttributeInstance).updateModifier(PlayerEXModifiers.UUID, value)
+            instance.`data_attributes$updateModifier`(PlayerEXModifiers.UUID, value)
         }
         else {
             instance.addPermanentModifier(AttributeModifier(PlayerEXModifiers.UUID, "PlayerEX Attribute", value, AttributeModifier.Operation.ADDITION))

@@ -1,8 +1,10 @@
 package com.bibireden.playerex.factory
 
 import com.bibireden.opc.api.OfflinePlayerCacheAPI
+import com.bibireden.opc.api.ext.getEntry
 import com.bibireden.playerex.PlayerEX
 import com.bibireden.playerex.api.PlayerEXCachedKeys
+import com.bibireden.playerex.api.PlayerEXCachedKeys.Level
 import com.bibireden.playerex.ext.level
 import eu.pb4.placeholders.api.PlaceholderHandler
 import eu.pb4.placeholders.api.PlaceholderResult
@@ -24,7 +26,7 @@ object PlaceholderFactory {
         var i = 0
 
         for (name: String in namesIn) {
-            cache.getEntry(PlayerEXCachedKeys.Level::class.java, name).ifPresent {
+            cache.getEntry<Level>(name).ifPresent {
                 names[i] = Pair(name, it.level)
                 i++
             }

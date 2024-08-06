@@ -1,4 +1,4 @@
 ## Changes 🌽
-- Fixed out-of-bounds exception when registering a menu.
-- Renamed `rootComponent` in `MenuComponent` -> `screenRoot` to refer to the actual screens root.
-  - If you plan on using this component, know that you can access the functions/members you need directly from the object itself.
+- Uses the latest DataAttributes (beta.9) & OfflinePlayerCache.
+  - The namespace of DataAttributes got changed on this update, breaking the ability to use the mod with the latest one. This has been addressed now.
+- This patches an issue when updating modifiers (for I forgot to update PlayerEX when changing namespaces.)
