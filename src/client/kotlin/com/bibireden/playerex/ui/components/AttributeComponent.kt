@@ -28,7 +28,7 @@ class AttributeComponent(private val attribute: Attribute, private val player: P
     val label: AttributeLabelComponent
 
     fun refresh() {
-        val entries = DataAttributesAPI.clientManager.data.functions[attribute.id]
+        val entries = DataAttributesAPI.clientManager.functions[attribute.id]
         if (!entries.isNullOrEmpty()) {
             label.tooltip(
                 Component.translatable("playerex.ui.main.modified_attributes").also { text ->
