@@ -1,4 +1,15 @@
+## Additions 🍎
+- Added the ability to customize the color of the label (default is still gold).
+
 ## Changes 🌽
-- Using the latest data-attributes with a supplied "stock" data-pack.
-- You can clear your config if you wish to use stock, or keep your config with all the entries.
-- Applied a patch for missing id's, which is an edge-case (will be labeled `unresolved:id`).
+- The UI has gone through a breaking change. recent alpha builds of WizardEX will not work with this version, though `alpha.3` will.
+- Switching to the beta channel as most components of the mod are stable.
+  - Required changes before release is the UI and re-adjusting the config for the last time.
+- Rebalanced knockback resistance to a proper 1% gain and displayed it properly.
+- Added author & contributor information according to who assisted in the development of the project's codebase.
+- Fixed `lifesteal` attribute not applying to attacker(s).
+- Fixed refund issues on the screen.
+
+## Later Objectives ⚡
+- Fixing tooltips
+- Adjusting more attributes

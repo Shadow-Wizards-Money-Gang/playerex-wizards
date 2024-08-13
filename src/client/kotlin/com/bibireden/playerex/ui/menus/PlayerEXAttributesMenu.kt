@@ -2,17 +2,15 @@ package com.bibireden.playerex.ui.menus
 
 import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
-import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
 import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.ext.id
-import com.bibireden.playerex.ext.level
 import com.bibireden.playerex.ui.PlayerEXScreen
 import com.bibireden.playerex.ui.childById
 import com.bibireden.playerex.ui.components.*
 import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
 import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
-import com.bibireden.playerex.ui.util.FormattingPredicates
+import com.bibireden.playerex.ui.helper.InputHelper
 import de.dafuqs.additionalentityattributes.AdditionalEntityAttributes
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.component.TextBoxComponent
@@ -28,43 +26,41 @@ import org.jetbrains.annotations.ApiStatus
 
 @ApiStatus.Internal
 class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
-    private val MELEE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
-        EntityAttributeSupplier(Attributes.ATTACK_DAMAGE.id) to FormattingPredicates.NORMAL,
-        EntityAttributeSupplier(Attributes.ATTACK_SPEED.id) to FormattingPredicates.NORMAL,
-        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY
+    private val MELEE_COMBAT_STATS: List<EntityAttributeSupplier> = listOf(
+        EntityAttributeSupplier(Attributes.ATTACK_DAMAGE.id),
+        EntityAttributeSupplier(Attributes.ATTACK_SPEED.id),
+        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE.id),
+        EntityAttributeSupplier(PlayerEXAttributes.MELEE_CRITICAL_CHANCE.id)
     )
 
-    private val RANGED_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
-        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id) to FormattingPredicates.fromBaseValue(EntityAttributes_RangedWeapon.HASTE.attribute, true),
-        EntityAttributeSupplier(EntityAttributes_RangedWeapon.DAMAGE.id) to FormattingPredicates.NORMAL,
+    private val RANGED_COMBAT_STATS: List<EntityAttributeSupplier> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_DAMAGE.id),
+        EntityAttributeSupplier(PlayerEXAttributes.RANGED_CRITICAL_CHANCE.id),
+        EntityAttributeSupplier(EntityAttributes_RangedWeapon.HASTE.id),
+        EntityAttributeSupplier(EntityAttributes_RangedWeapon.DAMAGE.id),
     )
 
-    private val DEFENSE_COMBAT_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
-        EntityAttributeSupplier(Attributes.ARMOR.id) to FormattingPredicates.NORMAL,
-        EntityAttributeSupplier(AdditionalEntityAttributes.MAGIC_PROTECTION.id) to FormattingPredicates.NORMAL,
-        EntityAttributeSupplier(Attributes.ARMOR_TOUGHNESS.id) to FormattingPredicates.NORMAL,
-        EntityAttributeSupplier(Attributes.KNOCKBACK_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_DIVIDE,
-        EntityAttributeSupplier(PlayerEXAttributes.EVASION.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
+    private val DEFENSE_COMBAT_STATS: List<EntityAttributeSupplier> = listOf(
+        EntityAttributeSupplier(Attributes.ARMOR.id),
+        EntityAttributeSupplier(AdditionalEntityAttributes.MAGIC_PROTECTION.id),
+        EntityAttributeSupplier(Attributes.ARMOR_TOUGHNESS.id),
+        EntityAttributeSupplier(Attributes.KNOCKBACK_RESISTANCE.id),
+        EntityAttributeSupplier(PlayerEXAttributes.EVASION.id),
     )
 
-    private val VITALITY_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
-        EntityAttributeSupplier(PlayerEXAttributes.HEALTH_REGENERATION.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.HEAL_AMPLIFICATION.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.LIFESTEAL.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(Attributes.MOVEMENT_SPEED.id) to FormattingPredicates.NORMAL,
+    private val VITALITY_STATS: List<EntityAttributeSupplier> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.HEALTH_REGENERATION.id),
+        EntityAttributeSupplier(PlayerEXAttributes.HEAL_AMPLIFICATION.id),
+        EntityAttributeSupplier(PlayerEXAttributes.LIFESTEAL.id),
+        EntityAttributeSupplier(Attributes.MOVEMENT_SPEED.id),
     )
 
-    private val RESISTANCE_STATS: List<Pair<EntityAttributeSupplier, FormattingPredicate>> = listOf(
-        EntityAttributeSupplier(PlayerEXAttributes.FIRE_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.FREEZE_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.LIGHTNING_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
-        EntityAttributeSupplier(PlayerEXAttributes.POISON_RESISTANCE.id) to FormattingPredicates.PERCENTAGE_MULTIPLY,
+    private val RESISTANCE_STATS: List<EntityAttributeSupplier> = listOf(
+        EntityAttributeSupplier(PlayerEXAttributes.FIRE_RESISTANCE.id),
+        EntityAttributeSupplier(PlayerEXAttributes.FREEZE_RESISTANCE.id),
+        EntityAttributeSupplier(PlayerEXAttributes.LIGHTNING_RESISTANCE.id),
+        EntityAttributeSupplier(PlayerEXAttributes.POISON_RESISTANCE.id),
     )
-
-    private fun onLevelUpdate(level: Int) {}
 
     /** Whenever ANY attribute gets updated. */
     private fun onAttributeUpdate() {
@@ -84,11 +80,11 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
             val result = it.value.toDoubleOrNull() ?: return@also
             this.forEachDescendant { descendant ->
                 if (descendant is AttributeButtonComponent) {
-                    val max = (descendant.attribute as IEntityAttribute).`data_attributes$max`()
+                    val max = descendant.attribute.`data_attributes$max`()
                     val current = DataAttributesAPI.getValue(descendant.attribute, player).orElse(0.0)
                     when (descendant.type) {
-                        PlayerEXScreen.AttributeButtonComponentType.Add -> descendant.active(result > 0 && component.skillPoints >= result && (current + result) <= max)
-                        PlayerEXScreen.AttributeButtonComponentType.Remove -> descendant.active(result > 0 && component.refundablePoints > 0 && (current - result > 0))
+                        PlayerEXScreen.ButtonType.Add -> descendant.active(result > 0 && component.skillPoints >= result && (current + result) <= max)
+                        PlayerEXScreen.ButtonType.Remove -> descendant.active(result > 0 && component.refundablePoints > 0 && (current - result >= 0))
                     }
                 }
             }
@@ -108,11 +104,12 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
                     child(Components.label(Component.translatable("playerex.ui.category.primary_attributes")))
                     child(
                         Components.textBox(Sizing.fixed(27))
+                            .text("1")
                             .also {
                                 it.setMaxLength(4)
+                                it.setFilter(InputHelper::isUIntInput)
                                 it.onChanged().subscribe { onInputFieldUpdated(player, component) }
                             }
-                            .text("1")
                             .verticalSizing(Sizing.fixed(10))
                             .positioning(Positioning.relative(100, 0))
                             .id("input")
@@ -154,11 +151,9 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
         padding(Insets.both(8, 8))
 
-        onLevelUpdate(player.level.toInt())
         onAttributeUpdate()
         onInputFieldUpdated(player, component)
 
-        onLevelUpdated.subscribe(::onLevelUpdate)
         onAttributeUpdated.subscribe { _, _ ->
             onAttributeUpdate()
             onInputFieldUpdated(player, component)
