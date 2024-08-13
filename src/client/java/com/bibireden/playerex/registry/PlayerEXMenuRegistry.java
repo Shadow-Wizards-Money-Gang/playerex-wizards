@@ -35,8 +35,8 @@ public final class PlayerEXMenuRegistry {
         if (!ENTRIES.isEmpty()) {
             for (int i = 0, size = ENTRIES.size(); i < size; i++) {
                 Pair<ResourceLocation, Class<? extends MenuComponent>> entry = ENTRIES.get(i);
-                Integer priority = PRIORITY_ORDER.get(entry.getFirst().toString());
-                if (priority > insertingPriority) {
+                Integer priority = PRIORITY_ORDER.get(entry.getFirst().getNamespace());
+                if (priority == null || priority > insertingPriority) {
                     ENTRIES.add(i, pair);
                     return;
                 }
