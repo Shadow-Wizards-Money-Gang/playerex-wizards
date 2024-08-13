@@ -30,7 +30,7 @@ public final class PlayerEXMenuRegistry {
      */
     public static void register(ResourceLocation id, @NotNull Class<? extends MenuComponent> menu) {
         Pair<ResourceLocation, Class<? extends MenuComponent>> pair = new Pair<>(id, menu);
-        Integer insertingPriority = PRIORITY_ORDER.get(pair.getFirst().toString());
+        Integer insertingPriority = PRIORITY_ORDER.get(id.getNamespace());
 
         if (!ENTRIES.isEmpty() && insertingPriority != null) {
             for (int i = 0, size = ENTRIES.size(); i < size; i++) {
