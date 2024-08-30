@@ -182,6 +182,7 @@
     "text.config.playerex-config.category.visualSettings": "Visual Options",
     "text.config.playerex-config.option.visualSettings.nameplateColor": "Nameplate Color",
 
+    "text.config.playerex-config.option.itemBreakingEnabled": "Item Breaking Enabled",
     "text.config.playerex-config.option.resetOnDeath": "Reset on Death",
     "text.config.playerex-config.option.skillPointsPerLevelUp": "Skill Points per. Level Up",
     "text.config.playerex-config.option.levelFormula": "Leveling Formula",
