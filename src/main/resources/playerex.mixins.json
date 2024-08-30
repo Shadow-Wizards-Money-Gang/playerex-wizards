@@ -8,7 +8,8 @@
     "InventoryMixin",
     "LivingEntityMixin",
     "PlayerMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1
