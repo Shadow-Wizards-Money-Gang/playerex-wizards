@@ -1,2 +1,2 @@
 ## Changes 🌽
-- Added missing translation key for `itemBreakingEnabled`
+- Added a missing translation key for `itemBreakingEnabled`
