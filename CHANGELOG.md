@@ -1,3 +1,2 @@
 ## Changes 🌽
-- Added "Item Breaking" mechanic
-- Added config option for Item Breaking
+- Added a missing translation key for `itemBreakingEnabled`
