@@ -35,8 +35,8 @@ class AttributeComponent(private val attribute: Attribute, private val player: P
                     text.append("\n")
                     text.append(Component.literal(attribute.id.toString()).withStyle(ChatFormatting.DARK_GRAY))
                     text.append("\n\n")
-                    entries.forEach { function ->
-                        val childAttribute = EntityAttributeSupplier(function.id).get().getOrNull() ?: return@forEach
+                    entries.forEach { (id, function) ->
+                        val childAttribute = EntityAttributeSupplier(id).get().getOrNull() ?: return@forEach
                         val formula = (childAttribute as IEntityAttribute).`data_attributes$formula`()
 
                         text.apply {

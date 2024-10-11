@@ -4,7 +4,7 @@
             "enabled": true,
             "min": 0.0,
             "max": 1.0,
-            "smoothness": 1.0,
+            "smoothness": 0.01,
             "formula": "Diminished",
             "format": "Percentage"
         },

@@ -1,146 +1,146 @@
 {
 	"entries": {
-		"playerex:luckiness": [
-			{
-				"id": "playerex:melee_crit_chance",
+		"playerex:luckiness": {
+			"playerex:melee_crit_chance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.02
 			},
-			{
-				"id": "playerex:ranged_crit_chance",
+			"playerex:ranged_crit_chance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.02
 			},
-			{
-				"id": "minecraft:generic.luck",
+			"minecraft:generic.luck": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.05
 			},
-			{
-				"id": "playerex:evasion",
+			"playerex:evasion": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			},
-			{
-				"id": "spell_power:critical_chance",
+			"spell_power:critical_chance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.02
 			}
-		],
-		"playerex:dexterity": [
-			{
-				"id": "minecraft:generic.attack_speed",
+		},
+		"playerex:dexterity": {
+			"minecraft:generic.attack_speed": {
+				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.01
 			},
-			{
-				"id": "playerex:ranged_crit_damage",
+			"playerex:ranged_crit_damage": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.005
 			},
-			{
-				"id": "ranged_weapon:haste",
+			"ranged_weapon:haste": {
+				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.02
 			},
-			{
-				"id": "ranged_weapon:damage",
+			"ranged_weapon:damage": {
+				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.02
 			}
-		],
-		"playerex:constitution": [
-			{
-				"id": "minecraft:generic.max_health",
+		},
+		"playerex:constitution": {
+			"minecraft:generic.max_health": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.5
 			},
-			{
-				"id": "minecraft:generic.armor",
+			"minecraft:generic.armor": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.25
 			},
-			{
-				"id": "additionalentityattributes:generic.magic_protection",
+			"additionalentityattributes:generic.magic_protection": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.25
 			},
-			{
-				"id": "additionalentityattributes:generic.lung_capacity",
+			"additionalentityattributes:generic.lung_capacity": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			},
-			{
-				"id": "playerex:poison_resistance",
+			"playerex:poison_resistance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			}
-		],
-		"playerex:intelligence": [
-			{
-				"id": "additionalentityattributes:player.dropped_experience",
+		},
+		"playerex:intelligence": {
+			"additionalentityattributes:player.dropped_experience": {
+				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.01
 			},
-			{
-				"id": "playerex:wither_resistance",
+			"playerex:wither_resistance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			},
-			{
-				"id": "spell_power:haste",
+			"spell_power:haste": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 2
 			}
-		],
-		"playerex:focus": [
-			{
-				"id": "playerex:health_regeneration",
+		},
+		"playerex:focus": {
+			"playerex:health_regeneration": {
+				"enabled": true,
 				"behavior": "Add",
-				"value": 0.0015
+				"value": 0.015
 			},
-			{
-				"id": "playerex:heal_amplification",
+			"playerex:heal_amplification": {
+				"enabled": true,
 				"behavior": "Add",
-				"value": 0.0020
+				"value": 0.002
 			},
-			{
-				"id": "playerex:freeze_resistance",
-				"behavior": "Add",
-				"value": 0.01
-			},
-			{
-				"id": "playerex:lightning_resistance",
+			"playerex:freeze_resistance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			},
-			{
-				"id": "playerex:fire_resistance",
+			"playerex:lightning_resistance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.01
+			},
+			"playerex:fire_resistance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			}
-		],
-		"playerex:strength": [
-			{
-				"id": "minecraft:generic.attack_damage",
+		},
+		"playerex:strength": {
+			"minecraft:generic.attack_damage": {
+				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.02
 			},
-			{
-				"id": "minecraft:generic.knockback_resistance",
+			"minecraft:generic.knockback_resistance": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			},
-			{
-				"id": "playerex:melee_crit_damage",
+			"playerex:melee_crit_damage": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 0.005
 			},
-			{
-				"id": "playerex:breaking_speed",
+			"playerex:breaking_speed": {
+				"enabled": true,
 				"behavior": "Add",
 				"value": 1.0
 			}
-		]
+		}
 	}
 }
