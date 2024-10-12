@@ -24,7 +24,7 @@
 			"spell_power:critical_chance": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 0.02
+				"value": 2
 			}
 		},
 		"playerex:dexterity": {
@@ -90,7 +90,7 @@
 			"spell_power:haste": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 2
+				"value": 1
 			}
 		},
 		"playerex:focus": {
