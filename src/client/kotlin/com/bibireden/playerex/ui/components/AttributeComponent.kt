@@ -24,7 +24,7 @@ import net.minecraft.network.chat.Component
 private val StackingBehavior.symbol: String
     get() = if (this == StackingBehavior.Add) "+" else "×"
 
-class AttributeComponent(private val attribute: Attribute, private val player: Player, component: IPlayerDataComponent) : FlowLayout(Sizing.fill(100), Sizing.fixed(18), Algorithm.HORIZONTAL) {
+class AttributeComponent(private val attribute: Attribute, private val player: Player, val component: IPlayerDataComponent) : FlowLayout(Sizing.fill(100), Sizing.fixed(18), Algorithm.HORIZONTAL) {
     val label: AttributeLabelComponent
 
     fun refresh() {

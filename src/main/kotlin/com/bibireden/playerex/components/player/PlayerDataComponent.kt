@@ -197,35 +197,34 @@ class PlayerDataComponent(
     override fun skillUp(skill: Attribute, amount: Int, override: Boolean): Boolean {
         if (amount <= 0) return false
 
-        return DataAttributesAPI.getValue(skill, player).map { current ->
-            val expected = current + amount
-            // too high
-            if (expected > (skill as IEntityAttribute).`data_attributes$max`()) return@map false
-            if (!override) {
-                // not enough skill points
-                if (skillPoints < amount) return@map false
-                this._skillPoints -= amount
-            }
-            this.set(skill, expected.toInt())
-            // signal to a client that an increase has occurred...
-            NetworkingChannels.NOTIFICATIONS.serverHandle(player).send(NetworkingPackets.Notify(NotificationType.Spent))
-            return@map true
-        }.orElse(false)
+        val current = _modifiers.getOrDefault(skill.id, 0.0)
+        val expected = current + amount
+        // too high
+        if (expected > skill.`data_attributes$max`()) return false
+        if (!override) {
+            // not enough skill points
+            if (skillPoints < amount) return false
+            this._skillPoints -= amount
+        }
+        this.set(skill, expected.toInt())
+        // signal to a client that an increase has occurred...
+        NetworkingChannels.NOTIFICATIONS.serverHandle(player).send(NetworkingPackets.Notify(NotificationType.Spent))
+        return true
     }
 
     override fun refund(skill: Attribute, amount: Int): Boolean {
         if (amount <= 0 || this.refundablePoints < amount) return false
-        return DataAttributesAPI.getValue(skill, player).map { value ->
-            if (amount > value) return@map false
 
-            this.addRefundablePoints(-amount)
-            this.addSkillPoints(amount)
-            this.set(skill, (value - amount).toInt())
+        val value = _modifiers.getOrDefault(skill.id, 0.0)
+        if (amount > value) return false
 
-            ServerNetworkingFactory.notify(player, NotificationType.Refunded)
+        this.addRefundablePoints(-amount)
+        this.addSkillPoints(amount)
+        this.set(skill, (value - amount).toInt())
 
-            true
-        }.orElse(false)
+        ServerNetworkingFactory.notify(player, NotificationType.Refunded)
+
+        return true
     }
 
     val modifiers: Map<ResourceLocation, Double>
