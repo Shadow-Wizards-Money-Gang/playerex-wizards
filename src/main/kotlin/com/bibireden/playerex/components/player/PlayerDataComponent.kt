@@ -1,7 +1,5 @@
 package com.bibireden.playerex.components.player
 
-import com.bibireden.data_attributes.api.DataAttributesAPI
-import com.bibireden.data_attributes.api.attribute.IEntityAttribute
 import com.bibireden.data_attributes.endec.Endecs
 import com.bibireden.data_attributes.endec.nbt.NbtDeserializer
 import com.bibireden.data_attributes.endec.nbt.NbtSerializer
@@ -172,26 +170,25 @@ class PlayerDataComponent(
     override fun levelUp(amount: Int, override: Boolean): Boolean {
         if (amount <= 0) return false
 
-        return DataAttributesAPI.getValue(PlayerEXAttributes.LEVEL, player).map { level ->
-            val expectedLevel = level + amount
-            // get the expected level, but do not go beyond the bounds of the maximum!
-            if (expectedLevel > PlayerEXAttributes.LEVEL.maxValue) return@map false
+        val level = this.get(PlayerEXAttributes.LEVEL)
+        val expectedLevel = level + amount
+        // get the expected level, but do not go beyond the bounds of the maximum!
+        if (expectedLevel > PlayerEXAttributes.LEVEL.maxValue) return false
 
-            val required = PlayerEXUtil.getRequiredXpForLevel(player, expectedLevel)
+        val required = PlayerEXUtil.getRequiredXpForLevel(player, expectedLevel)
 
-            val isEnoughExperience = player.experienceLevel >= required || override
-            if (isEnoughExperience) {
-                val skillPoints = CONFIG.skillPointsPerLevelUp * amount
-                val component = PlayerEXComponents.PLAYER_DATA.get(player)
+        val isEnoughExperience = player.experienceLevel >= required || override
+        if (isEnoughExperience) {
+            val skillPoints = CONFIG.skillPointsPerLevelUp * amount
 
-                if (!override) player.giveExperienceLevels(-required)
-                component.addSkillPoints(skillPoints)
-                component.set(PlayerEXAttributes.LEVEL, expectedLevel.toInt())
+            if (!override) player.giveExperienceLevels(-required)
+            this.addSkillPoints(skillPoints)
+            this.set(PlayerEXAttributes.LEVEL, expectedLevel.toInt())
 
-                ServerNetworkingFactory.notify(player, NotificationType.Spent)
-            }
-            return@map isEnoughExperience
-        }.orElse(false)
+            ServerNetworkingFactory.notify(player, NotificationType.Spent)
+            return true
+        }
+        return false
     }
 
     override fun skillUp(skill: Attribute, amount: Int, override: Boolean): Boolean {
