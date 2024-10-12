@@ -20,11 +20,6 @@
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
-			},
-			"spell_power:critical_chance": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 2
 			}
 		},
 		"playerex:dexterity": {
