@@ -10,8 +10,7 @@
         },
         "minecraft:generic.luck": {
             "enabled": true,
-            "smoothness": 1.0,
-            "formula": "Diminished"
+            "smoothness": 1.0
         },
         "minecraft:generic.max_health": {
             "enabled": true,
