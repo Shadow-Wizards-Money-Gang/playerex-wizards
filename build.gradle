@@ -18,6 +18,10 @@ base {
 repositories {
 	mavenCentral()
 	maven {
+		name = "JitPack"
+		url = "https://jitpack.io"
+	}
+	maven {
 		name = "wispForestReleases"
 		url = uri("https://maven.wispforest.io/releases")
 	}
