@@ -67,7 +67,7 @@ class PlayerEXConfigModel {
     @Sync(SyncMode.OVERRIDE_CLIENT)
     @JvmField
     @Hook
-    var levelFormula: String = "stairs(x,0.2,2.4,17,10,25)"
+    var levelFormula: String = "5+(0.1*x^2)+(x+0+abs(x+0))/2"
 
 //    @JvmField
 //    var expression: Expression

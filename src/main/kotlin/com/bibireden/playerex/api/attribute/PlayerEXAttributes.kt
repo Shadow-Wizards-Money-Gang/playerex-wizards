@@ -13,25 +13,25 @@ object PlayerEXAttributes {
     val PRIMARY_ATTRIBUTE_IDS: Set<ResourceLocation>
 
     @JvmField
-    val LEVEL = register("level", 0.0, 0.0, 100.0)
+    val LEVEL = register("level", 0.0, 0.0, 25.0)
 
     @JvmField
-    val CONSTITUTION = register("constitution", 0.0, 0.0, 100.0)
+    val BODY = register("body", 0.0, 0.0, 25.0)
 
     @JvmField
-    val STRENGTH = register("strength", 0.0, 0.0, 100.0)
+    val DEXTERITY = register("dexterity", 0.0, 0.0, 25.0)
 
     @JvmField
-    val DEXTERITY = register("dexterity", 0.0, 0.0, 100.0)
+    val FAITH = register("faith", 0.0, 0.0, 25.0)
 
     @JvmField
-    val INTELLIGENCE = register("intelligence", 0.0, 0.0, 100.0)
+    val INTELLIGENCE = register("intelligence", 0.0, 0.0, 25.0)
 
     @JvmField
-    val LUCKINESS = register("luckiness", 0.0, 0.0, 100.0)
+    val OCCULT = register("occult", 0.0, 0.0, 25.0)
 
     @JvmField
-    val FOCUS = register("focus", 0.0, 0.0, 100.0)
+    val WISDOM = register("wisdom", 0.0, 0.0, 25.0)
 
     @JvmField
     val HEALTH_REGENERATION = register("health_regeneration", 0.0, 0.0, 1.0)
@@ -82,6 +82,6 @@ object PlayerEXAttributes {
     }
 
     init {
-        PRIMARY_ATTRIBUTE_IDS = setOf(CONSTITUTION.id, STRENGTH.id, DEXTERITY.id, INTELLIGENCE.id, LUCKINESS.id, FOCUS.id)
+        PRIMARY_ATTRIBUTE_IDS = setOf(BODY.id, DEXTERITY.id, FAITH.id, INTELLIGENCE.id, OCCULT.id, WISDOM.id)
     }
 }

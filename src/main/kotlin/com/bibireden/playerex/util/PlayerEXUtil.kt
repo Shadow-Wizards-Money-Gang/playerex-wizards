@@ -39,10 +39,15 @@ object PlayerEXUtil {
         val steps = (target - player.level).toInt()
         if (steps <= 0) return 0
 
+
         var accumulator = 0
         for (x in 1..steps) {
             val k = steps + player.level
-            accumulator += abs(round(expression.setVariable(VARIABLE, k).evaluate())).toInt()
+            accumulator += if(player.level >= 9) {
+                abs(round(expression.setVariable(VARIABLE, k).evaluate())).toInt()
+            } else {
+                Math.round(5 + k / 2).toInt()
+            }
         }
 
         return accumulator

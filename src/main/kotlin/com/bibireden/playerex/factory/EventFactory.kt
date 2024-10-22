@@ -19,12 +19,14 @@ object EventFactory {
     fun reset(oldPlayer: ServerPlayer, newPlayer: ServerPlayer, isAlive: Boolean)
     {
         val factor = if (PlayerEX.CONFIG.resetOnDeath) 0 else 100
+
+        val takeLevels = 1 + (if (oldPlayer.hasEffect(MobEffects.LUCK)) -1 else 0) + (if (oldPlayer.hasEffect(MobEffects.BAD_OMEN)) 1 else 0)
         // attempt reconciliation
         (oldPlayer.component as PlayerDataComponent).modifiers.forEach { (rl, value) ->
             val attr = BuiltInRegistries.ATTRIBUTE[rl] ?: return@forEach
             newPlayer.component.set(attr, value.toInt())
         }
-        newPlayer.component.reset(factor)
+        newPlayer.component.reset(50, takeLevels)
     }
 
     fun healed(entity: LivingEntity, amount: Float): Float

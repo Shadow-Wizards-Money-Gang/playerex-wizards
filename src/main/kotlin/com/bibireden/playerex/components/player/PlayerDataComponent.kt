@@ -28,6 +28,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeInstance
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.player.Player
+import kotlin.math.max
 import kotlin.math.round
 
 /**
@@ -122,26 +123,45 @@ class PlayerDataComponent(
         this.sync { buf, player -> buf.writeNbt(toPacketNbt())}
     }
 
-    override fun reset(percent: Int) {
+    override fun reset(percent: Int, takeLevels: Int) {
         val partition = percent / 100.0
+        var reducedLevels = 0;
 
+        var level = 0.0;
         val kept = mutableMapOf<ResourceLocation, Double>()
         for ((id, value) in this.modifiers) {
+            if(id == PlayerEXAttributes.LEVEL.id)
+                level = value
+
             if (partition == 0.0) {
                 this.tryRemove(id)
             }
-            else {
-                val retained = value * partition
+            else if(id != PlayerEXAttributes.LEVEL.id){
+                val retained = (value - takeLevels).coerceAtLeast(0.0)
                 if (!this.trySet(id, retained)) {
                     continue
                 }
+                if(value - takeLevels >= 0) reducedLevels += takeLevels;
                 kept[id] = retained
             }
         }
 
+        if(this._skillPoints > 0) {
+            if (this._skillPoints - takeLevels >= 0) {
+                this._skillPoints -= takeLevels
+                reducedLevels += takeLevels
+            } else {
+                reducedLevels += 1
+                this._skillPoints = 0
+            }
+        }
+        this.trySet(PlayerEXAttributes.LEVEL.id, level - reducedLevels.toDouble())
+        kept[PlayerEXAttributes.LEVEL.id] =  level - reducedLevels.toDouble()
         this._modifiers = kept
+        /*
         this._refundablePoints = round(this._refundablePoints * partition).toInt()
         this._skillPoints = round(this._skillPoints * partition).toInt()
+         */
         this.isLevelUpNotified = false
 
         this.sync { buf, _ -> buf.writeNbt(toPacketNbt())}

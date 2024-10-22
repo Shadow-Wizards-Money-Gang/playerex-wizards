@@ -23,7 +23,7 @@ interface IPlayerDataComponent : Component {
      *
      * @param percent Depending on what is provided, it will preserve the amount of skill points.
     */
-    fun reset(percent: Int = 0)
+    fun reset(percent: Int = 0, takeLevels: Int = 1)
     /** Applies skill points to the player. */
     fun addSkillPoints(points: Int)
     /** Applies refundable points to the player. */

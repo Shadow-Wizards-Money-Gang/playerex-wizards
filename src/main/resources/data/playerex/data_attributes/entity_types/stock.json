@@ -4,28 +4,28 @@
 			"playerex:level": {
 				"value": 0.0
 			},
-			"playerex:constitution": {
-				"value": 0.0
-			},
-			"playerex:strength": {
+			"playerex:body": {
 				"value": 0.0
 			},
 			"playerex:dexterity": {
 				"value": 0.0
 			},
+			"playerex:faith": {
+				"value": 0.0
+			},
 			"playerex:intelligence": {
 				"value": 0.0
 			},
-			"playerex:luckiness": {
-				"value": 0.0
-			},
-			"playerex:evasion": {
-				"value": 0.0
-			},
-			"playerex:lifesteal": {
+			"playerex:occult": {
 				"value": 0.0
 			},
 			"playerex:focus": {
+				"value": 0.0
+			},
+			"playerex:wisdom": {
+				"value": 0.0
+			},
+			"playerex:lifesteal": {
 				"value": 0.0
 			},
 			"playerex:health_regeneration": {

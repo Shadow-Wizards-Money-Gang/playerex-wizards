@@ -1,6 +1,6 @@
 {
 	"entries": {
-		"playerex:luckiness": {
+		"playerex:occult": {
 			"playerex:melee_crit_chance": {
 				"enabled": true,
 				"behavior": "Add",
@@ -44,7 +44,7 @@
 				"value": 0.02
 			}
 		},
-		"playerex:constitution": {
+		"playerex:body": {
 			"minecraft:generic.max_health": {
 				"enabled": true,
 				"behavior": "Add",
@@ -88,7 +88,7 @@
 				"value": 1
 			}
 		},
-		"playerex:focus": {
+		"playerex:wisdom": {
 			"playerex:health_regeneration": {
 				"enabled": true,
 				"behavior": "Add",
@@ -115,7 +115,7 @@
 				"value": 0.01
 			}
 		},
-		"playerex:strength": {
+		"playerex:faith": {
 			"minecraft:generic.attack_damage": {
 				"enabled": true,
 				"behavior": "Multiply",
