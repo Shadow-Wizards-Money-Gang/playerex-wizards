@@ -1,5 +1,5 @@
-name: Audit Pull Request - Build
-on: [pull_request]
+name: Build
+on: [workflow_dispatch]
 
 jobs:
   build:
