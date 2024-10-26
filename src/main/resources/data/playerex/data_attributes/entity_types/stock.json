@@ -1,6 +1,9 @@
 {
 	"entries": {
 		"minecraft:player": {
+			"minecraft:generic.max_health": {
+				"value": 16.0
+			},
 			"playerex:level": {
 				"value": 0.0
 			},
@@ -83,6 +86,54 @@
 				"value": 0.0
 			},
 			"playerex:farming": {
+				"value": 0.0
+			},
+			"arcanuscontinuum:mana_regen": {
+				"value": -0.85
+			},
+			"arcanuscontinuum:max_mana": {
+				"value": 10
+			},
+			"arcanuscontinuum:mana_lock": {
+				"value": 0
+			},
+			"arcanuscontinuum:burnout_regen": {
+				"value": 0.5
+			},
+			"arcanuscontinuum:spell_potency": {
+				"value": 1
+			},
+			"arcanuscontinuum:mana_cost": {
+				"value": 1
+			},
+			"arcanuscontinuum:magic_resistance": {
+				"value": 1
+			},
+			"arcanuscontinuum:spell_cool_down": {
+				"value": 1
+			},
+			"spell_power:fire": {
+				"value": 0.0
+			},
+			"spell_power:arcane": {
+				"value": 0.0
+			},
+			"spell_power:frost": {
+				"value": 0.0
+			},
+			"spell_power:lightning": {
+				"value": 0.0
+			},
+			"spell_power:soul": {
+				"value": 0.0
+			},
+			"spell_power:healing": {
+				"value": 0.0
+			},
+			"shadow-wizards:barehanded_damage": {
+				"value": 0.0
+			},
+			"shadow-wizards:strength_scaling": {
 				"value": 0.0
 			}
 		}

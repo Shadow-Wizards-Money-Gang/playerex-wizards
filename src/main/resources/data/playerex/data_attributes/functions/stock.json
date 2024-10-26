@@ -1,25 +1,45 @@
 {
 	"entries": {
-		"playerex:occult": {
-			"playerex:melee_crit_chance": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.02
-			},
-			"playerex:ranged_crit_chance": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.02
-			},
-			"minecraft:generic.luck": {
+		"playerex:body": {
+			"playerex:breaking_speed": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.05
 			},
-			"playerex:evasion": {
+			"playerex:health_regeneration": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.015
+			},
+			"shadow-wizards:barehanded_damage": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.015
+			},
+			"minecraft:generic.max_health": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.5
+			},
+			"minecraft:generic.knockback_resistance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.005
+			},
+			"minecraft:generic.armor": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.25
+			},
+			"Addalentityattributes:generic.lung_capacity": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
+			},
+			"playerex:melee_crit_chance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.02
 			}
 		},
 		"playerex:dexterity": {
@@ -27,6 +47,11 @@
 				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.01
+			},
+			"minecraft:generic.movement_speed": {
+				"enabled": true,
+				"behavior": "Multiply",
+				"value": 0.005
 			},
 			"playerex:ranged_crit_damage": {
 				"enabled": true,
@@ -42,66 +67,17 @@
 				"enabled": true,
 				"behavior": "Multiply",
 				"value": 0.02
-			}
-		},
-		"playerex:body": {
-			"minecraft:generic.max_health": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.5
 			},
-			"minecraft:generic.armor": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.25
-			},
-			"additionalentityattributes:generic.magic_protection": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.25
-			},
-			"additionalentityattributes:generic.lung_capacity": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.01
-			},
-			"playerex:poison_resistance": {
+			"playerex:evasion": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			}
 		},
 		"playerex:intelligence": {
-			"additionalentityattributes:player.dropped_experience": {
+			"Addalentityattributes:player.dropped_experience": {
 				"enabled": true,
 				"behavior": "Multiply",
-				"value": 0.01
-			},
-			"playerex:wither_resistance": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.01
-			},
-			"spell_power:haste": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 1
-			}
-		},
-		"playerex:wisdom": {
-			"playerex:health_regeneration": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.015
-			},
-			"playerex:heal_amplification": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.002
-			},
-			"playerex:freeze_resistance": {
-				"enabled": true,
-				"behavior": "Add",
 				"value": 0.01
 			},
 			"playerex:lightning_resistance": {
@@ -113,6 +89,58 @@
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
+			},
+			"Addalentityattributes:generic.magic_protection": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.25
+			},
+			"playerex:wither_resistance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.01
+			},
+			"spell_power:haste": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 1
+			},
+			"spell_power:fire": {
+				"behaviour": "Add",
+				"value": 0.25
+			},
+			"spell_power:arcane": {
+				"behaviour": "Add",
+				"value": 0.25
+			},
+			"spell_power:frost": {
+				"behaviour": "Add",
+				"value": 0.25
+			},
+			"spell_power:soul": {
+				"behaviour": "Add",
+				"value": 0.25
+			},
+			"arcanuscontinuum:mana_regen": {
+				"behaviour": "Add",
+				"value": 0.05
+			}
+		},
+		"playerex:wisdom": {
+			"playerex:heal_amplification": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.002
+			},
+			"playerex:freeze_resistance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.01
+			},
+			"playerex:breaking_speed": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.05
 			}
 		},
 		"playerex:faith": {
@@ -121,20 +149,30 @@
 				"behavior": "Multiply",
 				"value": 0.02
 			},
-			"minecraft:generic.knockback_resistance": {
+			"spell_power:healing": {
+				"behaviour": "Add",
+				"value": 0.25
+			},
+			"playerex:heal_amplification": {
+				"behaviour": "ADDITION",
+				"value": 0.001
+			}
+		},
+		"playerex:occult": {
+			"playerex:ranged_crit_chance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.02
+			},
+			"minecraft:generic.luck": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.05
+			},
+			"playerex:poison_resistance": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
-			},
-			"playerex:melee_crit_damage": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.005
-			},
-			"playerex:breaking_speed": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 1.0
 			}
 		}
 	}
