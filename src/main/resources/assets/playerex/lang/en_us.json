@@ -44,10 +44,17 @@
     "playerex.ui.main.categories.resistance": "🩹 RESISTANCE",
 
     "attribute.name.playerex.level": "Level",
-    "attribute.name.playerex.constitution": "Constitution",
-    "attribute.name.playerex.strength": "Strength",
+
+    "attribute.name.playerex.body": "Body",
     "attribute.name.playerex.dexterity": "Dexterity",
+    "attribute.name.playerex.faith": "Faith",
     "attribute.name.playerex.intelligence": "Intelligence",
+    "attribute.name.playerex.occult": "Occult",
+    "attribute.name.playerex.wisdom": "Wisdom",
+    "attribute.name.playerex.mysticism": "Mysticism",
+
+    "attribute.name.playerex.strength": "Strength",
+    "attribute.name.playerex.constitution": "Constitution",
     "attribute.name.playerex.luckiness": "Luckiness",
     "attribute.name.playerex.evasion": "Evasion",
     "attribute.name.playerex.lifesteal": "Lifesteal",
