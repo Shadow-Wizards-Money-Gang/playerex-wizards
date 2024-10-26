@@ -36,10 +36,6 @@
 			"formula": "Diminished",
 			"format": "Percentage"
 		},
-		"playerex:health_regeneration": {
-			"enabled": true,
-			"format": "Percentage"
-		},
 		"playerex:melee_crit_chance": {
 			"enabled": true,
 			"min": 0.0,

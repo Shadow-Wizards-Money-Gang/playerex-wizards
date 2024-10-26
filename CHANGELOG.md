@@ -1,3 +1,3 @@
 ## Changes 🌽
-- Made skill point increases separate to the actual attribute value.
-  - As for increases to skills like **Constitution** that come from somewhere else, it will be tacked on the right in square brackets.
+- Resolved an issue with `ON_TICK` and renamed it to `ON_EVERY_SECOND`.
+  - The counter to reset was not present, but this has been fixed now.

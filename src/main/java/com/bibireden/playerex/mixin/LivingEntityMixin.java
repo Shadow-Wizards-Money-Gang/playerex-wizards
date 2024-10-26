@@ -49,7 +49,8 @@ public abstract class LivingEntityMixin {
             this.playerex_ticks++;
         }
         else {
-            LivingEntityEvents.ON_TICK.invoker().onTick((LivingEntity) (Object) this);
+            LivingEntityEvents.ON_EVERY_SECOND.invoker().onEverySecond((LivingEntity) (Object) this);
+            this.playerex_ticks = 0;
         }
     }
 
