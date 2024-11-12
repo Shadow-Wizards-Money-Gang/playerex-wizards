@@ -132,20 +132,15 @@
 			}
 		},
 		"playerex:wisdom": {
-			"playerex:heal_amplification": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.002
-			},
 			"playerex:freeze_resistance": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
 			},
-			"playerex:breaking_speed": {
+			"playerex:melee_crit_chance": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 0.05
+				"value": 0.02
 			}
 		},
 		"playerex:faith": {
@@ -154,10 +149,10 @@
 				"behavior": "Add",
 				"value": 0.25
 			},
-			"spell_power:heal": {
+			"minecraft:generic.luck": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 0.5
+				"value": 0.05
 			},
 			"playerex:heal_amplification": {
 				"enabled": true,
@@ -170,11 +165,6 @@
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.02
-			},
-			"minecraft:generic.luck": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.05
 			},
 			"playerex:poison_resistance": {
 				"enabled": true,
