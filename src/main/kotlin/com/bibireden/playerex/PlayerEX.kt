@@ -69,7 +69,7 @@ object PlayerEX : ModInitializer {
 		ServerPlayerEvents.COPY_FROM.register(EventFactory::reset)
 
 		LivingEntityEvents.ON_HEAL.register(EventFactory::healed)
-		LivingEntityEvents.ON_TICK.register(EventFactory::healthRegeneration)
+		LivingEntityEvents.ON_EVERY_SECOND.register(EventFactory::healthRegeneration)
 		LivingEntityEvents.ON_DAMAGE.register(EventFactory::onDamage)
 		LivingEntityEvents.SHOULD_DAMAGE.register(EventFactory::shouldDamage)
 

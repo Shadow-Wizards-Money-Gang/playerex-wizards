@@ -37,18 +37,10 @@ object EventFactory {
     fun healthRegeneration(entity: LivingEntity)
     {
         if (!entity.level().isClientSide()) {
-            val healthRegenerationOption = DataAttributesAPI.getValue(PlayerEXAttributes.HEALTH_REGENERATION, entity)
-
-            if (healthRegenerationOption.isPresent)
-            {
-                val healthRegeneration = healthRegenerationOption.get()
-
-                if (healthRegeneration > 0.0 && entity.health < entity.maxHealth)
-                {
-                    entity.heal(healthRegeneration.toFloat())
+            DataAttributesAPI.getValue(PlayerEXAttributes.HEALTH_REGENERATION, entity).ifPresent { value ->
+                if (value > 0.0 && entity.health < entity.maxHealth) {
+                    entity.heal(value.toFloat())
                 }
-
-                return
             }
         }
     }

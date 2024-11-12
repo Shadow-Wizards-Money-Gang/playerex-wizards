@@ -34,7 +34,7 @@ object PlayerEXAttributes {
     val WISDOM = register("wisdom", 0.0, 0.0, 25.0)
 
     @JvmField
-    val HEALTH_REGENERATION = register("health_regeneration", 0.0, 0.0, 1.0)
+    val HEALTH_REGENERATION = register("health_regeneration", 0.0, 0.0, 1_000_000.0)
 
     @JvmField
     val HEAL_AMPLIFICATION = register("heal_amplification", 0.0, 0.0, 1.0)

@@ -13,7 +13,7 @@
     "playerex.ui.main.skill_points_header": "SKILL POINTS",
     "playerex.ui.main.modified_attributes": [ {"text": "❤ ", "color": "#48D19B"}, {"text": "Modified Attributes", "color": "white"} ],
 
-    "playerex.ui.category.primary_attributes": "Attributes",
+    "playerex.ui.category.attributes": "Attributes",
 
     "playerex.ui.current_level": [
         {"text": "❤ ", "color": "#F0C25E"},

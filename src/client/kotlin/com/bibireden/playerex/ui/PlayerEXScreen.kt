@@ -19,6 +19,7 @@ import io.wispforest.owo.ui.component.*
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.Component as OwoComponent
 import io.wispforest.owo.ui.core.Easing
+import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.ParentComponent
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.util.EventSource
@@ -52,8 +53,6 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
     /** Whenever the level attribute gets modified, and on initialization of the screen, this will be called. */
     fun onLevelUpdated(level: Int) {
-        val root = this.uiAdapter.rootComponent
-
         currentLevel.apply {
             text(Component.translatable("playerex.ui.current_level", player.level.toInt(), PlayerEXUtil.getRequiredXpForNextLevel(player)))
         }

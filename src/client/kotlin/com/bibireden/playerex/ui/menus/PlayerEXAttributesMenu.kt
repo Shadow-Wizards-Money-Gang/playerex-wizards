@@ -1,9 +1,8 @@
 package com.bibireden.playerex.ui.menus
 
-import com.bibireden.data_attributes.api.DataAttributesAPI
 import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
 import com.bibireden.playerex.api.attribute.PlayerEXAttributes
-import com.bibireden.playerex.components.player.IPlayerDataComponent
+import com.bibireden.playerex.ext.component
 import com.bibireden.playerex.ext.id
 import com.bibireden.playerex.ui.PlayerEXScreen
 import com.bibireden.playerex.ui.childById
@@ -75,16 +74,16 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
         }
     }
 
-    private fun onInputFieldUpdated(player: Player, component: IPlayerDataComponent) {
+    private fun onInputFieldUpdated(player: Player) {
         this.childById(FlowLayout::class, "attributes")?.childById(TextBoxComponent::class, "input")?.also {
             val result = it.value.toDoubleOrNull() ?: return@also
             this.forEachDescendant { descendant ->
                 if (descendant is AttributeButtonComponent) {
                     val max = descendant.attribute.`data_attributes$max`()
-                    val current = component.get(descendant.attribute)
+                    val current = player.component.get(descendant.attribute)
                     when (descendant.type) {
-                        PlayerEXScreen.ButtonType.Add -> descendant.active(result > 0 && component.skillPoints >= result && (current + result) <= max)
-                        PlayerEXScreen.ButtonType.Remove -> descendant.active(result > 0 && component.refundablePoints > 0 && (current - result >= 0))
+                        PlayerEXScreen.ButtonType.Add -> descendant.active(result > 0 && player.component.skillPoints >= result && (current + result) <= max)
+                        PlayerEXScreen.ButtonType.Remove -> descendant.active(result > 0 && player.component.refundablePoints > 0 && (current - result >= 0))
                     }
                 }
             }
@@ -101,14 +100,14 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
             Sizing.fill(100),
             Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
                 child(Containers.horizontalFlow(Sizing.fill(100), Sizing.content(2)).apply {
-                    child(Components.label(Component.translatable("playerex.ui.category.primary_attributes")))
+                    child(Components.label(Component.translatable("playerex.ui.category.attributes")))
                     child(
                         Components.textBox(Sizing.fixed(27))
                             .text("1")
                             .also {
                                 it.setMaxLength(4)
                                 it.setFilter(InputHelper::isUIntInput)
-                                it.onChanged().subscribe { onInputFieldUpdated(player, component) }
+                                it.onChanged().subscribe { onInputFieldUpdated(player) }
                             }
                             .verticalSizing(Sizing.fixed(10))
                             .positioning(Positioning.relative(100, 0))
@@ -152,11 +151,11 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
         padding(Insets.both(8, 8))
 
         onAttributeUpdate()
-        onInputFieldUpdated(player, component)
+        onInputFieldUpdated(player)
 
         onAttributeUpdated.subscribe { _, _ ->
             onAttributeUpdate()
-            onInputFieldUpdated(player, component)
+            onInputFieldUpdated(player)
         }
     }
 }

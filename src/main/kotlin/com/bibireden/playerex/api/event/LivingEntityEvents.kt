@@ -32,7 +32,7 @@ object LivingEntityEvents {
      * Fired once at the end of {@link LivingEntity#tick()}, every 20 ticks (1 second).
      */
     @JvmField
-    val ON_TICK: Event<Tick> = EventFactory.createArrayBacked(Tick::class.java) { callbacks -> Tick { entity -> callbacks.forEach { it.onTick(entity) } }}
+    val ON_EVERY_SECOND: Event<OnEverySecond> = EventFactory.createArrayBacked(OnEverySecond::class.java) { callbacks -> OnEverySecond { entity -> callbacks.forEach { it.onEverySecond(entity) } }}
 
     /**
      * Fired before {@link LivingEntity#damage(DamageSource, float)}; allows the amount of damage to be modified before it is used in any way.
@@ -67,8 +67,8 @@ object LivingEntityEvents {
         fun shouldHeal(livingEntity: LivingEntity, original: Float): Boolean
     }
 
-    fun interface Tick {
-        fun onTick(livingEntity: LivingEntity)
+    fun interface OnEverySecond {
+        fun onEverySecond(livingEntity: LivingEntity)
     }
 
     fun interface Damaged {
