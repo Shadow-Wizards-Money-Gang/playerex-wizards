@@ -14,7 +14,12 @@
 			"shadow-wizards:barehanded_damage": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 0.015
+				"value": 0.25
+			},
+			"minecraft:generic.attack_damage": {
+				"enabled": true,
+				"behavior": "Multiply",
+				"value": 0.01
 			},
 			"minecraft:generic.max_health": {
 				"enabled": true,
@@ -95,11 +100,6 @@
 				"behavior": "Add",
 				"value": 0.25
 			},
-			"playerex:wither_resistance": {
-				"enabled": true,
-				"behavior": "Add",
-				"value": 0.01
-			},
 			"spell_power:haste": {
 				"enabled": true,
 				"behavior": "Add",
@@ -149,15 +149,15 @@
 			}
 		},
 		"playerex:faith": {
-			"minecraft:generic.attack_damage": {
-				"enabled": true,
-				"behavior": "Multiply",
-				"value": 0.02
-			},
 			"spell_power:healing": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.25
+			},
+			"spell_power:heal": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.5
 			},
 			"playerex:heal_amplification": {
 				"enabled": true,
@@ -177,6 +177,11 @@
 				"value": 0.05
 			},
 			"playerex:poison_resistance": {
+				"enabled": true,
+				"behavior": "Add",
+				"value": 0.01
+			},
+			"playerex:wither_resistance": {
 				"enabled": true,
 				"behavior": "Add",
 				"value": 0.01
