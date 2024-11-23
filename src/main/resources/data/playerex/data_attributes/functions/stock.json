@@ -16,11 +16,6 @@
 				"behavior": "Add",
 				"value": 0.25
 			},
-			"minecraft:generic.attack_damage": {
-				"enabled": true,
-				"behavior": "Multiply",
-				"value": 0.01
-			},
 			"minecraft:generic.max_health": {
 				"enabled": true,
 				"behavior": "Add",
