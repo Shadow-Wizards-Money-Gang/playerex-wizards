@@ -41,7 +41,7 @@ _________________
 
 <br>
 
-![PlayerEX Screen at Level 5](https://cdn.modrinth.com/data/cached_images/a1932f9482b132e06b75717be8e060149b275b94.png)
+![PlayerEX Screen](https://i.imgur.com/E6eHmzO.png)
 
 ### Preamble 📝
 

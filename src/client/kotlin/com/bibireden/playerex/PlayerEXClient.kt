@@ -23,6 +23,7 @@ import org.lwjgl.glfw.GLFW
 
 object PlayerEXClient : ClientModInitializer {
 	val MAIN_UI_SCREEN_ID = PlayerEX.id("main_ui_model")
+	val MAIN_UI_SCREEN_ID_TEMP = PlayerEX.id("main_ui_model_v2")
 
 	val KEYBINDING_MAIN_SCREEN: KeyMapping = KeyBindingHelper.registerKeyBinding(KeyMapping("${PlayerEX.MOD_ID}.key.main_screen", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, "key.categories.${PlayerEX.MOD_ID}"))
 
