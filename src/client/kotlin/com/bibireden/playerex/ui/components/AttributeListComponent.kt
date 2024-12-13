@@ -4,19 +4,20 @@ import com.bibireden.data_attributes.api.attribute.EntityAttributeSupplier
 import io.wispforest.owo.ui.component.Components
 import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
+import io.wispforest.owo.ui.core.Color
 import io.wispforest.owo.ui.core.Sizing
 import net.minecraft.world.entity.player.Player
 import net.minecraft.network.chat.Component
 import kotlin.jvm.optionals.getOrNull
 
 class AttributeListComponent(translationKey: String, private val player: Player, val attributes: List<EntityAttributeSupplier>) : FlowLayout(Sizing.fill(25), Sizing.content(), Algorithm.VERTICAL) {
-    val entriesSection: FlowLayout
+    private val entriesSection: FlowLayout
 
     init {
         child(Components.label(Component.translatable(translationKey)).horizontalSizing(Sizing.fill(100)))
-        child(Components.box(Sizing.fill(100), Sizing.fixed(2)))
+        child(Components.box(Sizing.fill(100), Sizing.fixed(1)).color(Color.ofArgb(0x10FFFFFF)))
         entriesSection = Containers.verticalFlow(Sizing.fill(100), Sizing.content())
-            .apply { gap(4) }.also(::child)
+            .apply { gap(10) }.also(::child)
 
         gap(4)
         refresh()

@@ -44,10 +44,7 @@ object PlayerEX : ModInitializer {
 
 	fun id(path: String) = ResourceLocation.tryBuild(MOD_ID, path)!!
 
-	private val gimmick = listOf(
-		"Let's do it right this time...",
-		"We test in production (not really).",
-	).random()
+	private val gimmick = listOf("Let's do it right this time...", "We test in production (not really).", "Extraordinary solutions to extraordinary problems.").random()
 
 	override fun onInitialize() {
 		NetworkingChannels.NOTIFICATIONS.registerClientboundDeferred(NetworkingPackets.Notify::class.java)

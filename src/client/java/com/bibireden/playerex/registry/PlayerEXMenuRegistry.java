@@ -56,7 +56,7 @@ public final class PlayerEXMenuRegistry {
     }
 
     @NotNull
-    public static List<Class<? extends MenuComponent>> getDefs() {
+    public static List<Class<? extends MenuComponent>> getComponents() {
         return ENTRIES.stream().map(Pair::component2).collect(Collectors.toUnmodifiableList());
     }
 
