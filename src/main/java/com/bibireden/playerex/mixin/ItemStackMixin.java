@@ -19,10 +19,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -39,10 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
@@ -50,11 +44,14 @@ abstract class ItemStackMixin {
     @Shadow
     public abstract boolean hurt(int amount, RandomSource random, @Nullable ServerPlayer serverPlayer);
 
+    @Shadow
+    public abstract CompoundTag getOrCreateTag();
+
     @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;", at = @At(value = "HEAD"), cancellable = true)
     public void preventUse(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         if (!PlayerEX.CONFIG.getFeatureSettings().getItemBreakingEnabled()) return;
 
-        ItemStack stack = (ItemStack)(Object)this;
+        ItemStack stack = (ItemStack) (Object) this;
         if (PlayerEXUtil.isBroken(stack)) {
             cir.setReturnValue(InteractionResultHolder.fail(stack));
         }
@@ -64,7 +61,7 @@ abstract class ItemStackMixin {
     public void preventUseOnBlock(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
         if (!PlayerEX.CONFIG.getFeatureSettings().getItemBreakingEnabled()) return;
 
-        ItemStack stack = (ItemStack)(Object)this;
+        ItemStack stack = (ItemStack) (Object) this;
         if (PlayerEXUtil.isBroken(stack)) {
             cir.setReturnValue(InteractionResult.FAIL);
         }
@@ -74,7 +71,7 @@ abstract class ItemStackMixin {
     public void preventDamage(int amount, RandomSource random, ServerPlayer user, CallbackInfoReturnable<Boolean> cir) {
         if (!PlayerEX.CONFIG.getFeatureSettings().getItemBreakingEnabled()) return;
 
-        ItemStack stack = (ItemStack)(Object)this;
+        ItemStack stack = (ItemStack) (Object) this;
         if (PlayerEXUtil.isBroken(stack)) {
             cir.setReturnValue(true);
         }
@@ -83,10 +80,10 @@ abstract class ItemStackMixin {
     @Inject(method = "hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"), cancellable = true)
     public <T extends LivingEntity> void preventBreak(int amount, T entity, Consumer<T> onBroken, CallbackInfo ci) {
         if (!PlayerEX.CONFIG.getFeatureSettings().getItemBreakingEnabled()) return;
-        ItemStack stack = (ItemStack)(Object)this;
-        if (stack.getItem().builtInRegistryHolder().is(PlayerEXTags.UNBREAKABLE_ITEMS)) {
+        ItemStack stack = (ItemStack) (Object) this;
+        if (stack.getItemHolder().is(PlayerEXTags.UNBREAKABLE_ITEMS)) {
             if (!PlayerEXUtil.isBroken(stack)) {
-                CompoundTag tag = stack.getTag();
+                CompoundTag tag = stack.getOrCreateTag();
                 tag.putBoolean("broken", true);
                 stack.setTag(tag);
             }
@@ -98,20 +95,26 @@ abstract class ItemStackMixin {
     public void removeBrokenOnRepair(int damage, CallbackInfo ci) {
         if (!PlayerEX.CONFIG.getFeatureSettings().getItemBreakingEnabled()) return;
 
-        ItemStack stack = (ItemStack)(Object)this;
+        ItemStack stack = (ItemStack) (Object) this;
         if (PlayerEXUtil.isBroken(stack) && damage < stack.getDamageValue()) {
-            CompoundTag tag = stack.getTag();
+            CompoundTag tag = stack.getOrCreateTag();
             tag.putBoolean("broken", false);
             stack.setTag(tag);
         }
     }
 
     @Inject(method = "getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;", at = @At(value = "RETURN"), cancellable = true)
-    public void preventArmour(EquipmentSlot slot, CallbackInfoReturnable<Multimap<Attribute, AttributeModifier>> cir) {
+    public void modifyAttributeModifiers(EquipmentSlot slot, CallbackInfoReturnable<Multimap<Attribute, AttributeModifier>> cir) {
         if (!PlayerEX.CONFIG.getFeatureSettings().getItemBreakingEnabled()) return;
 
-        ItemStack stack = (ItemStack)(Object)this;
+        ItemStack stack = (ItemStack) (Object) this;
         HashMultimap<Attribute, AttributeModifier> hashmap = HashMultimap.create(cir.getReturnValue());
+        if (PlayerEX.CONFIG.getWeaponLevelingSettings().getEnabled() && PlayerEXUtil.isWeapon(stack)) {
+            PlayerEXUtil.addToModifier(hashmap, Attributes.ATTACK_DAMAGE, getLevel() * PlayerEX.CONFIG.getWeaponLevelingSettings().getDamagePerLevel());
+        }
+        if (PlayerEX.CONFIG.getArmorLevelingSettings().getEnabled() && PlayerEXUtil.isArmor(stack)) {
+            PlayerEXUtil.addToModifier(hashmap, Attributes.ARMOR, getLevel() * PlayerEX.CONFIG.getArmorLevelingSettings().getArmorPerLevel());
+        }
         if (PlayerEXUtil.isBroken(stack)) {
             PlayerEXUtil.removeModifier(hashmap, Attributes.ARMOR);
             PlayerEXUtil.removeModifier(hashmap, Attributes.ARMOR_TOUGHNESS);
@@ -166,7 +169,9 @@ abstract class ItemStackMixin {
     }
 
     @ModifyVariable(method = "getTooltipLines", at = @At(value = "STORE", ordinal = 1), ordinal = 1)
-    private double playerex$modifyAdditionAttributeKnockback(double original) { return original / 10.0; }
+    private double playerex$modifyAdditionAttributeKnockback(double original) {
+        return original / 10.0;
+    }
 
     // todo: not sure about the implementation(s) here...
     @Inject(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 7, shift = At.Shift.AFTER))
@@ -235,6 +240,48 @@ abstract class ItemStackMixin {
                             .withStyle(ChatFormatting.RED)
                             .withStyle(ChatFormatting.BOLD)
             );
+        }
+    }
+
+    @Unique
+    private int getLevel() {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        return itemStack.getOrCreateTag().getInt("Level");
+    }
+
+    @Unique
+    private int getXp() {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        return itemStack.getOrCreateTag().getInt("Experience");
+    }
+
+    @Unique
+    private double getReduction() {
+        return Math.min(getLevel() * PlayerEX.CONFIG.getArmorLevelingSettings().getReductionPerLevel(), PlayerEX.CONFIG.getArmorLevelingSettings().getMaxReduction());
+    }
+
+    @Inject(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0, shift = At.Shift.AFTER))
+    private void playerex$insertLevelTooltip(
+            Player player, TooltipFlag context,
+            CallbackInfoReturnable<List<Component>> info,
+            @Local List<Component> list
+    ) {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        if (PlayerEXUtil.isLevelable(itemStack)) {
+            list.add(Component.translatable("playerex.item.level", getLevel(), PlayerEXUtil.getMaxLevel(itemStack)));
+            list.add(Component.translatable("playerex.item.experience", getXp(), PlayerEXUtil.getRequiredXpForNextLevel(itemStack)));
+        }
+    }
+
+    @Inject(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 6, shift = At.Shift.AFTER))
+    private void playerex$insertReductionTooltip(
+            Player player, TooltipFlag context,
+            CallbackInfoReturnable<List<Component>> info,
+            @Local List<Component> list
+    ) {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        if (PlayerEXUtil.isArmor(itemStack)) {
+            list.add(Component.translatable("playerex.item.reduction", String.format("%.2f", getReduction())));
         }
     }
 }

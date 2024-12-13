@@ -6,10 +6,10 @@
     "AbstractArrowMixin",
     "ExperienceOrbMixin",
     "InventoryMixin",
+    "ItemStackMixin",
     "LivingEntityMixin",
     "PlayerMixin",
-    "ServerPlayerMixin",
-    "ItemStackMixin"
+    "ServerPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

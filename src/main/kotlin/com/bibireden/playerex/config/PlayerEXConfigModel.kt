@@ -16,6 +16,8 @@ class PlayerEXConfigModel {
     @JvmField @Nest @Expanded var featureSettings = FeatureSettings()
     @JvmField @Nest @Expanded var lifecycleSettings = LifecycleSettings()
     @JvmField @Nest @Expanded var advancedSettings = AdvancedSettings()
+    @JvmField @Nest @Expanded var weaponLevelingSettings = WeaponXpSettings()
+    @JvmField @Nest @Expanded var armorLevelingSettings = ArmorXpSettings()
 
     @SectionHeader("client_options")
 
@@ -23,6 +25,84 @@ class PlayerEXConfigModel {
     @JvmField @Nest @Expanded var soundSettings = SoundSettings()
 
     // SERVER
+
+    data class ArmorXpSettings(
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var enabled: Boolean = true,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var armorPerLevel: Double = 0.1,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var reductionPerLevel: Double = 0.1,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        @RangeConstraint(min = 0.0, max = 25.0)
+        var maxReduction: Double = 25.0,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var formula: String = "5x^(1.1)",
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromPassive: Int = 10,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromHostile: Int = 20,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromMiniboss: Int = 50,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromBoss: Int = 100,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var maxLevel: Int = 500,
+    )
+
+    data class WeaponXpSettings(
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var enabled: Boolean = true,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var damagePerLevel: Double = 0.1,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var formula: String = "5x^(1.1)",
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromPassive: Int = 10,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromHostile: Int = 20,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromMiniboss: Int = 50,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var xpFromBoss: Int = 100,
+
+        @Sync(SyncMode.OVERRIDE_CLIENT)
+        @JvmField
+        var maxLevel: Int = 500,
+    )
+
     data class LevelingSettings(
         @Sync(SyncMode.OVERRIDE_CLIENT)
         @JvmField
