@@ -244,6 +244,7 @@
     "text.config.playerex-config.option.armorLevelingSettings.enabled": "Activated",
     "text.config.playerex-config.option.armorLevelingSettings.armorPerLevel": "Armor per Level",
     "text.config.playerex-config.option.armorLevelingSettings.reductionPerLevel": "% Damage Reduction per Level",
+    "text.config.playerex-config.option.armorLevelingSettings.maxReduction": "Max % Damage Reduction",
     "text.config.playerex-config.option.armorLevelingSettings.formula": "XP Formula",
     "text.config.playerex-config.option.armorLevelingSettings.xpFromPassive": "XP from Passive Mobs",
     "text.config.playerex-config.option.armorLevelingSettings.xpFromHostile": "XP from Hostile Mobs",
