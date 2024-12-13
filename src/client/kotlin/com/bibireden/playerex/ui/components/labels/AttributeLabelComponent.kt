@@ -18,9 +18,7 @@ private fun createTextFromAttribute(attribute: Attribute, player: Player): Compo
     val actual = DataAttributesAPI.getValue(attribute, player).map(Double::toInt).orElse(0)
 
     val text = Component.literal("[ ")
-        .append(Component.literal("$allocatedPoints").withStyle {
-            it.withColor(Colors.GOLD)
-        })
+        .append(Component.literal("$allocatedPoints").withStyle { it.withColor(Colors.GOLD) })
         .append("/${(attribute as IEntityAttribute).`data_attributes$max`().toInt()} ]")
 
     val difference = actual - allocatedPoints

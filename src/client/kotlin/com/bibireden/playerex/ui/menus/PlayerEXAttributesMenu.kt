@@ -118,14 +118,14 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
     private fun onHealthUpdated() {
         val player = client!!.player!!
-        val percentage = Mth.clamp((player.health / player.maxHealth).toDouble(), 0.0, 100.0)
+        val percentage = Mth.clamp((player.health / player.maxHealth).toDouble(), 0.0, 1.0)
         progressHealthBar.percentage = percentage
         labelHealth.text(Component.translatable("playerex.ui.main.labels.health").append(" - ${player.health.toDouble().round(1)}"))
     }
 
     private fun onLungCapacityUpdated() {
         val player = client!!.player!!
-        val percentage = Mth.clamp(player.airSupply.toDouble() / player.maxAirSupply, 0.0, 100.0)
+        val percentage = Mth.clamp(player.airSupply.toDouble() / player.maxAirSupply, 0.0, 1.0)
         lungProgressBar.percentage = percentage
         labelLung.text(Component.translatable("attribute.name.additionalentityattributes.generic.lung_capacity").append(" - ${player.airSupply}"))
     }

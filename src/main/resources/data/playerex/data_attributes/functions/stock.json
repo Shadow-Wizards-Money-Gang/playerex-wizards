@@ -63,7 +63,7 @@
 			"additionalentityattributes:generic.lung_capacity": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 0.01
+				"value": 1
 			},
 			"playerex:poison_resistance": {
 				"enabled": true,
