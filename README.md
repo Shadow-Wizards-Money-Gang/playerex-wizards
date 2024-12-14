@@ -41,7 +41,7 @@ _________________
 
 <br>
 
-![PlayerEX Screen](https://i.imgur.com/E6eHmzO.png)
+![PlayerEX Screen](https://i.imgur.com/cLFiVeD.png)
 
 ### Preamble 📝
 

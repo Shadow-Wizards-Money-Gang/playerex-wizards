@@ -136,10 +136,10 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
         // -- divider line -- //
 
-        child(Components.box(Sizing.fixed(2), Sizing.fill(100)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(45, 50)))
-        child(Components.box(Sizing.fill(55), Sizing.fixed(2)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(100, 50)))
+        child(Components.box(Sizing.fixed(2), Sizing.fill(100)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(36, 50)))
+        child(Components.box(Sizing.fill(64), Sizing.fixed(2)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(100, 50)))
 
-        child(Containers.verticalScroll(Sizing.fill(40), Sizing.fill(70), Containers.verticalFlow(Sizing.fill(100), Sizing.content(6)).apply {
+        child(Containers.verticalScroll(Sizing.fill(35), Sizing.fill(70), Containers.verticalFlow(Sizing.fill(100), Sizing.content(6)).apply {
             verticalAlignment(VerticalAlignment.CENTER)
             gap(10)
             padding(Insets.right(5))
@@ -179,13 +179,13 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
             .verticalAlignment(VerticalAlignment.CENTER)
             .id("attributes")
         )
-            .positioning(Positioning.relative(5, 50))
+            .positioning(Positioning.relative(0, 50))
         )
 
         // VIGOR
 
         child(
-            Containers.verticalFlow(Sizing.fill(54), Sizing.fill(46))
+            Containers.verticalFlow(Sizing.fill(65), Sizing.fill(46))
                 .apply {
                     child(Components.label(Component.translatable("playerex.ui.main.sections.vigor")).color(Color.ofArgb(0x32FFFFFF))
                         .horizontalSizing(Sizing.content()))
@@ -217,7 +217,7 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
         // COMBAT STATS
         child(
-            Containers.verticalFlow(Sizing.fill(54), Sizing.fill(46))
+            Containers.verticalFlow(Sizing.fill(63), Sizing.fill(46))
                 .apply {
                     child(Components.label(Component.translatable("playerex.ui.main.sections.combat_stats")).color(Color.ofArgb(0x32FFFFFF))
                         .horizontalSizing(Sizing.content()))
@@ -228,10 +228,10 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
                             Sizing.fill(90),
                             Containers.horizontalFlow(Sizing.fill(100), Sizing.content()).apply {
                                 child(AttributeListComponent("playerex.ui.main.categories.melee_combat", player, MELEE_COMBAT_STATS).horizontalSizing(Sizing.fill(30)))
-                                child(AttributeListComponent("playerex.ui.main.categories.ranged_combat", player, RANGED_COMBAT_STATS).horizontalSizing(Sizing.fill(30)))
-                                child(AttributeListComponent("playerex.ui.main.categories.defense_combat", player, DEFENSE_COMBAT_STATS).horizontalSizing(Sizing.fill(30)))
-                                padding(Insets.vertical(15))
-                                gap(10)
+                                child(AttributeListComponent("playerex.ui.main.categories.ranged_combat", player, RANGED_COMBAT_STATS).horizontalSizing(Sizing.fill(32)))
+                                child(AttributeListComponent("playerex.ui.main.categories.defense_combat", player, DEFENSE_COMBAT_STATS).horizontalSizing(Sizing.fill(34)))
+                                padding(Insets.vertical(12))
+                                gap(6)
                                 alignment(HorizontalAlignment.CENTER, VerticalAlignment.TOP)
                             }
                                 .positioning(Positioning.relative(50, 100))
