@@ -38,8 +38,8 @@
     "playerex.ui.nameplate.level": "<Lv. %s>",
 
     "playerex.ui.menu.playerex.attributes": [
-        {"text": "✎ ", "color": "#F0C25E"},
-        {"text": "PlayerEX Attributes", "color": "white"}
+        {"text": "★ ", "color": "#F0C25E"},
+        {"text": "PlayerEX", "color": "white"}
     ],
 
     "playerex.ui.main.labels.health": "Health",

@@ -83,7 +83,7 @@
                         <flow-layout direction="horizontal" id="list">
                             <children/>
 
-                            <sizing><vertical method="fill">85</vertical><horizontal method="fill">15</horizontal></sizing>
+                            <sizing><vertical method="fill">85</vertical><horizontal method="fill">12</horizontal></sizing>
                             <positioning type="relative">100,40</positioning>
 
                             <padding><all>10</all></padding>
@@ -130,7 +130,7 @@
                                                     <text>1</text>
 
                                                     <sizing>
-                                                        <vertical method="fixed">20</vertical>
+                                                        <vertical method="fill">90</vertical>
                                                         <horizontal method="fixed">27</horizontal>
                                                     </sizing>
 
@@ -140,13 +140,14 @@
                                                 <button id="level:button">
                                                     <text>+</text>
 
-                                                    <sizing><vertical method="fixed">23</vertical><horizontal method="fixed">20</horizontal></sizing>
+                                                    <sizing><vertical method="fill">100</vertical><horizontal method="fixed">15</horizontal></sizing>
                                                 </button>
                                             </children>
 
-                                            <sizing><vertical method="content">0</vertical><horizontal method="content">0</horizontal></sizing>
+                                            <vertical-alignment>bottom</vertical-alignment>
+                                            <sizing><vertical method="fill">100</vertical><horizontal method="content">0</horizontal></sizing>
 
-                                            <positioning type="relative">100,50</positioning>
+                                            <positioning type="relative">100,100</positioning>
                                         </flow-layout>
 
                                         <box>

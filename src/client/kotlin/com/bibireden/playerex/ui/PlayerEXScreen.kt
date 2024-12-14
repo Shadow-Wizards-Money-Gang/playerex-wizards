@@ -127,9 +127,9 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     private fun updateCollapseState(content: FlowLayout, listLayout: FlowLayout, button: ButtonComponent) {
         button.message = Component.literal(if (listCollapsed) "<" else ">").withStyle(Style.EMPTY.withBold(true))
 
-        content.horizontalSizing().animate(500, Easing.SINE, if (listCollapsed) Sizing.fill(97) else Sizing.fill(85)).forwards()
+        content.horizontalSizing().animate(500, Easing.SINE, if (listCollapsed) Sizing.fill(97) else Sizing.fill(90)).forwards()
         button.horizontalSizing().animate(500, Easing.SINE, if (listCollapsed) Sizing.fixed(10) else Sizing.fill(10)).forwards()
-        listLayout.horizontalSizing().animate(500, Easing.SINE, Sizing.fill(if (listCollapsed) 3 else 15)).forwards()
+        listLayout.horizontalSizing().animate(500, Easing.SINE, Sizing.fill(if (listCollapsed) 3 else 12)).forwards()
     }
 
     override fun build(rootComponent: FlowLayout) {
