@@ -161,9 +161,9 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
             Containers.verticalScroll(Sizing.fill(90), Sizing.fill(100), Containers.verticalFlow(Sizing.content(), Sizing.content())
                 .apply {
                     gap(2)
-                    padding(Insets.of(4))
+                    padding(Insets.of(2))
                     verticalAlignment(VerticalAlignment.TOP)
-                    horizontalAlignment(HorizontalAlignment.CENTER)
+                    horizontalAlignment(HorizontalAlignment.LEFT)
                 }
                 .also { vf ->
                     pages.forEachIndexed { index, (resource) ->
