@@ -136,8 +136,8 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
         // -- divider line -- //
 
-        child(Components.box(Sizing.fixed(2), Sizing.fill(100)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(40, 50)))
-        child(Components.box(Sizing.fill(60), Sizing.fixed(2)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(100, 50)))
+        child(Components.box(Sizing.fixed(2), Sizing.fill(100)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(36, 50)))
+        child(Components.box(Sizing.fill(64), Sizing.fixed(2)).color(Color.ofArgb(0x32FFFFFF)).positioning(Positioning.relative(100, 50)))
 
         child(Containers.verticalScroll(Sizing.fill(35), Sizing.fill(70), Containers.verticalFlow(Sizing.fill(100), Sizing.content(6)).apply {
             verticalAlignment(VerticalAlignment.CENTER)
@@ -179,13 +179,13 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
             .verticalAlignment(VerticalAlignment.CENTER)
             .id("attributes")
         )
-            .positioning(Positioning.relative(5, 50))
+            .positioning(Positioning.relative(0, 50))
         )
 
         // VIGOR
 
         child(
-            Containers.verticalFlow(Sizing.fill(60), Sizing.fill(46))
+            Containers.verticalFlow(Sizing.fill(65), Sizing.fill(46))
                 .apply {
                     child(Components.label(Component.translatable("playerex.ui.main.sections.vigor")).color(Color.ofArgb(0x32FFFFFF))
                         .horizontalSizing(Sizing.content()))
@@ -217,7 +217,7 @@ class PlayerEXAttributesMenu : MenuComponent(algorithm = Algorithm.HORIZONTAL) {
 
         // COMBAT STATS
         child(
-            Containers.verticalFlow(Sizing.fill(58), Sizing.fill(46))
+            Containers.verticalFlow(Sizing.fill(63), Sizing.fill(46))
                 .apply {
                     child(Components.label(Component.translatable("playerex.ui.main.sections.combat_stats")).color(Color.ofArgb(0x32FFFFFF))
                         .horizontalSizing(Sizing.content()))

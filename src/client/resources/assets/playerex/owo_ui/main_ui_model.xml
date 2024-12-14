@@ -87,7 +87,9 @@
                             <positioning type="relative">100,40</positioning>
 
                             <padding><all>10</all></padding>
+
                             <vertical-alignment>center</vertical-alignment>
+                            <horizontal-alignment>left</horizontal-alignment>
                         </flow-layout>
 
                         <!-- icon -->
