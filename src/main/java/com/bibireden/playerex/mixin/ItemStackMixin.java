@@ -8,11 +8,15 @@ import com.bibireden.playerex.util.PlayerEXUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.fabric_extras.ranged_weapon.api.EntityAttributes_RangedWeapon;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -111,6 +115,9 @@ abstract class ItemStackMixin {
         HashMultimap<Attribute, AttributeModifier> hashmap = HashMultimap.create(cir.getReturnValue());
         if (PlayerEX.CONFIG.getWeaponLevelingSettings().getEnabled() && PlayerEXUtil.isWeapon(stack)) {
             PlayerEXUtil.addToModifier(hashmap, Attributes.ATTACK_DAMAGE, getLevel() * PlayerEX.CONFIG.getWeaponLevelingSettings().getDamagePerLevel());
+            if (stack.is(TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("c", "bows")))) {
+                PlayerEXUtil.addToModifier(hashmap, EntityAttributes_RangedWeapon.DAMAGE.attribute, getLevel() * PlayerEX.CONFIG.getWeaponLevelingSettings().getDamagePerLevel());
+            }
         }
         if (PlayerEX.CONFIG.getArmorLevelingSettings().getEnabled() && PlayerEXUtil.isArmor(stack)) {
             PlayerEXUtil.addToModifier(hashmap, Attributes.ARMOR, getLevel() * PlayerEX.CONFIG.getArmorLevelingSettings().getArmorPerLevel());
@@ -270,18 +277,9 @@ abstract class ItemStackMixin {
         if (PlayerEXUtil.isLevelable(itemStack)) {
             list.add(Component.translatable("playerex.item.level", getLevel(), PlayerEXUtil.getMaxLevel(itemStack)));
             list.add(Component.translatable("playerex.item.experience", getXp(), PlayerEXUtil.getRequiredXpForNextLevel(itemStack)));
-        }
-    }
-
-    @Inject(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 6, shift = At.Shift.AFTER))
-    private void playerex$insertReductionTooltip(
-            Player player, TooltipFlag context,
-            CallbackInfoReturnable<List<Component>> info,
-            @Local List<Component> list
-    ) {
-        ItemStack itemStack = (ItemStack) (Object) this;
-        if (PlayerEXUtil.isArmor(itemStack)) {
-            list.add(Component.translatable("playerex.item.reduction", String.format("%.2f", getReduction())));
+            if (PlayerEXUtil.isArmor(itemStack)) {
+                list.add(Component.translatable("playerex.item.reduction", String.format("%.2f", getReduction())));
+            }
         }
     }
 }
