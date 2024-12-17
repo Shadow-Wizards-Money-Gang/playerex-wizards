@@ -1,0 +1,37 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:swords",
+            "required": false
+        },
+        {
+            "id": "#fabric:swords",
+            "required": false
+        },
+        {
+            "id": "#c:weapons",
+            "required": false
+        },
+        {
+            "id": "#c:axes",
+            "required": false
+        },
+        {
+            "id": "#c:spears",
+            "required": false
+        },
+        {
+            "id": "#c:bows",
+            "required": false
+        },
+        {
+            "id": "#fabric:bows",
+            "required": false
+        },
+        "#minecraft:swords",
+        "#minecraft:axes",
+        "minecraft:bow",
+        "minecraft:trident"
+    ]
+}

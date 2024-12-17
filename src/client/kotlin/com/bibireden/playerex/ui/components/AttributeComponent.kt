@@ -12,6 +12,7 @@ import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
 import com.bibireden.playerex.ui.components.labels.AttributeLabelComponent
 import com.bibireden.playerex.ui.util.Colors
 import io.wispforest.owo.ui.component.Components
+import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
 import io.wispforest.owo.ui.core.*
 import net.minecraft.ChatFormatting
@@ -25,7 +26,7 @@ private val StackingBehavior.symbol: String
     get() = if (this == StackingBehavior.Add) "+" else "×"
 
 class AttributeComponent(private val attribute: Attribute, private val player: Player, val component: IPlayerDataComponent) : FlowLayout(Sizing.fill(100), Sizing.fixed(18), Algorithm.HORIZONTAL) {
-    val label: AttributeLabelComponent
+    private val label: AttributeLabelComponent
 
     fun refresh() {
         val entries = DataAttributesAPI.clientManager.functions[attribute.id]
@@ -60,17 +61,21 @@ class AttributeComponent(private val attribute: Attribute, private val player: P
         child(
             Components.label(Component.translatable(attribute.descriptionId))
                 .verticalTextAlignment(VerticalAlignment.CENTER)
-                .sizing(Sizing.content(), Sizing.fill(100))
-                .positioning(Positioning.relative(0, 50))
+                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                .sizing(Sizing.fill(40), Sizing.content())
                 .id("${attribute.id}:label")
         )
 
-        child(AttributeButtonComponent(attribute, player, component, ButtonType.Remove))
-        child(
-            AttributeLabelComponent(attribute, player).also { label = it }
-                .horizontalSizing(Sizing.fill(34))
-        )
-        child(AttributeButtonComponent(attribute, player, component, ButtonType.Add))
+        child(Containers.horizontalFlow(Sizing.fill(60), Sizing.content()).apply {
+            horizontalAlignment(HorizontalAlignment.RIGHT)
+            verticalAlignment(VerticalAlignment.CENTER)
+
+            gap(6)
+
+            child(AttributeButtonComponent(attribute, player, component, ButtonType.Remove))
+            child(AttributeLabelComponent(attribute, player).also { label = it })
+            child(AttributeButtonComponent(attribute, player, component, ButtonType.Add))
+        })
 
         horizontalAlignment(HorizontalAlignment.RIGHT)
         verticalAlignment(VerticalAlignment.CENTER)

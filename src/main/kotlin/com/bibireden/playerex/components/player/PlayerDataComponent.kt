@@ -199,7 +199,7 @@ class PlayerDataComponent(
 
         val isEnoughExperience = player.experienceLevel >= required || override
         if (isEnoughExperience) {
-            val skillPoints = CONFIG.skillPointsPerLevelUp * amount
+            val skillPoints = CONFIG.levelingSettings.skillPointsPerLevelUp * amount
 
             if (!override) player.giveExperienceLevels(-required)
             this.addSkillPoints(skillPoints)

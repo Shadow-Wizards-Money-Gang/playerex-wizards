@@ -1,5 +1,6 @@
 package com.bibireden.playerex.ui
 
+import com.bibireden.data_attributes.ui.renderers.ButtonRenderers
 import com.bibireden.playerex.PlayerEXClient
 import com.bibireden.playerex.components.player.IPlayerDataComponent
 import com.bibireden.playerex.ext.component
@@ -14,18 +15,19 @@ import com.bibireden.playerex.ui.components.buttons.AttributeButtonComponent
 import com.bibireden.playerex.ui.helper.InputHelper
 import com.bibireden.playerex.ui.util.Colors
 import com.bibireden.playerex.util.PlayerEXUtil
+import io.wispforest.endec.impl.StructEndecBuilder
 import io.wispforest.owo.ui.base.BaseUIModelScreen
 import io.wispforest.owo.ui.component.*
+import io.wispforest.owo.ui.container.Containers
 import io.wispforest.owo.ui.container.FlowLayout
+import io.wispforest.owo.ui.core.*
 import io.wispforest.owo.ui.core.Component as OwoComponent
-import io.wispforest.owo.ui.core.Easing
-import io.wispforest.owo.ui.core.OwoUIDrawContext
-import io.wispforest.owo.ui.core.ParentComponent
-import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.util.EventSource
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.attributes.Attribute
-import net.minecraft.network.chat.Component
 import kotlin.reflect.KClass
 
 // Transformers
@@ -33,9 +35,11 @@ fun <T : OwoComponent> ParentComponent.childById(clazz: KClass<T>, id: String) =
 
 /** Primary screen for the mod that brings everything intended together. */
 class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, DataSource.asset(PlayerEXClient.MAIN_UI_SCREEN_ID)) {
+    private var listCollapsed = false
+
     private var currentPage = 0
 
-    private val pages: MutableList<MenuComponent> = mutableListOf()
+    private val pages: MutableList<Pair<ResourceLocation, MenuComponent>> = mutableListOf()
 
     private val player by lazy { this.minecraft!!.player!! }
 
@@ -45,6 +49,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
     private val currentLevel by lazy { uiAdapter.rootComponent.childById(LabelComponent::class, "level:current")!! }
     private val levelAmount by lazy { uiAdapter.rootComponent.childById(TextBoxComponent::class, "level:amount")!! }
     private val levelButton by lazy { uiAdapter.rootComponent.childById(ButtonComponent::class, "level:button")!! }
+
 
     private val onLevelUpdatedEvents = OnLevelUpdated.stream
     private val onLevelUpdated: EventSource<OnLevelUpdated> = onLevelUpdatedEvents.source()
@@ -78,7 +83,7 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
 
     private fun updatePointsAvailable() {
         this.uiAdapter.rootComponent.childById(LabelComponent::class, "points_available")?.apply {
-            text(Component.translatable("playerex.ui.main.skill_points_header").append(": [").append(
+            text(Component.translatable("playerex.ui.main.skill_points_header").append(": ").append(
                 Component.literal("${player.component.skillPoints}").withStyle {
                     it.withColor(
                         when (player.component.skillPoints) {
@@ -86,19 +91,19 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
                             else -> Colors.SATURATED_BLUE
                         }
                     )
-                }).append("]")
+                })
             )
         }
     }
 
-    private fun onPagesUpdated() {
+    /** changes the page based on the index. */
+    private fun switchPage(to: Int) {
         val root = this.uiAdapter.rootComponent
-        val pageCounter = root.childById(LabelComponent::class, "counter")!!
+
         val content = root.childById(FlowLayout::class, "content")!!
 
-        pageCounter.text(Component.nullToEmpty("${currentPage + 1}/${pages.size}"))
         content.clearChildren()
-        content.child(pages[currentPage])
+        content.child(pages[to].second)
     }
 
     private fun updateLevelUpButton() {
@@ -116,64 +121,88 @@ class PlayerEXScreen : BaseUIModelScreen<FlowLayout>(FlowLayout::class.java, Dat
             val required = PlayerEXUtil.getRequiredXpForNextLevel(player)
             result = Mth.clamp((player.experienceLevel.toDouble() / required) * 100, 0.0, 100.0)
         }
-       footer.childById(BoxComponent::class, "progress")!!
-            .horizontalSizing().animate(250, Easing.CUBIC, Sizing.fill(result.toInt())).forwards()
+       footer.childById(BoxComponent::class, "progress")?.horizontalSizing()?.animate(250, Easing.CUBIC, Sizing.fill(result.toInt()))?.forwards()
+    }
+
+    private fun updateCollapseState(content: FlowLayout, listLayout: FlowLayout, button: ButtonComponent) {
+        button.message = Component.literal(if (listCollapsed) "<" else ">").withStyle(Style.EMPTY.withBold(true))
+
+        content.horizontalSizing(if (listCollapsed) Sizing.fill(97) else Sizing.fill(90))
+        button.horizontalSizing(if (listCollapsed) Sizing.fixed(10) else Sizing.fill(10))
+        listLayout.horizontalSizing(Sizing.fill(if (listCollapsed) 3 else 12))
     }
 
     override fun build(rootComponent: FlowLayout) {
-        val player = minecraft?.player ?: return
+        val listLayout = rootComponent.childById(FlowLayout::class, "list")!!
+        val contentLayout = rootComponent.childById(FlowLayout::class, "content")!!
+
+        PlayerEXMenuRegistry.get().forEach { (resource, clazz) ->
+            val instance = clazz.getDeclaredConstructor().newInstance()
+            instance.init(minecraft!!, this, player.component)
+            instance.build(contentLayout)
+            pages.add(Pair(resource, instance))
+        }
+
+        listLayout.child(
+            Components.button(Component.empty()) {
+                listCollapsed = !listCollapsed
+                updateCollapseState(contentLayout, listLayout, it)
+            }
+                .apply {
+                    renderer(ButtonRenderers.STANDARD)
+                    textShadow(false)
+                    verticalSizing(Sizing.fill(100))
+
+                    updateCollapseState(contentLayout, listLayout, this)
+                }
+        )
+
+        listLayout.child(
+            Containers.verticalScroll(Sizing.fill(90), Sizing.fill(100), Containers.verticalFlow(Sizing.content(), Sizing.content())
+                .apply {
+                    gap(2)
+                    padding(Insets.of(2))
+                    verticalAlignment(VerticalAlignment.TOP)
+                    horizontalAlignment(HorizontalAlignment.LEFT)
+                }
+                .also { vf ->
+                    pages.forEachIndexed { index, (resource) ->
+                        vf.child(
+                            Components.button(Component.translatable("playerex.ui.menu.${resource.toLanguageKey()}")) { this.switchPage(index) }
+                                .renderer(ButtonRenderers.STANDARD)
+                        )
+                    }
+                }
+            )
+                .apply {
+                    positioning(Positioning.relative(100, 0))
+                }
+                .id("scroll")
+        )
 
         val levelUpButton = rootComponent.childById(ButtonComponent::class, "level:button")!!
+        val exit = rootComponent.childById(ButtonComponent::class, "exit")!!
 
-        updateLevelUpButton()
 
         levelAmount.setFilter(InputHelper::isUIntInput)
         levelAmount.onChanged().subscribe { updateLevelUpButton() }
 
-        val previousPage = rootComponent.childById(ButtonComponent::class, "previous")!!
-        val pageCounter = rootComponent.childById(LabelComponent::class, "counter")!!
-        val nextPage = rootComponent.childById(ButtonComponent::class, "next")!!
-        val exit = rootComponent.childById(ButtonComponent::class, "exit")!!
+        onLevelUpdated(player.level.toInt())
+        onExperienceUpdated()
 
-        PlayerEXMenuRegistry.get().forEach { (_, clazz) ->
-            val instance = clazz.getDeclaredConstructor().newInstance()
-            instance.init(minecraft!!, this, player.component)
-            instance.build(content)
-            pages.add(instance)
-        }
+        switchPage(0)
 
-        this.onLevelUpdated(player.level.toInt())
-        this.onPagesUpdated()
+        onLevelUpdated.subscribe { updateLevelUpButton() }
 
-        pageCounter.text(Component.nullToEmpty("${currentPage + 1}/${pages.size}"))
-
-        content.clearChildren()
-        content.child(pages[currentPage])
-
-        previousPage.onPress {
-            if (currentPage > 0) {
-                currentPage--
-                this.onPagesUpdated()
-            }
-        }
-        nextPage.onPress {
-            if (currentPage < pages.lastIndex) {
-                currentPage++
-                this.onPagesUpdated()
-            }
-        }
-
-        levelUpButton.onPress {
-            levelAmount.value.toIntOrNull()?.let { NetworkingChannels.MODIFY.clientHandle().send(NetworkingPackets.Level(it)) }
-        }
-
-        onLevelUpdated.subscribe { this.updateLevelUpButton() }
-
+        levelUpButton.onPress { levelAmount.value.toIntOrNull()?.let { NetworkingChannels.MODIFY.clientHandle().send(NetworkingPackets.Level(it)) } }
         exit.onPress { this.onClose() }
     }
 
     /** Whenever the player's experience is changed, refreshing the current status of experience-tied ui elements. */
     fun onExperienceUpdated() {
+        this.uiAdapter.rootComponent.childById(LabelComponent::class.java, "experience")!!.apply {
+            text(Component.literal(player.experienceLevel.toString()))
+        }
         updateLevelUpButton()
         updateProgressBar()
     }

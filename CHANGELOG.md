@@ -1,3 +1,3 @@
-## Changes 🌽
-- Resolved an issue with `ON_TICK` and renamed it to `ON_EVERY_SECOND`.
-  - The counter to reset was not present, but this has been fixed now.
+## Fixes 🍋
+- All instances of `BowItem`, `CrossbowItem` or `SwordItem` have been considered as levelable weapons.
+- All instances of `ArmorItem` have been considered as level-able armor.

@@ -8,4 +8,13 @@ import net.minecraft.world.item.Item
 object PlayerEXTags {
     @JvmField
     val UNBREAKABLE_ITEMS: TagKey<Item> = TagKey.create(Registries.ITEM, PlayerEX.id("unbreakable"))
+
+    @JvmField
+    val WEAPONS: TagKey<Item> = TagKey.create(Registries.ITEM, PlayerEX.id("weapons"))
+
+    @JvmField
+    val ARMOR: TagKey<Item> = TagKey.create(Registries.ITEM, PlayerEX.id("armor"))
+
+    @JvmField
+    val ARMOR_BLACKLIST: TagKey<Item> = TagKey.create(Registries.ITEM, PlayerEX.id("armor_blacklist"))
 }

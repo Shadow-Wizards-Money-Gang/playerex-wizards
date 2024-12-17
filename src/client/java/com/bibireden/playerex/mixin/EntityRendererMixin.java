@@ -18,7 +18,7 @@ import java.util.Optional;
 @Mixin(EntityRenderer.class)
 abstract class EntityRendererMixin<T extends Entity> {
     @Unique
-    private boolean playerex$shouldRenderLevel() { return PlayerEX.CONFIG.getShowLevelOnNameplates(); }
+    private boolean playerex$shouldRenderLevel() { return PlayerEX.CONFIG.getVisualSettings().getShowLevelOnNameplates(); }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"), index = 1)
     private Component playerex$renderLabelIfPresent(Component text, @Local(argsOnly = true) Entity entity) {
