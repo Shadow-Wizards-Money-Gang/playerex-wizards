@@ -95,7 +95,7 @@ object EventFactory {
     {
         if (target !is LivingEntity) return amount
         return DataAttributesAPI.getValue(PlayerEXAttributes.MELEE_CRITICAL_DAMAGE, player)
-            .map { (amount * (1.0 + (it * 10.0)) / 1.5).toFloat() }
+            .map { ((amount / 1.5) * (1.5+it)).toFloat() }
             .orElse(amount)
     }
 
