@@ -34,7 +34,7 @@
 			"additionalentityattributes:generic.lung_capacity": {
 				"enabled": true,
 				"behavior": "Add",
-				"value": 0.01
+				"value": 25
 			},
 			"playerex:melee_crit_chance": {
 				"enabled": true,
