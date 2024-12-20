@@ -22,7 +22,7 @@ public abstract class ExperienceOrbMixin extends Entity {
         ChunkAccess chunk = world.getChunk(pos);
         PlayerEXComponents.EXPERIENCE_DATA.maybeGet(chunk).ifPresent(data -> {
             if (data.updateExperienceNegationFactor(amount)) {
-                this.remove(Entity.RemovalReason.DISCARDED);
+                this.remove(RemovalReason.DISCARDED);
             }
         });
     }
