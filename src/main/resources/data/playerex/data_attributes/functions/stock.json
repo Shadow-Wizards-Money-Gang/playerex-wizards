@@ -66,7 +66,7 @@
 			"ranged_weapon:damage": {
 				"enabled": true,
 				"behavior": "Multiply",
-				"value": 0.02
+				"value": 0.01
 			},
 			"playerex:evasion": {
 				"enabled": true,
