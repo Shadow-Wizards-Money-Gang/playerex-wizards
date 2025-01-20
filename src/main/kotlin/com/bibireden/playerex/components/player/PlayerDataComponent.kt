@@ -130,19 +130,21 @@ class PlayerDataComponent(
         var level = 0.0;
         val kept = mutableMapOf<ResourceLocation, Double>()
         for ((id, value) in this.modifiers) {
-            if(id == PlayerEXAttributes.LEVEL.id)
-                level = value
+            if(PlayerEXAttributes.PRIMARY_ATTRIBUTE_IDS.contains(id)) {
+                if(id == PlayerEXAttributes.LEVEL.id)
+                    level = value
 
-            if (partition == 0.0) {
-                this.tryRemove(id)
-            }
-            else if(id != PlayerEXAttributes.LEVEL.id){
-                val retained = (value - takeLevels).coerceAtLeast(0.0)
-                if (!this.trySet(id, retained)) {
-                    continue
+                if (partition == 0.0) {
+                    this.tryRemove(id)
                 }
-                if(value - takeLevels >= 0) reducedLevels += takeLevels;
-                kept[id] = retained
+                else if(id != PlayerEXAttributes.LEVEL.id){
+                    val retained = (value - takeLevels).coerceAtLeast(0.0)
+                    if (!this.trySet(id, retained)) {
+                        continue
+                    }
+                    if(value - takeLevels >= 0) reducedLevels += takeLevels;
+                    kept[id] = retained
+                }
             }
         }
 
